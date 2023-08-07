@@ -1,0 +1,116 @@
+:root {
+    --white-color: #fff;
+    --black-color: #000;
+    --text-color: #333;
+    --primary-color: #ee4d2d;
+    --border-color: #dbdbdb;
+    --star-gold-color:#ffce3e;
+
+    --header-height: 80px;
+    --navbar-height: 10px;
+    --header-with-search-height: calc(var(--header-height) - var(--navbar-height))
+}
+
+* {
+    box-sizing: inherit;
+}
+html {
+    font-size: 62.5%; /* đặt như này để khi set font chữ 1 rem = 10px thay vì 100% thì 1 rem =16px */
+    line-height: 1.6rem;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+}
+/* responsive */
+.grid {
+    width: 1300px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.grid__full-width {
+    width: 100%;
+}
+
+.grid__row {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 15px;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+/* test */
+.grid__column-2 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width: calc((100% / 12)*2);
+}
+.grid__column-2-4 {
+    margin: 0 0 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: calc(100% /4);
+}
+.grid__column-2-5 {
+    margin: 0 0 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: calc(100% /5);
+}
+.grid__column-10 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*12);
+}
+
+
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* button-style */
+.btn {
+    min-width: 124px;
+    min-height: 34px;
+    text-decoration: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.5rem;
+    padding: 0 12px;
+    cursor: pointer;
+    color: var(--text-color);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color:var(--white-color);
+}
+.btn.btn--normal:hover {
+    color: rgba(0,0,0,0.4);
+
+}
+.btn.btn--size-s {
+    height: 32px;
+    font-size: 1.2rem;
+    padding: 0 8px;   
+}
+.btn.btn--primary {
+    color: var(--white-color);
+    background-color: #EE4D2DFF;
+}
+
+.btn-primary{
+    --bs-btn-hover-bg: #EE4D2DFF
+}
+
+.btn-check:focus+.btn-primary, .btn-primary:focus{
+    background-color: #fff;
+    color: #ee4d2d;
+}
