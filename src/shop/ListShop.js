@@ -10,6 +10,7 @@ export default function ListShop() {
     const idUser = user.id;
     useEffect(() => {
         axios.get(`http://localhost:8080/api/shops/user/${idUser}`).then(res => {
+
             if(res.data !==""){
                 setShops(res.data);
             }else {
@@ -87,6 +88,10 @@ export default function ListShop() {
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
+                                TRẠNG THÁI
+                            </h5></td>
+                        <td>
+                            <h5 className="table_shop_list-title">
                                 THÀNH PHỐ
                             </h5></td>
                         <td colSpan={3}><h5 className="table_shop_list-title">
@@ -104,6 +109,13 @@ export default function ListShop() {
                                 <td  className="table_shop_list-inner">{item.email}</td>
                                 <td  className="table_shop_list-inner">{item.startTime}</td>
                                 <td  className="table_shop_list-inner">{item.endTime}</td>
+                                {item.statusShops === "0" && <><td  className="table_shop_list-inner">Đã xác thực</td>
+                                </>}
+                                {item.statusShops === "1" && <><td  className="table_shop_list-inner">Đã hủy</td>
+                                </>}
+                                {item.statusShops === "2" && <><td  className="table_shop_list-inner">Chưa xác thực</td>
+                                </>}
+
                                 <td  className="table_shop_list-inner">{item.city.name}</td>
                                 <td className="table_shop_list-inner">
                                     <Link to={`/update-shop/${item.id}`} >Sửa</Link></td>
