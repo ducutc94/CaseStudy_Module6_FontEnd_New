@@ -9,7 +9,9 @@ export default function CreateVoucher(){
     const navigate = useNavigate();
     let [list,setList] = useState({})
     const shop = JSON.parse(localStorage.getItem("shops"))
-    const idShop = 4;
+
+    //  đoạn này fix cứng chú  ý lấy lại id
+    const idShop = 1;
     useEffect(()=>{
         axios.get('http://localhost:8080/api/shops').then((res=>{
             if(res.data !==""){

@@ -9,7 +9,9 @@ export default function UpdateVoucher(){
     const navigate = useNavigate();
     const {id} = useParams();
     const shop = JSON.parse(localStorage.getItem("shops"))
-    const idShop = 5;
+
+    //  đoạn này fix cứng chú  ý lấy lại id
+    const idShop = 1;
     useEffect(()=>{
         axios.get(`http://localhost:8080/api/vouchers/${id}`).then((res=>{
            formik.setValues(res.data);

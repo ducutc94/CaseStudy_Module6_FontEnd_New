@@ -3,17 +3,20 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {Link} from "react-router-dom";
 
-export default function ListVoucher(){
-    let [vouchers,setVoucher] = useState([]);
+export default function ListVoucher() {
+    let [vouchers, setVoucher] = useState([]);
     let [reload, setReload] = useState(false);
     const shop = JSON.parse(localStorage.getItem("shop"));
-    const idShop = 5;
+
+
+    //  đoạn này fix cứng chú  ý lấy lại id
+    const idShop = 1;
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/vouchers/shop/${idShop}`).then(res => {
-            if(res.data !==""){
+            if (res.data !== "") {
                 setVoucher(res.data);
-            }else {
+            } else {
                 setVoucher([])
             }
 
@@ -72,7 +75,8 @@ export default function ListVoucher(){
                         <td>
                             <h5 className="table_shop_list-title">
                                 QUANTITY
-                            </h5></td> <td colSpan={2}>
+                            </h5></td>
+                        <td colSpan={2}>
                             <h5 className="table_shop_list-title">
                                 ACTION
                             </h5></td>
@@ -83,13 +87,13 @@ export default function ListVoucher(){
                         vouchers.map((item, index) =>
                             <tr key={item.id}>
                                 <td className="table_shop_list-inner">{index + 1}</td>
-                                <td  className="table_shop_list-inner">{item.name}</td>
-                                <td  className="table_shop_list-inner">{item.quantity}</td>
+                                <td className="table_shop_list-inner">{item.name}</td>
+                                <td className="table_shop_list-inner">{item.quantity}</td>
 
-                                    <td><Link to={`/update-voucher/${item.id}`} >Sửa</Link></td>
-                                    <td className="table_shop_list-inner">
-                                        <button onClick={() => deleteVoucher(item.id)}>Xóa</button>
-                                    </td>
+                                <td><Link to={`/update-voucher/${item.id}`}>Sửa</Link></td>
+                                <td className="table_shop_list-inner">
+                                    <button onClick={() => deleteVoucher(item.id)}>Xóa</button>
+                                </td>
                             </tr>
                         )
                     }

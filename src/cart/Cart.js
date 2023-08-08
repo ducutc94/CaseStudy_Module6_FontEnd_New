@@ -35,7 +35,7 @@ export default function Cart(){
                            <h4 className="header__Cart-heading">Sản phẩm đã thêm</h4>
                            <ul className="header__Cart-list-item">
                                {productCart.map((items, index) =>
-                                   <li className="header__Cart-item">
+                                   <li className="header__Cart-item" key={index}>
                                        <img src="../static/img/product/iphone12.jpg" alt=""
                                             className="header__Cart-img"/>
                                        <div className="header__Cart-item-info">
