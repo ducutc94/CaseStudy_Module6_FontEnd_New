@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import { useFormik} from "formik";
+import {ErrorMessage, useFormik} from "formik";
 import Swal from "sweetalert2";
 import * as yup from "yup";
 
@@ -36,12 +36,12 @@ export default function CreateShop(){
         return str;
     }
     const validationS = yup.object().shape({
-        name: yup.string().min(2, "Độ dài tối thiểu")
-            .max(500, "Độ dài tối đa")
+        name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
+            .max(500, "Độ dài tối đa 500 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
             .required("Tên không được để trống!"),
 
-        description: yup.string().min(2, "Độ dài tối thiểu")
+        description: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
             .required("Mô tả không được để trống!"),
 
@@ -115,51 +115,76 @@ export default function CreateShop(){
                     <div className={'col-md-6'}>
                         <div className="mb-3">
                             <label htmlFor={'name'} className={'form-label'}>Tên</label>
-                            <input onChange={formik.handleChange} name={'name'} type={'text'} className={'form-control'} id={'name'}
+                            <input onChange={formik.handleChange}
+                                   name={'name'}
+                                   type={'text'} className={'form-control'}
+                                   id={'name'}
+                                   onBlur={formik.handleBlur}
                                    placeholder={'Nhập Tên Cửa Hàng'}/>
-                            {<span className={"text-danger"}>{formik.errors.name}</span>}
+                            {formik.touched.name && formik.errors.name ? (<span className={"text-danger"}>{formik.errors.name}</span>) : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor={'phone'} className={'form-label'}>Số điện thoại</label>
-                            <input onChange={formik.handleChange} name={'phone'} type={'number'}
-                                   className={'form-control'} id={'phone'}
+                            <input onChange={formik.handleChange}
+                                   name={'phone'} type={'number'}
+                                   className={'form-control'}
+                                   id={'phone'}
+                                   onBlur={formik.handleBlur}
                                    placeholder={'Nhập số điện thoại'}/>
-                            {<span className={"text-danger"}>{formik.errors.phone}</span>}
+                            {formik.touched.phone && formik.errors.phone ? (<span className={"text-danger"}>{formik.errors.phone}</span>) : null}
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor={'description'} className={'form-label'}>Mô tả</label>
-                            <input onChange={formik.handleChange} name={'description'} type={'text'} className={'form-control'} id={'description'}
+                            <input onChange={formik.handleChange}
+                                   name={'description'}
+                                   type={'text'} className={'form-control'}
+                                   id={'description'}
+                                   onBlur={formik.handleBlur}
                                    placeholder={'Số 12 Mỹ Đình, P. Mỹ Đình 2, Q.Nam Từ Liêm ...'}/>
-                            {<span className={"text-danger"}>{formik.errors.description}</span>}
+                            {formik.touched.description && formik.errors.description ? (<span className={"text-danger"}>{formik.errors.description}</span>) : null}
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor={'email'} className={'form-label'}>Email</label>
-                            <input onChange={formik.handleChange} name={'email'} type={'email'} className={'form-control'} id={'email'}
+                            <input onChange={formik.handleChange}
+                                   name={'email'} type={'email'}
+                                   className={'form-control'}
+                                   id={'email'}
+                                   onBlur={formik.handleBlur}
                                    placeholder={'biahaixom@gmail.com'}/>
-                            {<span className={"text-danger"}>{formik.errors.email}</span>}
+                            {formik.touched.email && formik.errors.email ? (<span className={"text-danger"}>{formik.errors.email}</span>) : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor={'startTime'} className={'form-label'}>Giờ bắt đầu</label>
-                            <input onChange={formik.handleChange} name={'startTime'} type={'time'} className={'form-control'} id={'startTime'}/>
-                            {<span className={"text-danger"}>{formik.errors.startTime}</span>}
+                            <input onChange={formik.handleChange}
+                                   name={'startTime'} type={'time'}
+                                   className={'form-control'}
+                                   id={'startTime'}/>
+                                   onBlur={formik.handleBlur}
+                            {formik.touched.endTime && formik.errors.endTime ? (<span className={"text-danger"}>{formik.errors.endTime}</span>) : null}
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor={'endTime'} className={'form-label'}>Giờ kết thúc</label>
-                            <input onChange={formik.handleChange} name={'endTime'} type={'time'} className={'form-control'} id={'endTime'}/>
-                            {<span className={"text-danger"}>{formik.errors.endTime}</span>}
+                            <input onChange={formik.handleChange}
+                                   name={'endTime'} type={'time'}
+                                   className={'form-control'}
+                                   id={'endTime'}
+                                   onBlur={formik.handleBlur}/>
+                            {formik.touched.endTime && formik.errors.endTime ? (<span className={"text-danger"}>{formik.errors.endTime}</span>) : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor={'city'} className={'form-label form-label-city'}>Thành phố</label>
-                            <select name={"city"}  onChange={formik.handleChange}>
+                            <select name={"city"}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}>
                                 <option>Chon Thành Phố</option>
                                 {city.map((item, index)=> (
                                     <option value={item.id} key={index}>{item.name}</option>
                                 ))}
                             </select><br/>
-                            {<span className={"text-danger"}>{formik.errors.city}</span>}
+                            {formik.touched.city && formik.errors.city ? (<span className={"text-danger"}>{formik.errors.city}</span>) : null}
                         </div>
                         <div className="mb-3">
                             <div style={{float: 'right'}}>

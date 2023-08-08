@@ -18,6 +18,7 @@ export default function UpdateShop() {
             setCity(res.data)
         })
         axios.get(`http://localhost:8080/api/shops/${id}`).then(res => {
+            console.log(id)
             let data = {...res.data, city: res.data.city.id}
             formik.setValues(data);
         })
@@ -25,11 +26,11 @@ export default function UpdateShop() {
     }, []);
 
     const validationS = yup.object().shape({
-        name: yup.string().min(2, "Độ dài tối thiểu")
-            .max(500, "Độ dài tối đa")
+        name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
+            .max(500, "Độ dài tối đa 500 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
             .required("Tên không được để trống!"),
-        description: yup.string().min(2, "Độ dài tối thiểu")
+        description: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
             .required("Mô tả không được để trống!"),
     })
@@ -97,16 +98,18 @@ export default function UpdateShop() {
                             <label htmlFor={'name'} className={'form-label'}>Tên</label>
                             <input onChange={formik.handleChange} name={'name'} type={'text'}
                                    className={'form-control'} id={'name'}
-                                   value={formik.values.name}/>
-                            {<span className={"text-danger"}>{formik.errors.name}</span>}
+                                   value={formik.values.name}
+                                   onBlur={formik.handleBlur}/>
+                            {formik.touched.name && formik.errors.name ? (<span className={"text-danger"}>{formik.errors.name}</span>) : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor={'phone'} className={'form-label'}>Số điện thoại</label>
                             <input readOnly={true} onChange={formik.handleChange} name={'phone'} type={'number'}
                                    className={'form-control'} id={'phone'}
                                    placeholder={'Enter phone'}
-                                   value={formik.values.phone}/>
-                            {<span className={"text-danger"}>{formik.errors.phone}</span>}
+                                   value={formik.values.phone}
+                                   onBlur={formik.handleBlur}/>
+                            {formik.touched.phone && formik.errors.phone ? (<span className={"text-danger"}>{formik.errors.phone}</span>) : null}
                         </div>
 
                         <div className="mb-3">
@@ -114,8 +117,9 @@ export default function UpdateShop() {
                             <input onChange={formik.handleChange} name={'description'} type={'text'}
                                    className={'form-control'} id={'description'}
                                    placeholder={'Enter description'}
-                                   value={formik.values.description}/>
-                            {<span className={"text-danger"}>{formik.errors.description}</span>}
+                                   value={formik.values.description}
+                                   onBlur={formik.handleBlur}/>
+                            {formik.touched.description && formik.errors.description ? (<span className={"text-danger"}>{formik.errors.description}</span>) : null}
                         </div>
 
                         <div className="mb-3">
@@ -123,17 +127,18 @@ export default function UpdateShop() {
                             <input readOnly={true} onChange={formik.handleChange} name={'email'} type={'email'}
                                    className={'form-control'} id={'email'}
                                    placeholder={'Enter email'}
-                                   value={formik.values.email}/>
-                            {<span className={"text-danger"}>{formik.errors.email}</span>}
-
+                                   value={formik.values.email}
+                                   onBlur={formik.handleBlur}/>
+                            {formik.touched.email && formik.errors.email ? (<span className={"text-danger"}>{formik.errors.email}</span>) : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor={'startTime'} className={'form-label'}>Giờ bắt đầu</label>
                             <input onChange={formik.handleChange} name={'startTime'} type={'time'}
                                    className={'form-control'} id={'startTime'}
                                    placeholder={'Enter startTime'}
-                                   value={formik.values.startTime}/>
-                            {<span className={"text-danger"}>{formik.errors.startTime}</span>}
+                                   value={formik.values.startTime}
+                                   onBlur={formik.handleBlur}/>
+                            {formik.touched.startTime && formik.errors.startTime ? (<span className={"text-danger"}>{formik.errors.startTime}</span>) : null}
                         </div>
 
                         <div className="mb-3">
@@ -141,23 +146,25 @@ export default function UpdateShop() {
                             <input onChange={formik.handleChange} name={'endTime'} type={'time'}
                                    className={'form-control'} id={'endTime'}
                                    placeholder={'Enter endTime'}
-                                   value={formik.values.endTime}/>
+                                   value={formik.values.endTime}
+                                   onBlur={formik.handleBlur}/>
 
-                            {<span className={"text-danger"}>{formik.errors.endTime}</span>}
+                            {formik.touched.endTime && formik.errors.endTime ? (<span className={"text-danger"}>{formik.errors.endTime}</span>) : null}
                         </div>
                         <div className="mb-3">
                             <label htmlFor={'city'} className={'form-label form-label-city'}>Thành phố</label>
-                            <select name={"city"} onChange={formik.handleChange} value={formik.values.city}>
+                            <select name={"city"}
+                                    onChange={formik.handleChange}
+                                    value={formik.values.city}
+                                    onBlur={formik.handleBlur}>
                                 <option>Chon Thành Phố</option>
                                 {city.map((item, index) => (
                                     <option value={item.id} key={index}>{item.name}</option>
                                 ))}
-
                             </select><br/>
-
-
                             {<span className={"text-danger"}>{formik.errors.city}</span>}
                         </div>
+
                         <div className="mb-3">
                             <div style={{float: 'right'}}>
                                 <button className={'btn btn-primary'} type={"submit"}>
