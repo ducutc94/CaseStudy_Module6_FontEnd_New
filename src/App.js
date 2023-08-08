@@ -9,6 +9,8 @@ import Update from "./food/form/Update";
 import ListShop from "./shop/ListShop";
 import CreateShop from "./shop/CreateShop";
 import UpdateShop from "./shop/UpdateShop";
+import Cart from "./cart/Cart";
+import Search from "./food/view/Search";
 
 function App() {
     return (
@@ -24,6 +26,9 @@ function App() {
                     <Route path={'/shop'} element={<ListShop />}></Route>
                     <Route path={'/create-shop'} element={<CreateShop />}></Route>
                     <Route path={'/update-shop/:id'} element={<UpdateShop />}></Route>
+
+                    <Route path={'/carts'} element={<Cart />}></Route>
+                    <Route path={'/search-food/:search'} element={<Search/>}></Route>
                 </Routes>
             </div>
             <Footer/>

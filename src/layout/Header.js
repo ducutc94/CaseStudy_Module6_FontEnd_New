@@ -2,6 +2,7 @@ import {Link, useNavigate} from "react-router-dom";
 import Login from "../user/formlogin/Login";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import Cart from "../cart/Cart";
 
 
 export default function Header() {
@@ -10,7 +11,12 @@ export default function Header() {
     const user = JSON.parse(localStorage.getItem("user"))
     const [city,setCity] = useState([])
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const handleSearch = () => {
+        navigate(`/search-food/${searchQuery}`);
+    };
 
 
     const handleClose = () => setShowLogin(false);
@@ -28,10 +34,6 @@ export default function Header() {
             setCity(res.data)
         },)
     },[])
-
-
-
-
 
     return (<>
         <header id="header">
@@ -76,62 +78,18 @@ export default function Header() {
                     <div className="header__search">
                         <div className="header__search-input-wrap">
                             <input type="text" id="name-search" className="header__search-input"
-                                   placeholder="Nhập để tìm kiếm"/>
+                                   placeholder="Nhập để tìm kiếm"
+                                   value={searchQuery}
+                                   onChange={(e) => setSearchQuery(e.target.value)}/>
                         </div>
-                        <button className="header__search-btn">
+                        <button className="header__search-btn" onClick={handleSearch}>
                             <i className="fas fa-search header__search-btn-icon"></i>
                         </button>
                     </div>
 
                     {/*header__Cart*/}
                     <div className="header__cart">
-                        <div className="header__cart-wrap">
-                            <i className="fas fa-shopping-cart header__cart-icon"></i>
-                            <span className="header__cart-notice">3</span>
-
-                            {/* no item cart: lúc ko có gì trong giỏ thì nó hiện */}
-                            <div className="header__Cart-list ">
-                                <div className="header__Cart-list-inner">
-                                    <img src="../static/img/footer/no-cart.png" alt=""
-                                         className="header__Cart-no-cart-img"/>
-                                    <span className="header__Cart-no-cart-msg">Chưa có sản phẩm</span>
-                                </div>
-
-
-
-                                {/*have item into cart: lúc có sản phẩm trong giỏ */}
-                                <div className="header__Cart-list-content">
-                                    <h4 className="header__Cart-heading">Sản phẩm đã thêm</h4>
-                                    <ul className="header__Cart-list-item">
-
-                                        <li className="header__Cart-item">
-                                            <img src="../static/img/product/iphone12.jpg" alt=""
-                                                 className="header__Cart-img"/>
-                                            <div className="header__Cart-item-info">
-                                                <div className="header__Cart-item-head">
-                                                    <h5 className="header__Cart-item-name">Apple iPhone 12
-                                                        64GB</h5>
-                                                    <div className="header__cart-item-price-wrap">
-                                                                <span
-                                                                    className="header__Cart-item-price">₫25.200.000</span>
-                                                        <span className="header__Cart-item-muntifly">x</span>
-                                                        <span className="header__Cart-item-quantity">1</span>
-                                                    </div>
-                                                </div>
-                                                <div className="header__Cart-item-body">
-                                                    <span className="header__Cart-item-description">Phân loại: Purple</span>
-                                                    <span className="header__Cart-item-remove">xóa</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <button className="header__cart-view btn btn--primary">Xem giỏ hàng</button>
-                                </div>
-
-
-
-                            </div>
-                        </div>
+                      <Cart/>
                     </div>
 
 
