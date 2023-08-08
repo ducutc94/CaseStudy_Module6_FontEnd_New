@@ -109,8 +109,6 @@ export default function Login({showLogin, handleClose}) {
                                                       <FontAwesomeIcon icon={faEyeSlash} />
                                                     </span>
                                                 )}
-
-
                                             </div>
                                         </div>
 
