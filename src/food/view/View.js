@@ -7,17 +7,25 @@ import {useFormik} from "formik";
 
 
 export default function View() {
-    const [food, setFood] = useState({})
-    const {id} = useParams()
-    const [shops, setShop] = useState("")
-    const navigate = useNavigate()
-    const user = JSON.parse(localStorage.getItem("user"))
+    const [food, setFood] = useState({});
+    const {id} = useParams();
+    const [shops, setShop] = useState("");
+    const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user"));
     const idUser = user.id;
+    const [idCart,setIdCart] = useState();
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products/${id}`).then((res) => {
             setFood(res.data)
             setShop(res.data.shops.name)
+        })
+        axios.post(`http://localhost:8080/api/carts`,{
+            user:{
+                id:idUser
+            }
+        }).then((res) => {
+           setIdCart(res.data.id)
         })
     }, [])
 
@@ -56,14 +64,20 @@ export default function View() {
 
         },
         onSubmit: values => {
+            console.log(values.quantity)
+            // eslint-disable-next-line no-unused-expressions
+            values.quantity === "" ? values.quantity =1 : values.quantity;
             axios.post("http://localhost:8080/api/products-carts",{
-                quantity:values.quantity,
+                quantity:+values.quantity,
                 carts:{
-                    id:3
+                    id:idCart
                 },
                 products:{
                     id:id
                 }
+            }).then(()=>{
+                Swal.fire('Thêm vào giỏ hàng thành công!', '', 'success')
+                navigate('/')
             })
 
         },
