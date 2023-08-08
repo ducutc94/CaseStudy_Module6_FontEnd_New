@@ -35,7 +35,7 @@
     border-radius: 2px;
 }
 .auth-form__aside {
-    margin-top: 18px;
+    margin-top: 24px;
 }
 .auth-form__policy-text {
     font-size: 1.2rem;
@@ -112,4 +112,13 @@
 }
 .auth-form__help-forgot {
     color: var(--primary-color);
+}
+
+
+.auth-form__toggle-password{
+    position: relative;
+    float: right;
+    top: -32px;
+    font-size: 14px;
+    left: -11px;
 }

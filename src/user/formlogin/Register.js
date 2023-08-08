@@ -3,7 +3,10 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {useEffect, useState} from "react";
 import * as Yup from "yup";
-import {number} from "yup";
+
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Register({setRegister,handleCloseRegister}) {
     const [list,setList] = useState([]);
@@ -89,6 +92,9 @@ export default function Register({setRegister,handleCloseRegister}) {
         },
     });
 
+    const [showPassword, setShowPassword] = useState(false);
+
+
     return (
         <>
             <div className="auth-form">
@@ -124,12 +130,24 @@ export default function Register({setRegister,handleCloseRegister}) {
                                 <input
                                     name={'password'}
                                     onChange={formikRegister.handleChange}
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     id="pass_register"
                                     className="auth-form__input"
                                     placeholder="Mật khẩu của bạn"/>
                                 {<span className={"text-danger"}>{formikRegister.errors.password}</span>}
 
+                                {showPassword ? (
+                                        <span
+                                            className="auth-form__toggle-password"
+                                            onClick={() => setShowPassword(false)}>
+                                                          <FontAwesomeIcon icon={faEye} />
+                                                    </span>) :
+                                    (<span
+                                            className="auth-form__toggle-password"
+                                            onClick={() => setShowPassword(true)}>
+                                                      <FontAwesomeIcon icon={faEyeSlash} />
+                                                    </span>
+                                    )}
                             </div>
                             <div
                                 className="auth-form__group">

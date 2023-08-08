@@ -6,6 +6,12 @@ import {useState} from "react";
 import Register from "./Register";
 import * as Yup from "yup";
 
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
+
+
 export default function Login({showLogin, handleClose}) {
     const [showRegister, setRegister] = useState(false);
     const validation = Yup.object().shape({
@@ -54,6 +60,8 @@ export default function Login({showLogin, handleClose}) {
         },
     });
 
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
         <>
             <Modal show={showLogin} onHide={handleClose} backdrop="static" keyboard={false}>
@@ -82,11 +90,26 @@ export default function Login({showLogin, handleClose}) {
                                             </div>
                                             <div className="auth-form__group">
                                                 <input name={'password'} onChange={formik.handleChange}
-                                                       type={'password'} className={'auth-form__input'}
+                                                       type={showPassword ? "text" : "password"}
+                                                       className={'auth-form__input'}
                                                        id={'your_pass'}
                                                        placeholder={'Mật khẩu của bạn'}>
                                                 </input>
                                                 {<span className={"text-danger"}>{formik.errors.password}</span>}
+
+                                                {showPassword ? (
+                                                    <span
+                                                        className="auth-form__toggle-password"
+                                                        onClick={() => setShowPassword(false)}>
+                                                          <FontAwesomeIcon icon={faEye} />
+                                                    </span>) :
+                                                    (<span
+                                                        className="auth-form__toggle-password"
+                                                        onClick={() => setShowPassword(true)}>
+                                                      <FontAwesomeIcon icon={faEyeSlash} />
+                                                    </span>
+                                                )}
+
 
                                             </div>
                                         </div>
