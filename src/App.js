@@ -9,6 +9,9 @@ import Update from "./food/form/Update";
 import ListShop from "./shop/ListShop";
 import CreateShop from "./shop/CreateShop";
 import UpdateShop from "./shop/UpdateShop";
+import ListVoucher from "./voucher/ListVoucher";
+import CreateVoucher from "./voucher/CreateVoucher";
+import UpdateVoucher from "./voucher/UpdateVoucher";
 
 function App() {
     return (
@@ -24,6 +27,11 @@ function App() {
                     <Route path={'/shop'} element={<ListShop />}></Route>
                     <Route path={'/create-shop'} element={<CreateShop />}></Route>
                     <Route path={'/update-shop/:id'} element={<UpdateShop />}></Route>
+
+                    <Route path={'/voucher'} element={<ListVoucher />}></Route>
+                    <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>
+                    <Route path={'/update-voucher/:id'} element={<UpdateVoucher />}></Route>
+
                 </Routes>
             </div>
             <Footer/>

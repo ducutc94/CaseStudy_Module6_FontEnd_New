@@ -26,10 +26,10 @@ export default function CreateShop(){
         }))
     },[])
     const checkEmailExists = (email) => {
-        return lists.some((user) => user.email === email);
+        return lists.some((shop) => shop.email === email);
     };
     const checkPhone = (phone) => {
-        return lists.some((user) => user.phone === phone);
+        return lists.some((shop) => shop.phone === phone);
     };
     const setTime = (values) => {
         let str = values + ":00";
