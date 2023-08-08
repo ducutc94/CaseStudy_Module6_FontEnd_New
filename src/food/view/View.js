@@ -2,18 +2,22 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import Swal from "sweetalert2";
+import {useFormik} from "formik";
+
 
 
 export default function View() {
     const [food, setFood] = useState({})
     const {id} = useParams()
-    const [shops,setShop] =useState("")
+    const [shops, setShop] = useState("")
     const navigate = useNavigate()
+    const user = JSON.parse(localStorage.getItem("user"))
+    const idUser = user.id;
 
     useEffect(() => {
-       axios.get(`http://localhost:8080/api/products/${id}`).then((res) => {
+        axios.get(`http://localhost:8080/api/products/${id}`).then((res) => {
             setFood(res.data)
-           setShop(res.data.shops.name)
+            setShop(res.data.shops.name)
         })
     }, [])
 
@@ -46,23 +50,43 @@ export default function View() {
             }
         })
     }
+    const formik = useFormik({
+        initialValues: {
+            quantity: "",
+
+        },
+        onSubmit: values => {
+            axios.post("http://localhost:8080/api/products-carts",{
+                quantity:values.quantity,
+                carts:{
+                    id:3
+                },
+                products:{
+                    id:id
+                }
+            })
+
+        },
+
+    })
 
     return (
         <>
-            <div className="grid">
-                <div className="grid__row app__content">
+            <form onSubmit={formik.handleSubmit}>
+                <div className="grid">
+                    <div className="grid__row app__content">
 
-                    <div className="grid__column-10">
+                        <div className="grid__column-10">
 
-                        <div className="home-product">
-                            <div className="grid__row">
-                                {/*product-item*/}
+                            <div className="home-product">
+                                <div className="grid__row">
+                                    {/*product-item*/}
 
                                     <div className="grid__column-2-4">
-                                        <a className="home-product-item"  >
+                                        <a className="home-product-item">
                                             <div className="home-product-item__image"
                                             >
-                                                <img className=""  src={food.image} alt=""/>
+                                                <img className="" src={food.image} alt=""/>
                                             </div>
 
                                             <h4 className="home-product-item__name">{food.name}</h4>
@@ -93,6 +117,10 @@ export default function View() {
                                                     <button>
                                                         <Link to={`/update-food/${food.id}`}>Sửa</Link>
                                                     </button>
+                                                    <button type={"submit"}>Thêm giỏ hàng</button>
+                                                    <input onChange={formik.handleChange}
+                                                           type="number" name={"quantity"}
+                                                    />||  <span>Số lượng</span>
                                                 </div>
 
                                             </div>
@@ -110,11 +138,12 @@ export default function View() {
                                         </a>
                                     </div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </>
     )
 }
