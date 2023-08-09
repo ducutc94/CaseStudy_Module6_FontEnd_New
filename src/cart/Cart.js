@@ -1,11 +1,14 @@
 
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 export default function Cart(){
     const [productCart, setProductCart] = useState([]);
+    const user = JSON.parse(localStorage.getItem("user"))
+    const idUser = user.id;
     useEffect(() => {
-        axios.get('http://localhost:8080/api/products-carts').then((res) => {
+        axios.get(`http://localhost:8080/api/products-carts/user/${idUser}`).then((res) => {
             if(res.data !== null){
                 setProductCart(res.data)
 
@@ -57,7 +60,7 @@ export default function Cart(){
                                        </li>
                                    )}
                                </ul>
-                               <button className="header__cart-view btn btn--primary">Xem giỏ hàng</button>
+                               <Link to={'/products-carts'} className="header__cart-view btn btn--primary">Xem giỏ hàng</Link>
                            </div>
                        </>}
 

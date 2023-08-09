@@ -65,8 +65,8 @@ export default function Header() {
                         </div>
 
                         <div className="header__select--category">
-                            <button className="header__select--category--btn">Đồ ăn</button>
-                            <button className="header__select--category--btn">Thực phẩm</button>
+                            <button className="header__select--category--btn"><Link to={`/category/${1}`}>Đồ ăn</Link></button>
+                            <button className="header__select--category--btn"><Link to={`/category/${2}`}>Thực phẩm</Link></button>
                             <button className="header__select--category--btn">Bia</button>
                             <button className="header__select--category--btn">Hoa</button>
                             <button className="header__select--category--btn">Siêu thị</button>

@@ -14,6 +14,8 @@ import CreateVoucher from "./voucher/CreateVoucher";
 import UpdateVoucher from "./voucher/UpdateVoucher";
 import Cart from "./cart/Cart";
 import Search from "./food/view/Search";
+import QuickSearch from "./food/view/QuickSearch";
+import ProductsCarts from "./cart/ProductsCarts";
 
 function App() {
     return (
@@ -36,7 +38,9 @@ function App() {
                     <Route path={'/voucher'} element={<ListVoucher />}></Route>
                     <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>
                     <Route path={'/update-voucher/:id'} element={<UpdateVoucher />}></Route>
+                    <Route path={'/category/:id'} element={<QuickSearch/>}></Route>
 
+                    <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                 </Routes>
             </div>
             <Footer/>
