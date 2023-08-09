@@ -57,12 +57,51 @@ html {
     padding-right: 10px;
     width: calc(100% /5);
 }
+
+.grid__column-3 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*3);
+}
+
+.grid__column-4 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*4);
+}
+.grid__column-5 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*5);
+}
+.grid__column-6 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*6);
+}
+
 .grid__column-10 {
     padding-left: 5px;
     padding-right: 5px;
     width:calc((100% / 12)*12);
 }
 
+
+.grid__column-12 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*12);
+}
+.grid__column-9 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*9);
+}
+.grid__column-8 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width:calc((100% / 12)*8);
+}
 
 
 /* Animation */
@@ -99,18 +138,30 @@ html {
 .btn.btn--size-s {
     height: 32px;
     font-size: 1.2rem;
-    padding: 0 8px;   
+    padding: 0 8px;
 }
 .btn.btn--primary {
     color: var(--white-color);
     background-color: #EE4D2DFF;
 }
 
-.btn-primary{
-    --bs-btn-hover-bg: #EE4D2DFF
+.btn-orange {
+    min-width: 90px;
+    min-height: 34px;
+    text-decoration: none;
+    border: none;
+    border-radius: 3px;
+    font-size: 1.5rem;
+    padding: 0 12px;
+    cursor: pointer;
+    color: #ffffff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#EE4D2DFF;
+}
+.btn-orange:hover{
+    color: #ffffff;
+    background-color: #be1d00;
 }
 
-.btn-check:focus+.btn-primary, .btn-primary:focus{
-    background-color: #fff;
-    color: #ee4d2d;
-}

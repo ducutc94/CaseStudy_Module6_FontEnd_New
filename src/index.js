@@ -8,6 +8,7 @@ import '../src/css/home.css';
 import '../src/css/footer.css';
 import '../src/css/form_CreateUpdate.css';
 import '../src/css/shop.css';
+import '../src/css/views_food.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";

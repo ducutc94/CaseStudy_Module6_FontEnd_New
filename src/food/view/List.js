@@ -80,7 +80,7 @@ export default function List() {
 
                                                 {/*đây là phần lấy giảm giá ở Voucher*/}
                                                 <span className="home-product-item__sale-off-percent">
-                                                    10%
+                                                    {items.shops.id}%
                                                 </span>
                                                 <span className="home-product-item__sale-off-label">Giảm</span>
                                             </div>
