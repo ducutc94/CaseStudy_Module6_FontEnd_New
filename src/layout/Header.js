@@ -65,8 +65,12 @@ export default function Header() {
                         </div>
 
                         <div className="header__select--category">
-                            <button className="header__select--category--btn"><Link to={`/category/${1}`}>Đồ ăn</Link></button>
-                            <button className="header__select--category--btn"><Link to={`/category/${2}`}>Thực phẩm</Link></button>
+                            <button className="header__select--category--btn"><Link to={`/category/${1}`} className="header__select--category--btn-link">
+                                Đồ ăn</Link>
+                            </button>
+                            <button className="header__select--category--btn"><Link to={`/category/${2}`} className="header__select--category--btn-link">
+                                Thực phẩm</Link>
+                            </button>
                             <button className="header__select--category--btn">Bia</button>
                             <button className="header__select--category--btn">Hoa</button>
                             <button className="header__select--category--btn">Siêu thị</button>
@@ -115,18 +119,29 @@ export default function Header() {
 
                                 <ul className="header__navbar-user-menu">
                                     <li className="header__navbar-user-item">
-                                        <a href="src/layout" className="">Tài khoản của tôi</a>
+                                        <a href="src/layout" className="header__navbar-user-manager">
+                                            <i className="fa-solid fa-user iconManager"></i>
+                                            Tài khoản của tôi
+                                        </a>
                                     </li>
                                     <li className="header__navbar-user-item">
-                                        <a href="src/layout" className="">Đơn mua</a>
+                                        <a href="src/layout" className="header__navbar-user-manager">
+                                            <i className="fa-solid fa-bag-shopping iconManager"></i>
+                                            Đơn mua
+                                        </a>
                                     </li>
                                     {user.authorities[0].authority === "ROLE_MERCHANT" && <>
                                         <li className="header__navbar-user-item">
-                                            <Link to={"/shop"} className="">Quản lý cửa hàng</Link>
+                                            <Link to={"/shop"} className="header__navbar-user-manager">
+                                                <i className="fa-solid fa-shop iconManager"></i>
+                                                Quản lý cửa hàng
+                                            </Link>
                                         </li>
                                     </>}
                                     <li className="header__navbar-user-item header__navbar-user-item--sparate">
-                                        <a className="" onClick={() => removeDataFromLocalStorage()}>
+                                        <a className="header__navbar-user-manager"
+                                           onClick={() => removeDataFromLocalStorage()}>
+                                            <i className="fa-solid fa-right-from-bracket iconManager"></i>
                                             Đăng xuất
                                         </a>
                                     </li>
