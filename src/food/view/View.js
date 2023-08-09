@@ -5,27 +5,38 @@ import Swal from "sweetalert2";
 import {useFormik} from "formik";
 
 
-
 export default function View() {
     const [food, setFood] = useState({});
     const {id} = useParams();
     const [shops, setShop] = useState("");
+    const [shopsDescription, setShopsDescription] = useState("");
+    const [shopsTimeStart, setShopsTimeStart] = useState("");
+    const [shopsTimeEnd, setShopsTimeEnd] = useState("");
+
+
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user"));
     const idUser = user.id;
-    const [idCart,setIdCart] = useState();
+    const [idCart, setIdCart] = useState();
+    const [vouchers, setVouchers] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products/${id}`).then((res) => {
             setFood(res.data)
             setShop(res.data.shops.name)
+            setShopsDescription(res.data.shops.description)
+            setShopsTimeStart(res.data.shops.startTime)
+            setShopsTimeEnd(res.data.shops.endTime)
         })
-        axios.post(`http://localhost:8080/api/carts`,{
-            user:{
-                id:idUser
+        axios.post(`http://localhost:8080/api/carts`, {
+            user: {
+                id: idUser
             }
         }).then((res) => {
-           setIdCart(res.data.id)
+            setIdCart(res.data.id)
+        })
+        axios.get(`http://localhost:8080/api/vouchers`).then((res) => {
+           setVouchers(res.data)
         })
     }, [])
 
@@ -58,6 +69,7 @@ export default function View() {
             }
         })
     }
+
     const formik = useFormik({
         initialValues: {
             quantity: "",
@@ -66,16 +78,16 @@ export default function View() {
         onSubmit: values => {
             console.log(values.quantity)
             // eslint-disable-next-line no-unused-expressions
-            values.quantity === "" ? values.quantity =1 : values.quantity;
-            axios.post("http://localhost:8080/api/products-carts",{
-                quantity:+values.quantity,
-                carts:{
-                    id:idCart
+            values.quantity === "" ? values.quantity = 1 : values.quantity;
+            axios.post("http://localhost:8080/api/products-carts", {
+                quantity: +values.quantity,
+                carts: {
+                    id: idCart
                 },
-                products:{
-                    id:id
+                products: {
+                    id: id
                 }
-            }).then(()=>{
+            }).then(() => {
                 Swal.fire('Thêm vào giỏ hàng thành công!', '', 'success')
                 navigate('/')
             })
@@ -84,76 +96,232 @@ export default function View() {
 
     })
 
+
+    const [quantity, setQuantity] = useState(1);
+    const increaseQuantity = () => {
+        setQuantity(quantity + 1);
+    };
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+
+
+    const today = new Date();
+    const hour = today.getHours();
+    const minu = today.getMinutes();
+    const sec = today.getSeconds();
+    const time = hour + ":" + minu + ":" + sec;
+
+    const check = (startTime, endTime) => {
+        return time >= startTime && time <= endTime;
+    };
+
+
+
+
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
                 <div className="grid">
                     <div className="grid__row app__content">
+                        <div className="grid__column-12">
+                            <div className="title-view-container">
+                                <h1 className="title_view-food">Chi tiết món ăn</h1>
+                            </div>
 
-                        <div className="grid__column-10">
-
-                            <div className="home-product">
-                                <div className="grid__row">
-                                    {/*product-item*/}
-
-                                    <div className="grid__column-2-4">
-                                        <a className="home-product-item">
-                                            <div className="home-product-item__image"
-                                            >
-                                                <img className="" src={food.image} alt=""/>
-                                            </div>
-
-                                            <h4 className="home-product-item__name">{food.name}</h4>
-                                            <div className="home-product-item__price">
-                                                <span className="home-product-item__price-old">
-                                                    Số lượng: {food.quantity}</span>
-                                                <span className="home-product-item__price-current">
-                                                    Giá: {food.price}</span>
-                                            </div>
-                                            <div className="home-product-item__action">
-                                            <span className="home-product-item__like home-product-item__like--liked">
-                                                {/*<i className="home-product-item__like-icon-empty far fa-heart"></i>*/}
-                                                <i className="home-product-item__like-icon-fill fas fa-heart"></i>
-                                            </span>
-
-                                                <span className="home-product-item__sold">
-                                                Lượt xem: {food.views}
-                                            </span>
-                                            </div>
-                                            <div className="home-product-item__origin">
-                                                <span className="home-product-item__brand"></span>
-                                                <span className="home-product-item__origin-name">
-                                                   Tên của hàng: {shops}</span>
-                                            </div>
-                                            <div className="home-product-item__origin">
-                                                <div>
-                                                    <button onClick={() => deleteFood(food.id)}>Xóa</button>
-                                                    <button>
-                                                        <Link to={`/update-food/${food.id}`}>Sửa</Link>
-                                                    </button>
-                                                    <button type={"submit"}>Thêm giỏ hàng</button>
-                                                    <input onChange={formik.handleChange}
-                                                           type="number" name={"quantity"}
-                                                    />||  <span>Số lượng</span>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="home-product-item__favourite">
-                                                <i className="fa fa-thumbs-up"></i>
-                                                <span>Yêu thích</span>
-                                            </div>
-
-                                            <div className="home-product-item__sale-off">
-                                                {/*đây là phần lấy giảm giá ở Voucher*/}
-                                                <span className="home-product-item__sale-off-percent">10%</span>
-                                                <span className="home-product-item__sale-off-label">Giảm</span>
-                                            </div>
-                                        </a>
+                            <div className="view_food-container">
+                                <div className="grid__column-5">
+                                    <div className="view_food-left">
+                                        <div className="view_food-left-img">
+                                            <img src={food.image}/>
+                                        </div>
                                     </div>
 
+                                    <div className="view_food-left">
+                                        <div className="view_food-left-img-container">
+                                            <img className="view_food-left-img-container-item"
+                                                 src={food.image}/>
+                                            <img className="view_food-left-img-container-item"
+                                                 src={food.image}/>
+                                            <img className="view_food-left-img-container-item"
+                                                 src={food.image}/>
+                                            <img className="view_food-left-img-container-item"
+                                                 src={food.image}/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid__column-6">
+                                    <div className="view_food-right">
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-item-link">
+                                                ShopeeFood
+                                            </div>
+                                            <div className="view_food-right-item-link">
+                                                {shops}
+                                            </div>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-item-like">
+                                                <i className="fa fa-thumbs-up"></i>
+                                                Yêu thích
+                                            </div>
+                                            <span>
+                                                Món gì cũng có tại
+                                        <a style={{textDecoration: `none`, color: `blue`}}> {shops}</a>
+                                    </span>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <h1 className="view_food-right-item-name">{shops}</h1>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-item-address">
+                                                {shopsDescription}
+                                            </div>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-item-rate">
+                                                <i className="view_food-right-item-star fa-solid fa-star"
+                                                   style={{color: `#ffc107`}}></i>
+                                                <i className="view_food-right-item-star fa-solid fa-star"
+                                                   style={{color: `#ffc107`}}></i>
+                                                <i className="view_food-right-item-star fa-solid fa-star"
+                                                   style={{color: `#ffc107`}}></i>
+                                                <i className="view_food-right-item-star fa-solid fa-star"
+                                                   style={{color: `#ffc107`}}></i>
+                                                <i className="view_food-right-item-star fa-solid fa-star"
+                                                   style={{color: `#ffc107`}}></i>
+                                            </div>
+                                            <span className="view_food-right-item-views">999+</span>
+                                            đánh giá trên ShopeeFood
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-more">
+                                                <a>Xem thêm lượt đánh giá từ Foody</a>
+                                            </div>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-status">
+                                                <div className="view_food-status-time">
+                                                    {check(shopsTimeStart, shopsTimeEnd) ? (
+                                                        <span className="view_food-right-status-on">Mở cửa</span>
+                                                    ) : (
+                                                        <span className="view_food-right-status-off">Đóng cửa</span>
+                                                    )}
+                                                </div>
+                                                <div className="view_food-status-time-now">
+                                                    <i className="far fa-clock"></i>
+                                                    <span> {shopsTimeStart} - {shopsTimeEnd}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-item-price">
+                                                <i className="fas fa-dollar-sign"></i>
+                                                {food.price}
+                                            </div>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-line"></div>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-add">
+                                                <div className="utility-item">
+                                                    <div className="utility-title">
+                                                        Phí dịch vụ
+                                                    </div>
+                                                    <div className="utility-content">
+                                                <span className="txt-bold-txt-red">
+                                                    0.0% Phí phục vụ
+                                                </span>
+                                                    </div>
+                                                    <span className="icon icon-partner-vi">
+                                                            <img src="../static/img/partner-vi-removebg-preview.png"
+                                                                 className="icon-partner-vi-img"/>
+                                                    </span>
+                                                </div>
+
+                                                <div className="utility-item">
+                                                    <div className="utility-title">
+                                                        Dịch vụ bơi
+                                                    </div>
+                                                    <div className="utility-content">
+                                                <span className="txt-bold-txt-red">
+                                                    ShoopeeFood
+                                                </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-voucher-container">
+                                                <div className="view_food-right-voucher-title">
+                                                    Voucher:
+                                                </div>
+                                                <select className="view_food-right-voucher-inner">
+                                                    {vouchers.map((items, index) =>
+                                                        <option className="view_food-right-voucher-item" key={index}>
+                                                            {items.name}
+                                                        </option>
+                                                    )}
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div className="view_food-right-container">
+                                            <div className="view_food-right-item-container-btn">
+                                                <div className="view_food-right-select-number">
+                                                    <div className="view_food-right-select-number-title">
+                                                        Số lượng:
+                                                    </div>
+                                                    <div className="view_food-right-select-number-container">
+                                                        <div className="view_food-right-select-number-item">
+                                                            <div className="el-input-number">
+                                                                <div className="el-input-number__decrease" onClick={decreaseQuantity}>
+                                                                    <i className="fas fa-minus-circle"></i>
+                                                                </div>
+                                                                <div className="input-selecter-number">
+                                                                    <input
+                                                                        onChange={formik.handleChange}
+                                                                        name={"quantity"}
+                                                                        value={quantity}
+                                                                        className="el-input__inner no-arrows"
+                                                                        max="9999"
+                                                                        min="1"
+                                                                        type="number" step="1"/>
+                                                                </div>
+                                                                <div className="el-input-number__increase" onClick={increaseQuantity}>
+                                                                    <i className="fas fa-plus-circle"></i>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="view_food-right-item-edit">
+                                                    <i className="fa-solid fa-pen-to-square"></i>
+                                                    <Link to={`/update-food/${food.id}`}
+                                                          style={{textDecoration: `none`, color: `white`, padding:`5px`}}>
+                                                        Sửa thông tin
+                                                    </Link>
+                                                </div>
+
+                                                <div className="view_food-right-item-buy">
+                                                    <i className="fa-solid fa-cart-plus"></i>
+                                                    <button className="view_food-right-item-buy-btn"
+                                                            type={"submit"}>Thêm vào giỏ hàng
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
