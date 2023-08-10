@@ -7,6 +7,7 @@ import Cart from "../cart/Cart";
 
 export default function Header() {
 
+
     const [showLogin, setShowLogin] = useState(false)
     const user = JSON.parse(localStorage.getItem("user"))
     const [city,setCity] = useState([])
@@ -26,6 +27,13 @@ export default function Header() {
     const removeDataFromLocalStorage = () => {
         localStorage.removeItem('user');
         navigate('/')
+    };
+    const [selectedCityId, setSelectedCityId] = useState(0);
+
+    const handleCityChange = (event) => {
+        const cityId = event.target.value;
+        setSelectedCityId(cityId);
+        navigate(`/findByCity/${cityId}`);
     };
 
     //Get city
@@ -56,11 +64,20 @@ export default function Header() {
 
                             <div className="header__select--address-inner">
 
-                                <select name="" id="" className="header__select--address--btn">
-                                    {city.map((items, index) =>
-                                        <option key={index}>{items.name}</option>
-                                    )}
+                                <select
+                                    name=""
+                                    id=""
+                                    className="header__select--address--btn"
+                                    value={selectedCityId}
+                                    onChange={handleCityChange}
+                                >
+                                    {city.map((item, index) => (
+                                        <option key={index} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    ))}
                                 </select>
+
                             </div>
                         </div>
 
