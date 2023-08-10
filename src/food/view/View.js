@@ -3,6 +3,7 @@ import axios from "axios";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import Swal from "sweetalert2";
 import {useFormik} from "formik";
+import Login from "../../user/formlogin/Login";
 
 
 export default function View() {
@@ -88,21 +89,36 @@ export default function View() {
 
         },
         onSubmit: values => {
-            console.log(values.quantity)
             // eslint-disable-next-line no-unused-expressions
             values.quantity === "" ? values.quantity = 1 : values.quantity;
-            axios.post("http://localhost:8080/api/products-carts", {
-                quantity: +values.quantity,
-                carts: {
-                    id: idCart
-                },
-                products: {
-                    id: id
-                }
-            }).then(() => {
-                Swal.fire('Thêm vào giỏ hàng thành công!', '', 'success')
-                navigate('/')
-            })
+           user  ?(
+               values.quantity > food.quantity ? (
+                   Swal.fire({
+                       width: '450px',
+                       position: 'center',
+                       title: ' Số lượng mua lớn hơn số lượng hiện có ',
+                       icon: 'info'
+                   })
+               ):(axios.post("http://localhost:8080/api/products-carts", {
+                   quantity: +values.quantity,
+                   carts: {
+                       id: idCart
+                   },
+                   products: {
+                       id: id
+                   }
+               }).then(() => {
+                   Swal.fire('Thêm vào giỏ hàng thành công!', '', 'success')
+                   navigate('/')
+               }))
+           ):
+               (Swal.fire({
+                   width: '450px',
+                   position: 'center',
+                   title: ' Mời bạn đăng nhập  ',
+                   icon: 'info'
+               })
+               )
 
         },
 
@@ -306,7 +322,7 @@ export default function View() {
                                                                                     name={"quantity"}
                                                                                     value={formik.values.quantity}
                                                                                     className="el-input__inner no-arrows"
-                                                                                    max="999"
+                                                                                    max={food.quantity}
                                                                                     min="1"
                                                                                     type="number" step="1"/>
                                                                             </div>

@@ -18,8 +18,9 @@ export default function PCByMerchant() {
     const user = JSON.parse(localStorage.getItem("user"))
     const idUser = checkUserID(user);
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/products-carts/merchant-cart/${idUser}`).then((res) => {
+        axios.get(`http://localhost:8080/api/products-carts/merchant-service/${idUser}`).then((res) => {
             if (res.data !== null) {
+                console.log(res.data)
                 setProductCart(res.data)
 
             } else {
@@ -38,7 +39,7 @@ export default function PCByMerchant() {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                axios.put(`http://localhost:8080/api/products-carts/update/${id}`).then(() => {
+                axios.put(`http://localhost:8080/api/products-carts/update-confirm/${id}`).then(() => {
                     Swal.fire({
                         width: '450px',
                         position: 'center',
@@ -132,8 +133,8 @@ export default function PCByMerchant() {
                     </tr>
                     </thead>
                     <tbody>
-                    {
-                        productCart.map((item, index) =>
+                    {productCart ? (
+                        <> {productCart.map((item, index) =>
                             <tr key={item.id}>
                                 <td className="table_shop_list-inner">{index + 1}</td>
                                 <td className="table_shop_list-inner">{item.products.name}</td>
@@ -172,7 +173,10 @@ export default function PCByMerchant() {
 
                             </tr>
                         )
-                    }
+                        }
+                        </>
+                    ):(<></>)}
+
                     </tbody>
                 </table>
             </div>

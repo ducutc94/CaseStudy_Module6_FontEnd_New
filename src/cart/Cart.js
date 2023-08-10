@@ -78,7 +78,9 @@ export default function Cart(){
                                </ul>
 
                            </div>
-                       </>} <Link to={'/products-carts'} className="header__cart-view btn btn--primary">Xem giỏ hàng</Link>
+                       </>}
+                       {user ? ( <Link to={'/products-carts'} className="header__cart-view btn btn--primary">Xem giỏ hàng</Link>):(<></>)}
+
 
 
                    </div>

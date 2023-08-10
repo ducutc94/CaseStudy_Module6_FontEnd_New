@@ -43,7 +43,7 @@ export default function ProductsCarts() {
                     Swal.fire({
                         width: '450px',
                         position: 'center',
-                        title: 'Thanh toán thành công!',
+                        title: 'Thanh toán thành công! Đã gửi yêu cầu đến chủ cửa hàng',
                         icon: 'success'
                     });
                 })
