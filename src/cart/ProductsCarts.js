@@ -127,7 +127,7 @@ export default function ProductsCarts() {
                             <h5 className="table_shop_list-title">
                                 TRANG THÁI ĐƠN
                             </h5></td>
-                        <td colSpan={4}><h5 className="table_shop_list-title">
+                        <td colSpan={3}><h5 className="table_shop_list-title">
                             TUỲ CHỌN
                         </h5></td>
                     </tr>
@@ -154,20 +154,24 @@ export default function ProductsCarts() {
                                     <td className="table_shop_list-inner">Đang chờ xác nhận</td>
                                 </>}
 
-                                {item.statusProductsCarts === "2" && <>
+                                {item.statusProductsCarts === "2" ? (<>
                                     <td className="table_shop_list-inner">
                                         <button onClick={() => createBill(item.id)}>Thanh toán</button>
                                     </td>
-                                </>}
-
-                                {item.statusProductsCarts === "2" && <>
                                     <td className="table_shop_list-inner">
                                         <button onClick={() => deleteCart(item.id)}>Huỷ</button>
                                     </td>
-                                </>}
-                                <td className="table_shop_list-inner">
-                                    <button onClick={() => createBill(item.id)}>Chi tiết</button>
+                                </>):(<>
+                                    <td className="table_shop_list-inner">
+
                                 </td>
+                                    <td className="table_shop_list-inner">
+                                    <button onClick={() => createBill(item.id)}>Chi tiết</button>
+                                    </td>
+                                   </>) }
+
+
+
 
 
                             </tr>

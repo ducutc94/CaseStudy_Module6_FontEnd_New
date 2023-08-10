@@ -56,7 +56,7 @@ export default function Cart(){
                                <ul className="header__Cart-list-item">
                                    {productCart.map((items, index) =>
                                        <li className="header__Cart-item" key={index}>
-                                           <img src="../static/img/product/iphone12.jpg" alt=""
+                                           <img src={items.products.image} alt=""
                                                 className="header__Cart-img"/>
                                            <div className="header__Cart-item-info">
                                                <div className="header__Cart-item-head">

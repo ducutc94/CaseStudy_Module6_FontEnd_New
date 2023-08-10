@@ -246,7 +246,10 @@
     margin-top: 3px;
     margin-right: 3px;
 }
-
+.view_food-right-item-quantity{
+    margin-top: 10px;
+    font-size: 14px;
+}
 .view_food-right-line {
     border-bottom: 1px solid gray;
     width: 100%;

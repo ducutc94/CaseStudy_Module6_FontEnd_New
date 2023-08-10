@@ -115,7 +115,7 @@ export default function View() {
     };
 
     const increaseQuantity = () => {
-        formik.setFieldValue('quantity', Math.min(formik.values.quantity + 1, 9999));
+        formik.setFieldValue('quantity', Math.min(formik.values.quantity + 1, food.quantity));
     };
 
 
@@ -237,6 +237,11 @@ export default function View() {
                                             </div>
                                         </div>
                                         <div className="view_food-right-container">
+                                            <div className="view_food-right-item-quantity">
+                                               Số lượng: {food.quantity}
+                                            </div>
+                                        </div>
+                                        <div className="view_food-right-container">
                                             <div className="view_food-right-line"></div>
                                         </div>
                                         <div className="view_food-right-container">
@@ -306,7 +311,7 @@ export default function View() {
                                                                                     name={"quantity"}
                                                                                     value={formik.values.quantity}
                                                                                     className="el-input__inner no-arrows"
-                                                                                    max="9999"
+                                                                                    max="999"
                                                                                     min="1"
                                                                                     type="number" step="1"/>
                                                                             </div>
