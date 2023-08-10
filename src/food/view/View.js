@@ -109,15 +109,19 @@ export default function View() {
     })
 
 
-    const [quantitys, setQuantity] = useState(1);
-    const increaseQuantity = () => {
-        setQuantity(quantitys + 1);
-    };
+
     const decreaseQuantity = () => {
-        if (quantitys > 1) {
-            setQuantity(quantitys - 1);
-        }
+        formik.setFieldValue('quantity', Math.max(formik.values.quantity - 1, 1));
     };
+
+    const increaseQuantity = () => {
+        formik.setFieldValue('quantity', Math.min(formik.values.quantity + 1, 9999));
+    };
+
+
+
+
+
 
 
     const today = new Date();
@@ -300,7 +304,7 @@ export default function View() {
                                                                                 <input
                                                                                     onChange={formik.handleChange}
                                                                                     name={"quantity"}
-                                                                                    value={formik.values.quantitys}
+                                                                                    value={formik.values.quantity}
                                                                                     className="el-input__inner no-arrows"
                                                                                     max="9999"
                                                                                     min="1"
