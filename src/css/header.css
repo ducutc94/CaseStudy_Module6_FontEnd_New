@@ -38,6 +38,7 @@
 
 
 
+
 /* header-with search */
 .header-with-search {
     height: var(--header-with-search-height);
@@ -124,7 +125,15 @@
     font-size: 14px;
     border: none;
     background-color: white;
+    border-bottom: 1px solid orangered;
 }
+
+
+
+
+
+
+
 .header__search{
     display: flex;
     height: 36px;

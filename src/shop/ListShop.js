@@ -61,8 +61,9 @@ export default function ListShop() {
                     </div>
 
                     <div className="shopList_table_inner">
-                        <Link to={"/create-shop"} className={"btn btn-success"}>
+                        <Link to={"/create-shop"} className={"btn-successful"}>
                             <i className="fa-solid fa-plus"></i>
+                            TẠO SHOP
                         </Link>
                     </div>
 
@@ -125,14 +126,21 @@ export default function ListShop() {
                                 {item.statusShops === "2" && <><td  className="table_shop_list-inner">Chưa xác thực</td>
                                 </>}
                                 <td  className="table_shop_list-inner">{item.city.name}</td>
-                                {item.statusShops === "0" && <><td className="table_shop_list-inner">
-                                    <Link to={`/update-shop/${item.id}`} >Sửa</Link></td>
+                                {item.statusShops === "0"  ? (<>
+                                    <td className="table_shop_list-inner">
+                                        <Link to={`/update-shop/${item.id}`} >Sửa</Link></td>
                                     <td className="table_shop_list-inner">
                                         <button onClick={() => deleteShop(item.id)}>Xóa</button>
                                     </td>
                                     <td  className="table_shop_list-inner">
                                         <Link to={`/create-food/${item.id}`} className="btn-shop-2" >Thêm món</Link></td>
-                                </>}
+                                </>):(
+                                    <>
+                                    <td className="table_shop_list-inner"></td>
+                                    <td className="table_shop_list-inner"></td>
+                                    <td  className="table_shop_list-inner"></td>
+                                    </>
+                                    ) }
                             </tr>
                         )
                     }

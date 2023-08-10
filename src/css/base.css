@@ -181,3 +181,22 @@ html {
     background-color: #be1d00;
 }
 
+.btn-successful{
+    min-width: 124px;
+    min-height: 34px;
+    text-decoration: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.5rem;
+    padding: 0 12px;
+    cursor: pointer;
+    color: var(--text-color);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0ac90a;
+}
+.btn-successful:hover{
+    color: white;
+    background-color: #049d04;
+}
