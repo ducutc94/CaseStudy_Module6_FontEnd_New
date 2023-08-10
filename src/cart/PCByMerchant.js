@@ -31,7 +31,7 @@ export default function PCByMerchant() {
     const createBill = (id) => {
         Swal.fire({
             position: 'center',
-            title: 'Bạn muốn thanh toán đơn hàng ?',
+            title: 'Bạn muốn xác nhận đơn hàng ?',
             showDenyButton: true,
             confirmButtonText: 'Xác nhận',
             denyButtonText: 'Hủy',
@@ -42,7 +42,35 @@ export default function PCByMerchant() {
                     Swal.fire({
                         width: '450px',
                         position: 'center',
-                        title: 'Thanh toán thành công!',
+                        title: 'Chấp nhận đơn hàng !',
+                        icon: 'success'
+                    });
+                })
+            } else if (result.isDenied) {
+                Swal.fire({
+                    width: '450px',
+                    position: 'center',
+                    title: 'Hủy!',
+                    icon: 'info'
+                })
+            }
+        })
+    }
+    const deleteCart = (id) =>{
+        Swal.fire({
+            position: 'center',
+            title: 'Bạn muốn huỷ đơn hàng ?',
+            showDenyButton: true,
+            confirmButtonText: 'Xác nhận',
+            denyButtonText: 'Hủy',
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:8080/api/products-carts/merchant/${id}`).then(() => {
+                    Swal.fire({
+                        width: '450px',
+                        position: 'center',
+                        title: 'Huỷ thành công!',
                         icon: 'success'
                     });
                 })
@@ -126,7 +154,7 @@ export default function PCByMerchant() {
                                     <button onClick={() => createBill(item.id)}>Xác nhận</button>
                                 </td>
                                     <td className="table_shop_list-inner">
-                                        <button onClick={() => createBill(item.id)}>Huỷ</button>
+                                        <button onClick={() => deleteCart(item.id)}>Huỷ</button>
                                     </td>
                                     <td className="table_shop_list-inner">
                                         <button >Chi tiết</button>
@@ -141,13 +169,6 @@ export default function PCByMerchant() {
                                 </>)
 
                                 }
-
-                                {item.statusProductsCarts === "2" && <>
-                                    <td className="table_shop_list-inner">
-                                        <button onClick={() => createBill(item.id)}>Huỷ</button>
-                                    </td>
-                                </>}
-
 
                             </tr>
                         )
