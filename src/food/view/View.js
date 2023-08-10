@@ -8,6 +8,7 @@ import {useFormik} from "formik";
 export default function View() {
     const [food, setFood] = useState({});
     const {id} = useParams();
+    const [shopsUserId, setShopUserId] = useState("");
     const [shops, setShop] = useState("");
     const [shopsDescription, setShopsDescription] = useState("");
     const [shopsTimeStart, setShopsTimeStart] = useState("");
@@ -15,14 +16,25 @@ export default function View() {
 
 
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("user"));
-    const idUser = user.id;
+    const checkUserID = (value) => {
+        let id;
+        if (value) {
+            id = value.id;
+        } else {
+            id = 1000;
+        }
+        return id;
+
+    }
+    const user = JSON.parse(localStorage.getItem("user"))
+    const idUser = checkUserID(user);
     const [idCart, setIdCart] = useState();
     const [vouchers, setVouchers] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products/${id}`).then((res) => {
             setFood(res.data)
+            setShopUserId(res.data.shops.user.id)
             setShop(res.data.shops.name)
             setShopsDescription(res.data.shops.description)
             setShopsTimeStart(res.data.shops.startTime)
@@ -36,7 +48,7 @@ export default function View() {
             setIdCart(res.data.id)
         })
         axios.get(`http://localhost:8080/api/vouchers`).then((res) => {
-           setVouchers(res.data)
+            setVouchers(res.data)
         })
     }, [])
 
@@ -108,7 +120,6 @@ export default function View() {
     };
 
 
-
     const today = new Date();
     const hour = today.getHours();
     const minu = today.getMinutes();
@@ -118,8 +129,6 @@ export default function View() {
     const check = (startTime, endTime) => {
         return time >= startTime && time <= endTime;
     };
-
-
 
 
     return (
@@ -256,7 +265,8 @@ export default function View() {
                                             </div>
                                         </div>
                                         <div className="view_food-right-container">
-                                            <div className="view_food-right-voucher-container">
+                                            <div className="view_food-right-voucher-container"
+                                                 style={{display: `none`}}>
                                                 <div className="view_food-right-voucher-title">
                                                     Voucher:
                                                 </div>
@@ -272,51 +282,70 @@ export default function View() {
 
 
                                         <div className="view_food-right-container">
-                                            <div className="view_food-right-item-container-btn">
-                                                <div className="view_food-right-select-number">
-                                                    <div className="view_food-right-select-number-title">
-                                                        Số lượng:
-                                                    </div>
-                                                    <div className="view_food-right-select-number-container">
-                                                        <div className="view_food-right-select-number-item">
-                                                            <div className="el-input-number">
-                                                                <div className="el-input-number__decrease" onClick={decreaseQuantity}>
-                                                                    <i className="fas fa-minus-circle"></i>
-                                                                </div>
-                                                                <div className="input-selecter-number">
-                                                                    <input
-                                                                        onChange={formik.handleChange}
-                                                                        name={"quantity"}
-                                                                        value={quantity}
-                                                                        className="el-input__inner no-arrows"
-                                                                        max="9999"
-                                                                        min="1"
-                                                                        type="number" step="1"/>
-                                                                </div>
-                                                                <div className="el-input-number__increase" onClick={increaseQuantity}>
-                                                                    <i className="fas fa-plus-circle"></i>
-                                                                </div>
 
+                                                {user.id !== shopsUserId ? (
+                                                    <div className="view_food-right-item-container-btn">
+                                                            <div className="view_food-right-select-number">
+                                                                <div className="view_food-right-select-number-title">
+                                                                    Số lượng:
+                                                                </div>
+                                                                <div className="view_food-right-select-number-container">
+                                                                    <div className="view_food-right-select-number-item">
+                                                                        <div className="el-input-number">
+                                                                            <div className="el-input-number__decrease"
+                                                                                 onClick={decreaseQuantity}>
+                                                                                <i className="fas fa-minus-circle"></i>
+                                                                            </div>
+                                                                            <div className="input-selecter-number">
+                                                                                <input
+                                                                                    onChange={formik.handleChange}
+                                                                                    name={"quantity"}
+                                                                                    value={quantity}
+                                                                                    className="el-input__inner no-arrows"
+                                                                                    max="9999"
+                                                                                    min="1"
+                                                                                    type="number" step="1"/>
+                                                                            </div>
+                                                                            <div className="el-input-number__increase"
+                                                                                 onClick={increaseQuantity}>
+                                                                                <i className="fas fa-plus-circle"></i>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="view_food-right-item-buy">
+                                                                <i className="fa-solid fa-cart-plus"></i>
+                                                                <button className="view_food-right-item-buy-btn"
+                                                                        type={"submit"}>Thêm vào giỏ hàng
+                                                                </button>
                                                             </div>
                                                         </div>
+                                                ) : (
+                                                    <div className="view_food-right-item-container-btn">
+                                                        <div className="view_food-right-item-edit">
+                                                            <i className="fa-solid fa-pen-to-square"></i>
+                                                            <Link to={`/update-food/${food.id}`}
+                                                                  style={{
+                                                                      textDecoration: `none`,
+                                                                      color: `white`,
+                                                                      padding: `5px`
+                                                                  }}>
+                                                                Sửa thông tin
+                                                            </Link>
+                                                        </div>
+
+                                                        <div className="view_food-right-item-buy">
+                                                            <i className="fa-solid fa-trash"></i>
+                                                            <button className="view_food-right-item-buy-btn"
+                                                                    onClick={() => deleteFood(food.id)}
+                                                                    type={"submit"}>Xóa sản phẩm
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    )}
 
-                                                <div className="view_food-right-item-edit">
-                                                    <i className="fa-solid fa-pen-to-square"></i>
-                                                    <Link to={`/update-food/${food.id}`}
-                                                          style={{textDecoration: `none`, color: `white`, padding:`5px`}}>
-                                                        Sửa thông tin
-                                                    </Link>
-                                                </div>
-
-                                                <div className="view_food-right-item-buy">
-                                                    <i className="fa-solid fa-cart-plus"></i>
-                                                    <button className="view_food-right-item-buy-btn"
-                                                            type={"submit"}>Thêm vào giỏ hàng
-                                                    </button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

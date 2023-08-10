@@ -29,7 +29,7 @@
 .view_food-container {
     display: flex;
     justify-content: space-between;
-    padding: 20px 0 250px;
+    padding: 20px 0 170px;
     background-color: white;
     margin-bottom: 5%;
 }
@@ -309,6 +309,9 @@
     background-color: transparent;
     border: none;
     color: white;
+    width: 128px;
+    font-size: 12px;
+    line-height: 25px;
 }
 
 .view_food-right-item-buy > i {
@@ -330,6 +333,9 @@
     text-transform: none;
     border-radius: 5px;
     font-size: 12px;
+    display: flex;
+    align-items: center;
+
 }
 
 .view_food-right-item-edit > i {
