@@ -44,6 +44,8 @@ function App() {
                     <Route path={'/category/:id'} element={<QuickSearch/>}></Route>
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
+                    <Route path={'/findByCity/:id'} element={<FindCity/>}></Route>
+                    <Route path={'/confirm'} element={<Confirm/>}></Route>
                 </Routes>
             </div>
             <Footer/>
