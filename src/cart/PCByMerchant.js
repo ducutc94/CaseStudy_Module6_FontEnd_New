@@ -1,9 +1,9 @@
-import {Link} from "react-router-dom";
+
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export default function ProductsCarts() {
+export default function PCByMerchant() {
     const [productCart, setProductCart] = useState([]);
     const checkUserID = (value) =>{
         let id;
@@ -14,12 +14,11 @@ export default function ProductsCarts() {
             id = 1000;
         }
         return id;
-
     }
     const user = JSON.parse(localStorage.getItem("user"))
     const idUser = checkUserID(user);
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/products-carts/user-cart/${idUser}`).then((res) => {
+        axios.get(`http://localhost:8080/api/products-carts/merchant-cart/${idUser}`).then((res) => {
             if (res.data !== null) {
                 setProductCart(res.data)
 
@@ -57,45 +56,17 @@ export default function ProductsCarts() {
             }
         })
     }
-    const deleteCart = (id) =>{
-        Swal.fire({
-            position: 'center',
-            title: 'Bạn muốn huỷ đơn hàng ?',
-            showDenyButton: true,
-            confirmButtonText: 'Xác nhận',
-            denyButtonText: 'Hủy',
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                axios.delete(`http://localhost:8080/api/products-carts/${id}`).then(() => {
-                    Swal.fire({
-                        width: '450px',
-                        position: 'center',
-                        title: 'Huỷ thành công!',
-                        icon: 'success'
-                    });
-                })
-            } else if (result.isDenied) {
-                Swal.fire({
-                    width: '450px',
-                    position: 'center',
-                    title: 'Hủy!',
-                    icon: 'info'
-                })
-            }
-        })
-    }
 
 
     return (
         <>
             <div>
                 <div className="title-form-container">
-                    <h1 className="title-form">Quản lý giỏ hàng</h1>
+                    <h1 className="title-form">Quản lý đơn hàng</h1>
                 </div>
                 <div>
                     <div><span className={"btn-white"}>
-                        <b>GIỎ HÀNG</b>
+                        <b>ĐƠN HÀNG</b>
                     </span></div>
                 </div>
 
@@ -142,32 +113,40 @@ export default function ProductsCarts() {
                                 <td className="table_shop_list-inner">{item.quantity}</td>
                                 <td className="table_shop_list-inner">{item.totalPrice}</td>
                                 {item.statusProductsCarts === "0" && <>
-                                    <td className="table_shop_list-inner">Đã xác thực</td>
+                                    <td className="table_shop_list-inner">Đã thanh toán</td>
                                 </>}
                                 {item.statusProductsCarts === "1" && <>
-                                    <td className="table_shop_list-inner">Đã hủy</td>
-                                </>}
-                                {item.statusProductsCarts === "2" && <>
-                                    <td className="table_shop_list-inner">Đang chờ</td>
+                                    <td className="table_shop_list-inner">Huỷ thanh toán </td>
                                 </>}
                                 {item.statusProductsCarts === "5" && <>
                                     <td className="table_shop_list-inner">Đang chờ xác nhận</td>
                                 </>}
 
-                                {item.statusProductsCarts === "2" && <>
+                                {item.statusProductsCarts === "5" ? (<> <td className="table_shop_list-inner">
+                                    <button onClick={() => createBill(item.id)}>Xác nhận</button>
+                                </td>
                                     <td className="table_shop_list-inner">
-                                        <button onClick={() => createBill(item.id)}>Thanh toán</button>
+                                        <button onClick={() => createBill(item.id)}>Huỷ</button>
                                     </td>
-                                </>}
+                                    <td className="table_shop_list-inner">
+                                        <button >Chi tiết</button>
+                                    </td>
+                                </>):(<><td className="table_shop_list-inner">
+                                </td>
+                                    <td className="table_shop_list-inner">
+                                    </td>
+                                    <td className="table_shop_list-inner">
+                                        <button >Chi tiết</button>
+                                    </td>
+                                </>)
+
+                                }
 
                                 {item.statusProductsCarts === "2" && <>
                                     <td className="table_shop_list-inner">
-                                        <button onClick={() => deleteCart(item.id)}>Huỷ</button>
+                                        <button onClick={() => createBill(item.id)}>Huỷ</button>
                                     </td>
                                 </>}
-                                <td className="table_shop_list-inner">
-                                    <button onClick={() => createBill(item.id)}>Chi tiết</button>
-                                </td>
 
 
                             </tr>

@@ -109,13 +109,13 @@ export default function View() {
     })
 
 
-    const [quantity, setQuantity] = useState(1);
+    const [quantitys, setQuantity] = useState(1);
     const increaseQuantity = () => {
-        setQuantity(quantity + 1);
+        setQuantity(quantitys + 1);
     };
     const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity(quantity - 1);
+        if (quantitys > 1) {
+            setQuantity(quantitys - 1);
         }
     };
 
@@ -300,7 +300,7 @@ export default function View() {
                                                                                 <input
                                                                                     onChange={formik.handleChange}
                                                                                     name={"quantity"}
-                                                                                    value={quantity}
+                                                                                    value={formik.values.quantitys}
                                                                                     className="el-input__inner no-arrows"
                                                                                     max="9999"
                                                                                     min="1"

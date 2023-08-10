@@ -29,6 +29,11 @@ export default function Cart(){
 
         })
     }, [])
+    const deleteCart = (id) =>{
+        axios.delete(`http://localhost:8080/api/products-carts/${id}`).then((res)=>{
+        })
+
+    }
 
 
 
@@ -65,15 +70,15 @@ export default function Cart(){
                                                </div>
                                                <div className="header__Cart-item-body">
                                                    <span className="header__Cart-item-description">Phân loại:</span>
-                                                   <span className="header__Cart-item-remove">xóa</span>
+                                                   <span onClick={() => deleteCart(items.id)} className="header__Cart-item-remove" >xóa</span>
                                                </div>
                                            </div>
                                        </li>
                                    )}
                                </ul>
-                               <Link to={'/products-carts'} className="header__cart-view btn btn--primary">Xem giỏ hàng</Link>
+
                            </div>
-                       </>}
+                       </>} <Link to={'/products-carts'} className="header__cart-view btn btn--primary">Xem giỏ hàng</Link>
 
 
                    </div>
