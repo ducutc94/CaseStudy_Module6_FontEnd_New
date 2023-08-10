@@ -83,7 +83,7 @@ export default function ProductsCarts() {
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
-                                TRANG THÁI
+                                TRANG THÁI ĐƠN
                             </h5></td>
                         <td colSpan={4}><h5 className="table_shop_list-title">
                             TUỲ CHỌN
