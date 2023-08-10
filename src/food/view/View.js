@@ -120,10 +120,6 @@ export default function View() {
 
 
 
-
-
-
-
     const today = new Date();
     const hour = today.getHours();
     const minu = today.getMinutes();
@@ -291,8 +287,7 @@ export default function View() {
 
 
                                         <div className="view_food-right-container">
-
-                                                {user.id !== shopsUserId ? (
+                                                {user?.id !== shopsUserId ? (
                                                     <div className="view_food-right-item-container-btn">
                                                             <div className="view_food-right-select-number">
                                                                 <div className="view_food-right-select-number-title">
@@ -354,7 +349,6 @@ export default function View() {
                                                         </div>
                                                     </div>
                                                     )}
-
                                         </div>
                                     </div>
                                 </div>

@@ -133,8 +133,9 @@ export default function ProductsCarts() {
                     </tr>
                     </thead>
                     <tbody>
-                    {
-                        productCart.map((item, index) =>
+                    { productCart ? (
+                        <>
+                            { productCart.map((item, index) =>
                             <tr key={item.id}>
                                 <td className="table_shop_list-inner">{index + 1}</td>
                                 <td className="table_shop_list-inner">{item.products.name}</td>
@@ -164,11 +165,11 @@ export default function ProductsCarts() {
                                 </>):(<>
                                     <td className="table_shop_list-inner">
 
-                                </td>
-                                    <td className="table_shop_list-inner">
-                                    <button onClick={() => createBill(item.id)}>Chi tiết</button>
                                     </td>
-                                   </>) }
+                                    <td className="table_shop_list-inner">
+                                        <button onClick={() => createBill(item.id)}>Chi tiết</button>
+                                    </td>
+                                </>) }
 
 
 
@@ -176,7 +177,13 @@ export default function ProductsCarts() {
 
                             </tr>
                         )
+                        }
+                        </>
+                    ) : (
+                        <></>
+                    )
                     }
+
                     </tbody>
                 </table>
             </div>
