@@ -63,9 +63,9 @@ export default function ProductsCarts() {
         <>
             <div>
                 <div>
-                    <div><Link to={"/create-shop"} className={"btn btn-success"}>
+                    <div><span className={"btn-white"}>
                         <b>GIỎ HÀNG</b>
-                    </Link></div>
+                    </span></div>
                 </div>
 
                 <table className={"table table_shop_list"}>

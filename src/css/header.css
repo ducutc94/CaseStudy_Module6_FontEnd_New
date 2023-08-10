@@ -47,7 +47,7 @@
 }
 .header__logo {
     width: 200px;
-    margin-left: 30px;
+    margin-left: -26px;
 }
 .header__logo-link{
     text-decoration: none;
@@ -74,7 +74,7 @@
     font-size: 16px;
 }
 .header__select--category{
-    padding-left: 48px;
+    padding-left: 25px;
     padding-right: 0;
     white-space: nowrap;
 }
@@ -128,7 +128,8 @@
 .header__search{
     display: flex;
     height: 36px;
-    margin-left: 28px;
+    margin-left: 20px;
+    margin-right: 8px;
     position: relative;
     padding: 10px 25px 10px 8px;
     align-items: center;
@@ -183,6 +184,7 @@
     width: 150px;
     text-align: center;
     cursor: pointer;
+    margin: 0 12px 0 12px;
 }
 .header__cart-wrap{
     position: relative;

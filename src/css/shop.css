@@ -1,3 +1,12 @@
+.shopList_table_container{
+    display: flex;
+}
+.shopList_table_inner{
+    position: relative;
+    left: 81.77%;
+}
+
+
 .table_shop_list{
     font-family: Roboto;
     font-size: 16px;

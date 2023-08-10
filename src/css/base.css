@@ -131,6 +131,22 @@ html {
     align-items: center;
     background-color:var(--white-color);
 }
+
+.btn-white{
+    min-width: 124px;
+    min-height: 34px;
+    text-decoration: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.5rem;
+    padding: 0 12px;
+    cursor: pointer;
+    color: var(--text-color);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color:var(--white-color);
+}
 .btn.btn--normal:hover {
     color: rgba(0,0,0,0.4);
 

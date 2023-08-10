@@ -53,10 +53,19 @@ export default function ListShop() {
     return (
         <>
             <div>
-                <div>
-                    <div><Link to={"/create-shop"} className={"btn btn-success"}>
-                        <b>TẠO SHOP</b>
-                    </Link></div>
+                <div className="shopList_table_container">
+                    <div>
+                        <span className={"btn-white"}>
+                            <b>SHOP</b>
+                        </span>
+                    </div>
+
+                    <div className="shopList_table_inner">
+                        <Link to={"/create-shop"} className={"btn btn-success"}>
+                            <i className="fa-solid fa-plus"></i>
+                        </Link>
+                    </div>
+
                 </div>
 
                 <table className={"table table_shop_list"}>

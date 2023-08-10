@@ -65,16 +65,36 @@ export default function Header() {
                         </div>
 
                         <div className="header__select--category">
-                            <button className="header__select--category--btn"><Link to={`/category/${1}`} className="header__select--category--btn-link">
-                                Đồ ăn</Link>
+                            <button className="header__select--category--btn">
+                                <Link to={`/category/${1}`} className="header__select--category--btn-link">
+                                    Đồ ăn
+                                </Link>
                             </button>
-                            <button className="header__select--category--btn"><Link to={`/category/${2}`} className="header__select--category--btn-link">
-                                Thực phẩm</Link>
+                            <button className="header__select--category--btn">
+                                <Link to={`/category/${2}`} className="header__select--category--btn-link">
+                                    Thực phẩm
+                                </Link>
                             </button>
-                            <button className="header__select--category--btn">Bia</button>
-                            <button className="header__select--category--btn">Hoa</button>
-                            <button className="header__select--category--btn">Siêu thị</button>
-                            <button className="header__select--category--btn">Thú cưng</button>
+                            <button className="header__select--category--btn">
+                                <Link to={`/category/${3}`} className="header__select--category--btn-link">
+                                    Bia
+                                </Link>
+                            </button>
+                            <button className="header__select--category--btn">
+                                <Link to={`/category/${4}`} className="header__select--category--btn-link">
+                                   Hoa
+                                </Link>
+                            </button>
+                            <button className="header__select--category--btn">
+                                <Link to={`/category/${5}`} className="header__select--category--btn-link">
+                                    Siêu thị
+                                </Link>
+                            </button>
+                            <button className="header__select--category--btn">
+                                <Link to={`/category/${6}`} className="header__select--category--btn-link">
+                                    Thú cưng
+                                </Link>
+                            </button>
                         </div>
                     </div>
 
@@ -125,10 +145,10 @@ export default function Header() {
                                         </a>
                                     </li>
                                     <li className="header__navbar-user-item">
-                                        <a href="src/layout" className="header__navbar-user-manager">
+                                        <Link  to={'/products-carts'} className="header__navbar-user-manager">
                                             <i className="fa-solid fa-bag-shopping iconManager"></i>
                                             Đơn mua
-                                        </a>
+                                        </Link>
                                     </li>
                                     {user.authorities[0].authority === "ROLE_MERCHANT" && <>
                                         <li className="header__navbar-user-item">
