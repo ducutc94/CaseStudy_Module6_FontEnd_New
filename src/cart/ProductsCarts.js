@@ -5,8 +5,19 @@ import Swal from "sweetalert2";
 
 export default function ProductsCarts(){
     const [productCart, setProductCart] = useState([]);
+    const checkUserID = (value) =>{
+        let id;
+        if(value){
+            id = value.id;
+        }
+        else {
+            id = 1000;
+        }
+        return id;
+
+    }
     const user = JSON.parse(localStorage.getItem("user"))
-    const idUser = user.id;
+    const idUser = checkUserID(user);
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products-carts/user/${idUser}`).then((res) => {
             if(res.data !== null){

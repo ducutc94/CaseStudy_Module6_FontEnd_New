@@ -166,7 +166,7 @@ export default function FormCreate(props) {
                         <h1 className="title-form">Cập nhật món ăn</h1>
                     </div>
                     <div className={'col-md-6'}>
-                        <FormControl sx={{ m: 1, minWidth: 80, marginLeft: 0 }}>
+                        <FormControl sx={{ m: 1, minWidth: 80, marginLeft: 0, display: `none` }}>
                             {/*<InputLabel id="demo-simple-select-autowidth-label">Cửa hàng</InputLabel>*/}
                             <label htmlFor={''}  className={'form-label'}>Cửa hàng</label>
                             <Select
