@@ -16,6 +16,7 @@ import Cart from "./cart/Cart";
 import Search from "./food/view/Search";
 import QuickSearch from "./food/view/QuickSearch";
 import ProductsCarts from "./cart/ProductsCarts";
+import FindCity from "./food/view/FindCity";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
                     <Route path={'/category/:id'} element={<QuickSearch/>}></Route>
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
+                    <Route path={'/findByCity/:id'} element={<FindCity/>}></Route>
                 </Routes>
             </div>
             <Footer/>
