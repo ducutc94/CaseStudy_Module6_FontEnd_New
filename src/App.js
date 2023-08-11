@@ -19,7 +19,6 @@ import ProductsCarts from "./cart/ProductsCarts";
 import Confirm from "./confirm/Confirm";
 import FindCity from "./food/view/FindCity";
 import PCByMerchant from "./cart/PCByMerchant";
-import Filter from "./layout/Filter";
 
 
 function App() {
@@ -27,7 +26,7 @@ function App() {
         <>
             <Header/>
             <div className={`container-content`}>
-                <Filter/>
+
                 <Routes>
                     <Route path={'/'} element={<List />}></Route>
                     <Route path={'/view-food/:id'} element={<View/>}></Route>
@@ -45,7 +44,6 @@ function App() {
                     <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>
                     <Route path={'/update-voucher/:id'} element={<UpdateVoucher />}></Route>
                     <Route path={'/category/:id'} element={<QuickSearch/>}></Route>
-                    <Route path={'/products/:String'} element={<Filter/>}></Route>
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                     <Route path={'/products-carts-merchant'} element={<PCByMerchant/>}></Route>

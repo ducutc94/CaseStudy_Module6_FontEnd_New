@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import Filter from "../../layout/Filter";
 
 export default function List() {
     const [foods, setFoods] = useState([])
@@ -28,6 +29,10 @@ export default function List() {
         }
     };
 
+    const sortFood = (data) => {
+        setFoods(data)
+    }
+
 
 
     return (
@@ -38,6 +43,7 @@ export default function List() {
                         <div className="grid__column-10">
 
                             <div className="home-product">
+                                <Filter filter={sortFood}/>
                                 <div className="grid__row">
                                     {/*product-item*/}
 
