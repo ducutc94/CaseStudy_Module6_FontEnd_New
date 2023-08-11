@@ -53,6 +53,9 @@ export default function ListShop() {
     return (
         <>
             <div>
+                <div className="title-form-container">
+                    <h1 className="title-form">Quản lý cửa hàng</h1>
+                </div>
                 <div className="shopList_table_container">
                     <div>
                         <span className={"btn-white"}>
@@ -127,13 +130,24 @@ export default function ListShop() {
                                 </>}
                                 <td  className="table_shop_list-inner">{item.city.name}</td>
                                 {item.statusShops === "0"  ? (<>
-                                    <td className="table_shop_list-inner">
-                                        <Link to={`/update-shop/${item.id}`} >Sửa</Link></td>
-                                    <td className="table_shop_list-inner">
-                                        <button onClick={() => deleteShop(item.id)}>Xóa</button>
+                                    <td className="table_shop_list-inner iconEditShop">
+                                        <Link to={`/update-shop/${item.id}`} >
+                                            <i className="fa-regular fa-pen-to-square"></i>
+                                        </Link>
+                                        <span className="iconEditShop-inner">Sửa</span>
                                     </td>
-                                    <td  className="table_shop_list-inner">
-                                        <Link to={`/create-food/${item.id}`} className="btn-shop-2" >Thêm món</Link></td>
+                                    <td className="table_shop_list-inner iconDeleteShop">
+                                        <button onClick={() => deleteShop(item.id)}>
+                                           <i className="fa-solid fa-trash"></i>
+                                        </button>
+                                        <span className="iconDeleteShop-inner">Xóa</span>
+                                    </td>
+                                    <td  className="table_shop_list-inner iconAddShopFood">
+                                        <Link to={`/create-food/${item.id}`} className="btn-shop-2" >
+                                            <i className="fa-solid fa-utensils"></i>
+                                        </Link>
+                                     <span className="iconAddShopFood-inner">Thêm</span>
+                                    </td>
                                 </>):(
                                     <>
                                     <td className="table_shop_list-inner"></td>

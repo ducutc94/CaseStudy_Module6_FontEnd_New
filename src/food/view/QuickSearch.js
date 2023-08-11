@@ -52,7 +52,14 @@ export default function QuickSearch(){
                                                 <span className="home-product-item__price-old">
                                                     Số lượng: {food.quantity}</span>
                                                     <span className="home-product-item__price-current">
-                                                    Giá: {food.price}</span>
+                                                    Giá:
+                                                         <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(food.price)}
+                                                    </span>
+                                                    </span>
                                                 </div>
                                                 <div className="home-product-item__action">
                                             <span className="home-product-item__like home-product-item__like--liked">

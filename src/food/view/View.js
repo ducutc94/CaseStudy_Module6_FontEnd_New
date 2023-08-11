@@ -245,7 +245,9 @@ export default function View() {
                                         <div className="view_food-right-container">
                                             <div className="view_food-right-item-price">
                                                 <i className="fas fa-dollar-sign"></i>
-                                                {food.price}
+                                                <span style={{marginLeft:`5px`}}>
+                                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(food.price)}
+                                                </span>
                                             </div>
                                         </div>
                                         <div className="view_food-right-container">
@@ -335,12 +337,12 @@ export default function View() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="view_food-right-item-buy">
+                                                            <button className="view_food-right-item-buy">
                                                                 <i className="fa-solid fa-cart-plus"></i>
                                                                 <button className="view_food-right-item-buy-btn"
                                                                         type={"submit"}>Thêm vào giỏ hàng
                                                                 </button>
-                                                            </div>
+                                                            </button>
                                                         </div>
                                                 ) : (
                                                     <div className="view_food-right-item-container-btn">
@@ -356,13 +358,13 @@ export default function View() {
                                                             </Link>
                                                         </div>
 
-                                                        <div className="view_food-right-item-buy">
+                                                        <button className="view_food-right-item-buy">
                                                             <i className="fa-solid fa-trash"></i>
                                                             <button className="view_food-right-item-buy-btn"
                                                                     onClick={() => deleteFood(food.id)}
                                                                     type={"submit"}>Xóa sản phẩm
                                                             </button>
-                                                        </div>
+                                                        </button>
                                                     </div>
                                                     )}
                                         </div>

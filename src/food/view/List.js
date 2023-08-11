@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useLocation} from "react-router-dom";
-import Filter from "../../layout/Filter";
+import Filter from "./Filter";
 import Swal from "sweetalert2";
 
 export default function List() {
@@ -13,17 +13,26 @@ export default function List() {
     const [currentPage, setCurrentPage] = useState(1);
     const [foodsPerPage] = useState(8);
 
+
     useEffect(() => {
         if (!search) {
             axios.get('http://localhost:8080/api/products').then((res) => {
                 setFoods(res.data)
             })
-        } else if (search) {
+        } else {
             searchByName(search)
-        } else if (city) {
-            searchByCity(city)
         }
-    }, [search, city])
+    }, [search])
+
+    useEffect(()=>{
+        if (!city){
+            axios.get('http://localhost:8080/api/products').then((res) => {
+                setFoods(res.data)
+            })
+        }else {
+            searchByCity(city);
+        }
+    },[city])
 
     const searchByName = (search) => {
         axios.get(`http://localhost:8080/api/products/search?search=${search}`).then((res) => {
@@ -94,11 +103,22 @@ export default function List() {
                                                 <span className="home-product-item__price-old">
                                                     Số lượng: {items.quantity}</span>
                                                 <span className="home-product-item__price-current">
-                                                    Giá: {items.price}</span>
+                                                    Giá:
+                                                    <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(items.price)}
+                                                    </span>
+                                            </span>
+
                                             </div>
                                             <div className="home-product-item__action">
                                             <span className="home-product-item__like home-product-item__like--liked">
-                                                {/*<i className="home-product-item__like-icon-empty far fa-heart"></i>*/}
+                                                <i className="home-product-item__like-icon-fill fas fa-heart"></i>
+                                                <i className="home-product-item__like-icon-fill fas fa-heart"></i>
+                                                <i className="home-product-item__like-icon-fill fas fa-heart"></i>
+                                                <i className="home-product-item__like-icon-fill fas fa-heart"></i>
                                                 <i className="home-product-item__like-icon-fill fas fa-heart"></i>
                                             </span>
 
@@ -136,9 +156,11 @@ export default function List() {
             {/* Phân trang */}
             <ul className="pagination">
                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                    <button className="page-link" onClick={() => paginate(currentPage - 1)}>
-                        <i className="pagination-item__icon fas fa-chevron-left"></i>
-                    </button>
+                    <a href={"#header"}>
+                        <button className="page-link" onClick={() => paginate(currentPage - 1)}>
+                            <i className="pagination-item__icon fas fa-chevron-left"></i>
+                        </button>
+                    </a>
                 </li>
                 {Array.from({length: totalPages}).map((_, index) => (
                     <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>

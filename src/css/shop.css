@@ -6,7 +6,6 @@
     left: 81.77%;
 }
 
-
 .table_shop_list{
     font-family: Roboto;
     font-size: 16px;
@@ -19,6 +18,7 @@
     font-weight: 600;
     text-align: center;
 }
+
 .table_shop_list-inner{
     text-align: center;
     max-width: 150px;
@@ -27,21 +27,111 @@
 }
 .table_shop_list-inner > a {
     text-decoration: none;
-    color: blue;
+    color:gray;
+    font-weight: 600;
+    font-size: 18px;
+
+}.table_shop_list-inner:hover > a {
+    text-decoration: none;
+    color: rgba(67, 67, 177, 0.79);
     font-weight: 600;
 
 }
 
 .table_shop_list-inner >.btn-shop-2{
     text-decoration: none;
-    color: #18b718;
+    color:gray;
     font-weight: 600;
-
+    font-size: 18px;
+}.table_shop_list-inner:hover >.btn-shop-2{
+    text-decoration: none;
+    color: #088533;
+    font-weight: 600;
+    font-size: 18px;
 }
 
 .table_shop_list-inner > button {
     border: none;
-    color: red;
+    color:gray;
     background-color: white;
     font-weight: 600;
+    font-size: 18px;
+}.table_shop_list-inner:hover > button {
+    border: none;
+    color: #ea0505;
+    background-color: white;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+.table>:not(caption)>*>* {
+    height: 69px;
+    color: var(--bs-table-color-state,var(--bs-table-color-type,var(--bs-table-color)));
+    background-color: var(--bs-table-bg);
+    border-bottom-width: var(--bs-border-width);
+    box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state,var(--bs-table-bg-type,var(--bs-table-accent-bg)));
+    padding: 15px 0;
+
+}
+.iconEditShop{
+position: relative;
+    width: 50px;
+}
+
+.iconEditShop-inner{
+    display: none;
+    position: absolute;
+    padding: 0 13px;
+    background-color: #eaeaedd4;
+    border-radius: 6px;
+}
+.iconEditShop:hover  .iconEditShop-inner{
+    display: block;
+}
+
+.iconDeleteShop{
+    position: relative;
+    width: 50px;
+}
+.iconDeleteShop-inner{
+    display: none;
+    position: absolute;
+    padding: 0 12px;
+    background-color: #eaeaedd4;
+    border-radius: 6px;
+}
+
+.iconDeleteShop:hover  .iconDeleteShop-inner{
+    display: block;
+}
+
+
+
+.iconAddShopFood{
+    position: relative;
+    width: 50px;
+}
+.iconAddShopFood-inner{
+    display: none;
+    position: absolute;
+    padding: 0 5px;
+    background-color: #eaeaedd4;
+    border-radius: 6px;
+}
+
+.iconAddShopFood:hover  .iconAddShopFood-inner{
+    display: block;
+}
+
+
+
+
+.iconAddShopFood{
+
 }

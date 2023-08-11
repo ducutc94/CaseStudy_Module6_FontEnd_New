@@ -307,13 +307,15 @@
     text-transform: none;
     border-radius: 5px;
     font-size: 12px;
+    border: none;
 }
 .view_food-right-item-buy-btn{
     background-color: transparent;
     border: none;
     color: white;
     width: 128px;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 500;
     line-height: 25px;
 }
 
@@ -335,10 +337,11 @@
     cursor: pointer;
     text-transform: none;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 13px;
     display: flex;
     align-items: center;
-
+    font-weight: 500;
+    border: none;
 }
 
 .view_food-right-item-edit > i {

@@ -17,7 +17,6 @@ import Cart from "./cart/Cart";
 import QuickSearch from "./food/view/QuickSearch";
 import ProductsCarts from "./cart/ProductsCarts";
 import Confirm from "./confirm/Confirm";
-import FindCity from "./food/view/FindCity";
 import PCByMerchant from "./cart/PCByMerchant";
 
 
@@ -47,8 +46,6 @@ function App() {
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                     <Route path={'/products-carts-merchant'} element={<PCByMerchant/>}></Route>
-                    <Route path={'/findByCity/:id'} element={<FindCity/>}></Route>
-                    <Route path={'/filter/:id'} element={<FindCity/>}></Route>
                     <Route path={'/confirm'} element={<Confirm/>}></Route>
                 </Routes>
             </div>

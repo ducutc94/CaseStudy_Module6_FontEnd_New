@@ -60,7 +60,6 @@ export default function Header({search}) {
                         <div className="header__select--address">
 
                             <div className="header__select--address-inner">
-
                                 <select
                                     name=""
                                     id=""
@@ -156,16 +155,24 @@ export default function Header({search}) {
                                             Tài khoản của tôi
                                         </a>
                                     </li>
-                                    <li className="header__navbar-user-item">
-                                        <Link  to={'/products-carts'} className="header__navbar-user-manager">
-                                            <i className="fa-solid fa-bag-shopping iconManager"></i>
-                                            Đơn mua
-                                        </Link>
-                                    </li>
+                                    {user.authorities[0].authority === "ROLE_USER" && <>
+                                        <li className="header__navbar-user-item">
+                                            <Link  to={'/products-carts-user'} className="header__navbar-user-manager">
+                                                <i className="fa-solid fa-list-ul iconManager"></i>
+                                                Lịch sử đơn hàng
+                                            </Link>
+                                        </li>
+                                    </>}
                                     {user.authorities[0].authority === "ROLE_MERCHANT" && <>
                                         <li className="header__navbar-user-item">
+                                            <Link  to={'/products-carts-merchant'} className="header__navbar-user-manager">
+                                                <i className="fa-solid fa-bag-shopping iconManager"></i>
+                                                Đơn mua
+                                            </Link>
+                                        </li>
+                                        <li className="header__navbar-user-item">
                                             <Link to={"/shop"} className="header__navbar-user-manager">
-                                                <i className="fa-solid fa-shop iconManager"></i>
+                                                <i className="fa-solid fa-store iconManager"></i>
                                                 Quản lý cửa hàng
                                             </Link>
                                         </li>
