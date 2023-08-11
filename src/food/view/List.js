@@ -1,19 +1,54 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import Filter from "../../layout/Filter";
+import Swal from "sweetalert2";
 
 export default function List() {
     const [foods, setFoods] = useState([])
-
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const search = searchParams.get("search");
+    const city = +searchParams.get("city");
     const [currentPage, setCurrentPage] = useState(1);
     const [foodsPerPage] = useState(8);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/products').then((res) => {
+        if (!search) {
+            axios.get('http://localhost:8080/api/products').then((res) => {
+                setFoods(res.data)
+            })
+        } else if (search) {
+            searchByName(search)
+        } else if (city) {
+            searchByCity(city)
+        }
+    }, [search, city])
+
+    const searchByName = (search) => {
+        axios.get(`http://localhost:8080/api/products/search?search=${search}`).then((res) => {
             setFoods(res.data)
-        })
-    }, [])
+        }).catch(error => {
+            setFoods(error.response.data)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Không tìm thấy !',
+            })
+        });
+    }
+    const searchByCity = (city) => {
+        axios.get(`http://localhost:8080/api/products/city/${city}`).then((res) => {
+            setFoods(res.data)
+        }).catch(error => {
+            setFoods(error.response.data)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Không tìm thấy !',
+            })
+        });
+    }
 
 
     // Xử lý chuyển trang
@@ -34,26 +69,24 @@ export default function List() {
     }
 
 
-
     return (
         <>
-                <div className="grid">
-                    <div className="grid__row app__content">
+            <div className="grid">
+                <div className="grid__row app__content">
 
-                        <div className="grid__column-10">
+                    <div className="grid__column-10">
 
-                            <div className="home-product">
-                                <Filter filter={sortFood}/>
-                                <div className="grid__row">
-                                    {/*product-item*/}
-
-                                    {currentFoods.map((items, index) =>
+                        <div className="home-product">
+                            <Filter filter={sortFood}/>
+                            <div className="grid__row">
+                                {/*product-item*/}
+                                {currentFoods.map((items, index) =>
                                     <div className="grid__column-2-4" key={index}>
-                                        <Link className="home-product-item" to={`/view-food/${items.id}`} >
+                                        <Link className="home-product-item" to={`/view-food/${items.id}`}>
                                             <div className="home-product-item__image"
-                                                 // style={{ backgroundImage: `url(${items.image})` }}
+                                                // style={{ backgroundImage: `url(${items.image})` }}
                                             >
-                                                <img className=""  src={items.image} alt=""/>
+                                                <img className="" src={items.image} alt=""/>
                                             </div>
 
                                             <h4 className="home-product-item__name">{items.name}</h4>
@@ -92,13 +125,12 @@ export default function List() {
                                             </div>
                                         </Link>
                                     </div>
-                                    )}
-                                </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
 
 
             {/* Phân trang */}
@@ -108,7 +140,7 @@ export default function List() {
                         <i className="pagination-item__icon fas fa-chevron-left"></i>
                     </button>
                 </li>
-                {Array.from({ length: totalPages }).map((_, index) => (
+                {Array.from({length: totalPages}).map((_, index) => (
                     <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
                         <button className="page-link" onClick={() => paginate(index + 1)}>{index + 1}</button>
                     </li>
@@ -121,7 +153,6 @@ export default function List() {
                     </a>
                 </li>
             </ul>
-
 
 
         </>

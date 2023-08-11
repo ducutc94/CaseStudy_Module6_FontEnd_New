@@ -13,7 +13,7 @@ import ListVoucher from "./voucher/ListVoucher";
 import CreateVoucher from "./voucher/CreateVoucher";
 import UpdateVoucher from "./voucher/UpdateVoucher";
 import Cart from "./cart/Cart";
-import Search from "./food/view/Search";
+
 import QuickSearch from "./food/view/QuickSearch";
 import ProductsCarts from "./cart/ProductsCarts";
 import Confirm from "./confirm/Confirm";
@@ -38,7 +38,7 @@ function App() {
                     <Route path={'/update-shop/:id'} element={<UpdateShop />}></Route>
 
                     <Route path={'/carts'} element={<Cart />}></Route>
-                    <Route path={'/search-food/:search'} element={<Search/>}></Route>
+                    {/*<Route path={'/search-food/:search'} element={<Search/>}></Route>*/}
 
                     <Route path={'/voucher'} element={<ListVoucher />}></Route>
                     <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>

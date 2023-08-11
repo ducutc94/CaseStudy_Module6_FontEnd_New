@@ -5,7 +5,7 @@ import axios from "axios";
 import Cart from "../cart/Cart";
 
 
-export default function Header() {
+export default function Header({search}) {
 
 
     const [showLogin, setShowLogin] = useState(false)
@@ -16,9 +16,8 @@ export default function Header() {
     const [searchQuery, setSearchQuery] = useState("");
 
     const handleSearch = () => {
-        navigate(`/search-food/${searchQuery}`);
+        navigate(`/?search=${searchQuery}`)
     };
-
 
     const handleClose = () => setShowLogin(false);
     const handleShow = () => setShowLogin(true);
@@ -28,12 +27,10 @@ export default function Header() {
         localStorage.removeItem('user');
         navigate('/')
     };
-    const [selectedCityId, setSelectedCityId] = useState(0);
 
     const handleCityChange = (event) => {
         const cityId = event.target.value;
-        setSelectedCityId(cityId);
-        navigate(`/findByCity/${cityId}`);
+        navigate(`/?city=${cityId}`);
     };
 
     //Get city
@@ -68,7 +65,6 @@ export default function Header() {
                                     name=""
                                     id=""
                                     className="header__select--address--btn"
-                                    value={selectedCityId}
                                     onChange={handleCityChange}
                                 >
                                     {city.map((item, index) => (
@@ -120,7 +116,6 @@ export default function Header() {
                         <div className="header__search-input-wrap">
                             <input type="text" id="name-search" className="header__search-input"
                                    placeholder="Nhập để tìm kiếm"
-                                   value={searchQuery}
                                    onChange={(e) => setSearchQuery(e.target.value)}/>
                         </div>
                         <button className="header__search-btn" onClick={handleSearch}>
