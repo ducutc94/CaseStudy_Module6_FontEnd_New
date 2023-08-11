@@ -20,7 +20,6 @@ export default function PCByMerchant() {
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products-carts/merchant-service/${idUser}`).then((res) => {
             if (res.data !== null) {
-                console.log(res.data)
                 setProductCart(res.data)
 
             } else {
@@ -39,13 +38,20 @@ export default function PCByMerchant() {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                axios.put(`http://localhost:8080/api/products-carts/update-confirm/${id}`).then(() => {
-                    Swal.fire({
+                axios.put(`http://localhost:8080/api/products-carts/update-confirm/${id}`).then((res) => {
+                    // eslint-disable-next-line no-unused-expressions
+                    res.data.statusProductsCarts === "0" ? (Swal.fire({
                         width: '450px',
                         position: 'center',
                         title: 'Chấp nhận đơn hàng !',
                         icon: 'success'
-                    });
+                    })):( Swal.fire({
+                        width: '450px',
+                        position: 'center',
+                        title: 'Đơn hàng không đủ!',
+                        icon: 'info'
+                    }))
+
                 })
             } else if (result.isDenied) {
                 Swal.fire({
