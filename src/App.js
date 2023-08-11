@@ -26,6 +26,7 @@ function App() {
         <>
             <Header/>
             <div className={`container-content`}>
+
                 <Routes>
                     <Route path={'/'} element={<List />}></Route>
                     <Route path={'/view-food/:id'} element={<View/>}></Route>
@@ -47,6 +48,7 @@ function App() {
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                     <Route path={'/products-carts-merchant'} element={<PCByMerchant/>}></Route>
                     <Route path={'/findByCity/:id'} element={<FindCity/>}></Route>
+                    <Route path={'/filter/:id'} element={<FindCity/>}></Route>
                     <Route path={'/confirm'} element={<Confirm/>}></Route>
                 </Routes>
             </div>

@@ -162,7 +162,7 @@ export default function Header() {
                                         </a>
                                     </li>
                                     <li className="header__navbar-user-item">
-                                        <Link  to={'/products-carts-merchant'} className="header__navbar-user-manager">
+                                        <Link  to={'/products-carts'} className="header__navbar-user-manager">
                                             <i className="fa-solid fa-bag-shopping iconManager"></i>
                                             Đơn mua
                                         </Link>
