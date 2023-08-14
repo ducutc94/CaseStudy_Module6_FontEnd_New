@@ -1,4 +1,5 @@
 import {createSlice, current} from '@reduxjs/toolkit'
+import Swal from "sweetalert2";
 
 const initialState = {
     items: [],
@@ -47,6 +48,12 @@ export const cartSlice = createSlice({
                                 money: (item.quantity + quantity) * foodBuy.price
                             };
                         }else {
+                            Swal.fire({
+                                width: '450px',
+                                position: 'center',
+                                title: 'Số lượng sản phẩm không đủ',
+                                icon: 'info'
+                            })
                             updatedTotalMoney = state.totalMoney
                         }
                     }

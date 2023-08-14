@@ -64,7 +64,7 @@ function App() {
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                     <Route path={'/products-carts-merchant'} element={<PCByMerchant/>}></Route>
                     <Route path={'/products-carts-merchant-all'} element={<MerchantBillService/>}></Route>
-                    <Route path={'/products-carts-shop/:id'} element={<FindShopById/>}></Route>
+                    <Route path={'/products-carts-shop/:idShop'} element={<FindShopById/>}></Route>
                     <Route path={'/products-carts-oder'} element={<Oder/>}></Route>
                     <Route path={'/confirm'} element={<Confirm/>}></Route>
                 </Routes>

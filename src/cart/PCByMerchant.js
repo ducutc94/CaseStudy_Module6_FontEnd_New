@@ -88,6 +88,7 @@ export default function PCByMerchant() {
     }
     const handleCityChange = (event) => {
         const shopID = event.target.value;
+        console.log(shopID)
         navigate(`/products-carts-shop/${shopID}`);
     };
 
@@ -115,6 +116,7 @@ export default function PCByMerchant() {
                                 className="bill_about--shop-inner--btn"
                                 onChange={handleCityChange}
                             >
+                                <option value="">---Đơn theo cửa hàng---</option>
                                 {list.map((item, index) => (<option key={index} value={item.id}>
                                     {item.name}
                                 </option>))}
@@ -222,11 +224,12 @@ export default function PCByMerchant() {
                                 <td className="table_shop_list-inner">
                                 </td>
                                 <td className="table_shop_list-inner">
-                                    <button>Chi tiết</button>
+                                    <Link to={`/bills/${item.id}`}>Chi tiết</Link>
                                 </td>
                             </>)}
                         </tr>)}
                         </>) : (<></>)}
+
 
                     </tbody>
                 </table>

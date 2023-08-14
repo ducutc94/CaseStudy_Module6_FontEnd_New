@@ -77,11 +77,21 @@ export default function View() {
 
         },
         onSubmit: values => {
-            let data = {
-                food:food,
-                quantity:values.quantity
+            if(user){
+                let data = {
+                    food:food,
+                    quantity:values.quantity
+                }
+                dispatch(addCart(data))
+            }else {
+                Swal.fire({
+                    width: '450px',
+                    position: 'center',
+                    title: 'Bạn chưa đăng nhập',
+                    icon: 'info'
+                })
             }
-            dispatch(addCart(data))
+
         },
 
     })

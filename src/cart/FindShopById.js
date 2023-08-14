@@ -1,18 +1,30 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useNavigate, useParams} from "react-router-dom";
+import BillsDetail from "../features/cart/BillsDetail";
 
 export default function FindShopById(){
     const [list,setList] = useState([]);
+    const [listShop,setListShop] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
     const {idShop} = useParams();
     const navigate = useNavigate()
+    const [showBills, setShowBills] = useState(false);
+    const handleCloseBills = () => setShowBills(false);
+    const handleShowBills = () => setShowBills(true);
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products-carts/products-shop/${user.id}/${idShop}`).then((res) => {
             if (res.data !== null) {
                setList(res.data)
             } else {
                 setList([])
+            }
+        })
+        axios.get(`http://localhost:8080/api/shops/user/${user.id}`).then((res) => {
+            if (res.data !== null) {
+                setListShop(res.data)
+            } else {
+                setListShop([])
             }
         })
     }, [])
@@ -28,7 +40,7 @@ export default function FindShopById(){
                 </div>
                 <div className="bill_about_title">
                     <span className={"btn-white borderBill"}>
-                        Đơn hàng
+                        <Link to={'/products-carts-merchant'}>Đơn hàng</Link>
                     </span>
                     <span className={"btn-white borderBill"}>
                         <Link to={'/products-carts-merchant-all'}>Tổng đơn hàng</Link>
@@ -41,8 +53,8 @@ export default function FindShopById(){
                                 id=""
                                 className="bill_about--shop-inner--btn"
                                 onChange={handleCityChange}
-                            >
-                                {list.map((item, index) => (
+                            ><option value="">---Đơn theo cửa hàng---</option>
+                                {listShop.map((item, index) => (
                                     <option key={index} value={item.id}>
                                         {item.name}
                                     </option>
@@ -106,7 +118,7 @@ export default function FindShopById(){
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
-                                                        }).format(item.totalPrice)}
+                                                        }).format(item.products.price*item.quantity)}
                                     </span>
                                 </td>
                                 {item.statusProductsCarts === "0" && <>
@@ -115,8 +127,12 @@ export default function FindShopById(){
                                 {item.statusProductsCarts === "1" && <>
                                     <td className="table_shop_list-inner">Huỷ thanh toán</td>
                                 </>}
+                                {item.statusProductsCarts === "2" && <>
+                                    <td className="table_shop_list-inner">Chờ xác nhận</td>
+                                </>}
                                 <td className="table_shop_list-inner">
-                                    <button>Chi tiết</button>
+                                    <button onClick={handleShowBills}>Chi tiết</button>
+                                    <BillsDetail showBills={showBills} handleClose={handleCloseBills} />
                                 </td>
 
                             </tr>

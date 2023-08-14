@@ -4,12 +4,16 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {useDispatch, useSelector} from "react-redux";
 import {addCartBuy, confirmOrderBuy} from "../features/cart/cartBuy";
+import BillsDetail from "../features/cart/BillsDetail";
 
 export default function Oder(){
     const [list,setList] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
     const cartBuy = useSelector(state => state.cartBuy);
     const dispatch = useDispatch()
+    const [showBills, setShowBills] = useState(false);
+    const handleCloseBills = () => setShowBills(false);
+    const handleShowBills = () => setShowBills(true);
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products-carts/products-user-id/${user.id}`).then((res) => {
             console.log(res.data)
@@ -166,14 +170,11 @@ export default function Oder(){
                                 </button>
                             </td>
                             <td className="table_shop_list-inner">
-                                <button>Chi tiết</button>
+                                <button onClick={handleShowBills}>Chi tiết</button>
+                                <BillsDetail showBills={showBills} handleClose={handleCloseBills} />
                             </td>
                         </>) : (<>
-                            <td className="table_shop_list-inner">
-                            </td>
-                            <td className="table_shop_list-inner">
-                                <button>Chi tiết</button>
-                            </td>
+
                         </>)}
                     </tr>)}
                     </>) : (<></>)}

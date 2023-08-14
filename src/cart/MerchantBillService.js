@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import {useDispatch, useSelector} from "react-redux";
 import { confirmOrder, deleteByMerchant,} from "../features/cart/cartMC";
 import {Link, useNavigate} from "react-router-dom";
+import BillsDetail from "../features/cart/BillsDetail";
+import {Button} from "react-bootstrap";
 
 export default function MerchantBillService() {
     const [list,setList] = useState([]);
@@ -12,6 +14,9 @@ export default function MerchantBillService() {
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem("user"))
     const navigate = useNavigate()
+    const [showBills, setShowBills] = useState(false);
+    const handleCloseBills = () => setShowBills(false);
+    const handleShowBills = () => setShowBills(true);
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products-carts/merchant-service-all/${user.id}`).then((res) => {
             if (res.data !== null) {
@@ -119,7 +124,7 @@ export default function MerchantBillService() {
                                 id=""
                                 className="bill_about--shop-inner--btn"
                                 onChange={handleCityChange}
-                            >
+                            ><option value="">---Đơn theo cửa hàng---</option>
                                 {listShop.map((item, index) => (<option key={index} value={item.id}>
                                     {item.name}
                                 </option>))}
@@ -190,9 +195,10 @@ export default function MerchantBillService() {
                                 {item.statusProductsCarts === "1" && <>
                                     <td className="table_shop_list-inner">Huỷ thanh toán</td>
                                 </>}
-                                <td className="table_shop_list-inner">
-                                    <button>Chi tiết</button>
-                                </td>
+                                    <td className="table_shop_list-inner">
+                                        <button onClick={handleShowBills}>Chi tiết</button>
+                                        <BillsDetail showBills={showBills} handleClose={handleCloseBills} />
+                                    </td>
                             </tr>
                         )
                         }
