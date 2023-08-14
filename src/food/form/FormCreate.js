@@ -21,14 +21,21 @@ import Swal from "sweetalert2";
 const getCategory = async () => {
     return await axios.get(`http://localhost:8080/api/category`)
 };
+const getVoucher = async () => {
+    return await axios.get(`http://localhost:8080/api/vouchers`)
+};
 
 
 export default function FormCreate(props) {
     const [nameProducts, setNameProducts] = useState([])
     const [category, setCategory] = useState([])
+    const [voucher, setVoucher] = useState([])
+    const [voucherChose, setVoucherChose] = useState([])
     const [categoryChose, setCategoryChose] = useState([])
     const [file, setFile] = useState("")
     const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user"))
+    const idUser = user.id;
 
     useEffect(() => {
         getCategory().then(res => {
@@ -36,10 +43,17 @@ export default function FormCreate(props) {
         })
     }, []);
     useEffect(() => {
+        getVoucher().then(res => {
+            setVoucher(res.data)
+        })
+    }, []);
+
+    useEffect(() => {
         axios.get('http://localhost:8080/api/products').then((res => {
             setNameProducts(res.data);
         }))
     }, [])
+
 
     const validation = Yup.object().shape({
         name: Yup.string().min(2, "Độ dài không hợp lệ")
@@ -68,9 +82,9 @@ export default function FormCreate(props) {
             name: "",
             description: "",
             quantity: 0,
-            price: 0
+            price: 0,
+
         },
-        validationSchema: validation,
         onSubmit: values => {
             let data = {...values}
             if (file) {
@@ -87,12 +101,18 @@ export default function FormCreate(props) {
                         });
                     }
                 );
-            } else {data.image = "https://websitecukcukvn.misacdn.net/wp-content/uploads/2022/02/shopee-food.png";
+            } else {
+                data.image = "https://websitecukcukvn.misacdn.net/wp-content/uploads/2022/02/shopee-food.png";
             }
+            data.voucher = [{
+                id: +props.voucher
+            }]
+            data.voucher = voucherChose;
             data.categories = categoryChose;
+
             data.shops = {
-                id: props.idShop
-            };
+                    id: props.idShop
+                };
             data.id = props.food.id;
             Swal.fire({
                 title: 'Bạn có muốn thêm sản phẩm mới?',
@@ -103,9 +123,8 @@ export default function FormCreate(props) {
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
-                    axios.post(`http://localhost:8080/api/products`, data).then((res) =>
-                    {
-                        Swal.fire('Thêm thành công!','', 'success')
+                    axios.post(`http://localhost:8080/api/products`, data).then((res) => {
+                        Swal.fire('Thêm thành công!', '', 'success')
                         navigate('/')
                     }).catch(err => console.log(err))
                 } else if (result.isDenied) {
@@ -115,11 +134,13 @@ export default function FormCreate(props) {
                 console.log(err.message)
             })
         },
+        validationSchema: validation,
 
     })
     useEffect(() => {
     }, [categoryChose])
-
+    useEffect(() => {
+    }, [voucherChose])
 
     const choseCategory = (e) => {
         let id = +e.target.value;
@@ -131,6 +152,17 @@ export default function FormCreate(props) {
             setCategoryChose([...categoryChose, {id: id}])
         }
     };
+    const choseVoucher = (e) => {
+        let id = +e.target.value;
+        let voucher = voucherChose.filter(item => item.id === id);
+        if (voucher.length > 0) {
+            let data = voucherChose.filter(item => item.id !== id);
+            setVoucherChose([...data]);
+        } else {
+            setVoucherChose([...voucherChose, {id: id}])
+        }
+    };
+
 
 
     const choseFileUpload = (e) => {
@@ -200,6 +232,16 @@ export default function FormCreate(props) {
                             />
                         </div>
                         <div className="mb-3">
+                            <label htmlFor={'voucher'} className={'form-label form-label-city'}>Mã giảm giá</label>
+                            <select name={"voucher"}
+                                    onChange={choseVoucher}>
+                                <option>Chọn mã giảm giá</option>
+                                {voucher.map((item, index)=> (
+                                    <option value={item.id} key={index}>{item.name}</option>
+                                ))}
+                            </select><br/>
+                        </div>
+                        <div className="mb-3">
                             <FormLabel component="legend">
                                 <span className="type-text-form">Các thể loại</span>
                             </FormLabel>
@@ -210,7 +252,8 @@ export default function FormCreate(props) {
                                                       label={item.name}/>
                                 )
                             )}
-                        </div><div className="mb-3">
+                        </div>
+                        <div className="mb-3">
                         <label htmlFor="image" className="form-label">Chọn ảnh</label>
                         <input type="file" className="form-control" id="image" onChange={choseFileUpload}
                         />
