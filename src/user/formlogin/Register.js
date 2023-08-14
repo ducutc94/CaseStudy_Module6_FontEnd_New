@@ -30,7 +30,7 @@ export default function Register({setRegister,handleCloseRegister}) {
         username: Yup.string().required("Tên không để trống").matches(/^[a-z0-9_-]{3,16}$/, 'Chưa đúng định dạng')
             .test('Tên duy nhất', 'Tên đăng nhập đã tồn tại',function (value) {return !checkUsername(value)
             }),
-        // password:Yup.string().matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,"Chưa đúng định dạng").required("Mật khẩu rỗng"),
+        password:Yup.string().matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,"Chưa đúng định dạng").required("Mật khẩu rỗng"),
         email: Yup.string().email("Invalid email address").required("Email không để trống")
             .test('Email duy nhất', 'Email đã tồn tại', function (value) {
                 return !checkEmailExists(value);

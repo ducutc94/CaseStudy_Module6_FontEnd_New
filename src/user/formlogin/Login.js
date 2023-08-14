@@ -9,15 +9,17 @@ import * as Yup from "yup";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {useDispatch, useSelector} from "react-redux";
+import {addIdCart} from "../../features/cart/idCartLogin";
 
 
 
 export default function Login({showLogin, handleClose}) {
+    const idCart = useSelector(state => state.idCart);
+    const dispatch = useDispatch()
     const [showRegister, setRegister] = useState(false);
     const validation = Yup.object().shape({
         username: Yup.string().required("Tên không để trống").matches(/^[a-z0-9_-]{3,16}$/, 'Chưa đúng định dạng'),
-        // password: Yup.string().matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-        //     "Chưa đúng định dạng").required("Mật khẩu rỗng"),
     });
     const formik = useFormik({
         initialValues: {
@@ -29,8 +31,8 @@ export default function Login({showLogin, handleClose}) {
             axios.post('http://localhost:8080/api/auth/login', values).then((res) => {
 
                 if (res.data.username !== undefined) {
-                    console.log(res)
                     localStorage.setItem("user", JSON.stringify(res.data))
+                    dispatch(addIdCart(res.data.id))
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -98,17 +100,17 @@ export default function Login({showLogin, handleClose}) {
                                                 {<span className={"text-danger"}>{formik.errors.password}</span>}
 
                                                 {showPassword ? (
-                                                    <span
-                                                        className="auth-form__toggle-password"
-                                                        onClick={() => setShowPassword(false)}>
+                                                        <span
+                                                            className="auth-form__toggle-password"
+                                                            onClick={() => setShowPassword(false)}>
                                                           <FontAwesomeIcon icon={faEye} />
                                                     </span>) :
                                                     (<span
-                                                        className="auth-form__toggle-password"
-                                                        onClick={() => setShowPassword(true)}>
+                                                            className="auth-form__toggle-password"
+                                                            onClick={() => setShowPassword(true)}>
                                                       <FontAwesomeIcon icon={faEyeSlash} />
                                                     </span>
-                                                )}
+                                                    )}
                                             </div>
                                         </div>
 

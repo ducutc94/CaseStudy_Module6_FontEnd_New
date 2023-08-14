@@ -3,10 +3,13 @@ import Login from "../user/formlogin/Login";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Cart from "../cart/Cart";
+import {setCart} from "../features/cart/cartSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 
 export default function Header({search}) {
-
+    const cart = useSelector(state => state.cart);
+    const dispatch = useDispatch()
 
     const [showLogin, setShowLogin] = useState(false)
     const user = JSON.parse(localStorage.getItem("user"))
@@ -22,9 +25,11 @@ export default function Header({search}) {
     const handleClose = () => setShowLogin(false);
     const handleShow = () => setShowLogin(true);
 
+
     // logout
     const removeDataFromLocalStorage = () => {
-        localStorage.removeItem('user');
+        localStorage.clear();
+        dispatch(setCart());
         navigate('/')
     };
 

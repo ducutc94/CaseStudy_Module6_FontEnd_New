@@ -1,56 +1,44 @@
-
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import {useDispatch, useSelector} from "react-redux";
+import {addCartMerchant, confirmOder, confirmOrder, deleteByMerchant, setCartMerchant} from "../features/cart/cartMC";
+
 
 export default function PCByMerchant() {
-    const [productCart, setProductCart] = useState([]);
-    const checkUserID = (value) =>{
-        let id;
-        if(value){
-            id = value.id;
-        }
-        else {
-            id = 1000;
-        }
-        return id;
-    }
+    const cartMerchant = useSelector(state => state.cartMerchant)
+    const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem("user"))
-    const idUser = checkUserID(user);
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/products-carts/merchant-service/${idUser}`).then((res) => {
+        axios.get(`http://localhost:8080/api/products-carts/merchant-service/${user.id}`).then((res) => {
             if (res.data !== null) {
-                setProductCart(res.data)
-
+                dispatch(addCartMerchant(res.data))
             } else {
-                setProductCart([])
+                dispatch(addCartMerchant([]))
             }
-
         })
     }, [])
-    const createBill = (id) => {
+
+    const deleteCartMerchant = (id, index, item) => {
         Swal.fire({
             position: 'center',
-            title: 'Bạn muốn xác nhận đơn hàng ?',
+            title: 'Bạn muốn huỷ đơn hàng ?',
             showDenyButton: true,
             confirmButtonText: 'Xác nhận',
             denyButtonText: 'Hủy',
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                axios.put(`http://localhost:8080/api/products-carts/update-confirm/${id}`).then((res) => {
-                    // eslint-disable-next-line no-unused-expressions
-                    res.data.statusProductsCarts === "0" ? (Swal.fire({
+                dispatch(deleteByMerchant({
+                    index: index,
+                    item: item
+                }))
+                axios.delete(`http://localhost:8080/api/products-carts/merchant/${id}`).then(() => {
+                    Swal.fire({
                         width: '450px',
                         position: 'center',
-                        title: 'Chấp nhận đơn hàng !',
+                        title: 'Huỷ thành công!',
                         icon: 'success'
-                    })):( Swal.fire({
-                        width: '450px',
-                        position: 'center',
-                        title: 'Đơn hàng không đủ!',
-                        icon: 'info'
-                    }))
+                    });
 
                 })
             } else if (result.isDenied) {
@@ -63,21 +51,24 @@ export default function PCByMerchant() {
             }
         })
     }
-    const deleteCart = (id) =>{
+    const handleSumbit = (id, index, item) => {
         Swal.fire({
             position: 'center',
-            title: 'Bạn muốn huỷ đơn hàng ?',
+            title: 'Bạn muốn thanh toán đơn hàng ?',
             showDenyButton: true,
             confirmButtonText: 'Xác nhận',
             denyButtonText: 'Hủy',
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:8080/api/products-carts/merchant/${id}`).then(() => {
+                dispatch(confirmOrder({
+                    index: index,
+                    item: item
+                }))
+                axios.put(`http://localhost:8080/api/products-carts/merchant-update/${id}`).then((res) => {
                     Swal.fire({
                         width: '450px',
                         position: 'center',
-                        title: 'Huỷ thành công!',
+                        title: 'Thanh toán thành công!',
                         icon: 'success'
                     });
                 })
@@ -95,6 +86,7 @@ export default function PCByMerchant() {
 
     return (
         <>
+
             <div>
                 <div className="title-form-container">
                     <h1 className="title-form">Quản lý đơn hàng</h1>
@@ -133,14 +125,14 @@ export default function PCByMerchant() {
                             <h5 className="table_shop_list-title">
                                 TRANG THÁI ĐƠN
                             </h5></td>
-                        <td colSpan={4}><h5 className="table_shop_list-title">
+                        <td colSpan={5}><h5 className="table_shop_list-title">
                             TUỲ CHỌN
                         </h5></td>
                     </tr>
                     </thead>
                     <tbody>
-                    {productCart ? (
-                        <> {productCart.map((item, index) =>
+                    {(Array.isArray(cartMerchant.items)) ? (
+                        <> {cartMerchant.items.map((item, index) =>
                             <tr key={item.id}>
                                 <td className="table_shop_list-inner">{index + 1}</td>
                                 <td className="table_shop_list-inner">{item.products.name}</td>
@@ -151,37 +143,49 @@ export default function PCByMerchant() {
                                     <td className="table_shop_list-inner">Đã thanh toán</td>
                                 </>}
                                 {item.statusProductsCarts === "1" && <>
-                                    <td className="table_shop_list-inner">Huỷ thanh toán </td>
+                                    <td className="table_shop_list-inner">Huỷ thanh toán</td>
                                 </>}
-                                {item.statusProductsCarts === "5" && <>
+                                {item.statusProductsCarts === "2" && <>
                                     <td className="table_shop_list-inner">Đang chờ xác nhận</td>
                                 </>}
 
-                                {item.statusProductsCarts === "5" ? (<> <td className="table_shop_list-inner">
-                                    <button onClick={() => createBill(item.id)}>Xác nhận</button>
-                                </td>
-                                    <td className="table_shop_list-inner">
-                                        <button onClick={() => deleteCart(item.id)}>Huỷ</button>
-                                    </td>
-                                    <td className="table_shop_list-inner">
-                                        <button >Chi tiết</button>
-                                    </td>
-                                </>):(<><td className="table_shop_list-inner">
-                                </td>
-                                    <td className="table_shop_list-inner">
-                                    </td>
-                                    <td className="table_shop_list-inner">
-                                        <button >Chi tiết</button>
-                                    </td>
-                                </>)
+                                {item.statusProductsCarts === "5" ? (<>
 
+                                    <td className="table_shop_list-inner">
+                                        <button>Chi tiết</button>
+                                    </td>
+                                </>) : (<>
+                                    <td className="table_shop_list-inner">
+                                    </td>
+                                    <td className="table_shop_list-inner">
+                                    </td>
+
+                                </>)
                                 }
 
+                                {item.statusProductsCarts === "2"?(<>
+                                    <td className="table_shop_list-inner">
+                                        <button type={"submit"} onClick={() => handleSumbit(item.id, index, item)}>Xác nhận</button>
+                                    </td>
+                                    <td className="table_shop_list-inner">
+                                        <button type={"submit"} onClick={() => deleteCartMerchant(item.id,index,item)}>Huỷ</button>
+                                    </td>
+                                    <td className="table_shop_list-inner">
+                                        <button>Chi tiết</button>
+                                    </td>
+                                </>):(<> <td className="table_shop_list-inner">
+                                </td>
+                                    <td className="table_shop_list-inner">
+                                    </td>
+                                    <td className="table_shop_list-inner">
+                                        <button>Chi tiết</button>
+                                    </td>
+                                </>) }
                             </tr>
                         )
                         }
                         </>
-                    ):(<></>)}
+                    ) : (<></>)}
 
                     </tbody>
                 </table>

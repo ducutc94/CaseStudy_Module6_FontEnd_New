@@ -1,94 +1,71 @@
-import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import {useDispatch, useSelector} from "react-redux";
+import {addCart, deleteAll, deleteItem, setCart, setStatus} from "../features/cart/cartSlice";
+import formik, {useFormik} from "formik";
 
 export default function ProductsCarts() {
-    const [productCart, setProductCart] = useState([]);
-    const checkUserID = (value) =>{
+    const [productCart, setProductCart] = useState([JSON.parse(localStorage.getItem("cart"))]);
+    const carts = useSelector(state => state.cart)
+    const dispatch = useDispatch();
+    const idCart = JSON.parse(localStorage.getItem("idCart"));
+    const id = idCart.id;
+    const checkUserID = (value) => {
         let id;
-        if(value){
+        if (value) {
             id = value.id;
-        }
-        else {
+        } else {
             id = 1000;
         }
         return id;
-
     }
     const user = JSON.parse(localStorage.getItem("user"))
     const idUser = checkUserID(user);
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/products-carts/user-cart/${idUser}`).then((res) => {
-            if (res.data !== null) {
-                setProductCart(res.data)
-
-            } else {
-                setProductCart([])
-            }
-
-        })
+        setProductCart(carts);
+        dispatch(setCart())
     }, [])
-    const createBill = (id) => {
-        Swal.fire({
-            position: 'center',
-            title: 'Bạn muốn thanh toán đơn hàng ?',
-            showDenyButton: true,
-            confirmButtonText: 'Xác nhận',
-            denyButtonText: 'Hủy',
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                axios.put(`http://localhost:8080/api/products-carts/update/${id}`).then(() => {
+
+    const formik = useFormik({
+        initialValues: {
+            id:"",
+            totalMoney:""
+        },
+        onSubmit: values => {
+            Swal.fire({
+                position: 'center',
+                title: 'Bạn muốn xác nhận đơn hàng ?',
+                showDenyButton: true,
+                confirmButtonText: 'Xác nhận',
+                denyButtonText: 'Hủy',
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    axios.post(`http://localhost:8080/api/bills/${user.id}/${idCart.id}`,
+                        carts.items
+                    ).then((res) => {
+                        console.log(res.data)
+                        dispatch(deleteAll())
+                    })
+                } else if (result.isDenied) {
                     Swal.fire({
                         width: '450px',
                         position: 'center',
-                        title: 'Thanh toán thành công! Đã gửi yêu cầu đến chủ cửa hàng',
-                        icon: 'success'
-                    });
-                })
-            } else if (result.isDenied) {
-                Swal.fire({
-                    width: '450px',
-                    position: 'center',
-                    title: 'Hủy!',
-                    icon: 'info'
-                })
-            }
-        })
-    }
-    const deleteCart = (id) =>{
-        Swal.fire({
-            position: 'center',
-            title: 'Bạn muốn huỷ đơn hàng ?',
-            showDenyButton: true,
-            confirmButtonText: 'Xác nhận',
-            denyButtonText: 'Hủy',
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                axios.delete(`http://localhost:8080/api/products-carts/${id}`).then(() => {
-                    Swal.fire({
-                        width: '450px',
-                        position: 'center',
-                        title: 'Huỷ thành công!',
-                        icon: 'success'
-                    });
-                })
-            } else if (result.isDenied) {
-                Swal.fire({
-                    width: '450px',
-                    position: 'center',
-                    title: 'Hủy!',
-                    icon: 'info'
-                })
-            }
-        })
-    }
+                        title: 'Hủy!',
+                        icon: 'info'
+                    })
+                }
+            })
+
+
+        },
+
+    })
 
 
     return (
-        <>
+        <> <form onSubmit={formik.handleSubmit}>
             <div>
                 <div className="title-form-container">
                     <h1 className="title-form">Quản lý giỏ hàng</h1>
@@ -102,9 +79,14 @@ export default function ProductsCarts() {
                 <table className={"table table_shop_list"}>
                     <thead>
                     <tr>
+
                         <td className="table_shop_list-header">
                             <h5 className="table_shop_list-title">
                                 STT
+                            </h5></td>
+                        <td className="table_shop_list-header">
+                            <h5 className="table_shop_list-title">
+                                ANH
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
@@ -125,68 +107,74 @@ export default function ProductsCarts() {
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
-                                TRANG THÁI ĐƠN
                             </h5></td>
-                        <td colSpan={3}><h5 className="table_shop_list-title">
-                            TUỲ CHỌN
-                        </h5></td>
+                        <td></td>
                     </tr>
                     </thead>
                     <tbody>
-                    { productCart ? (
+                    {carts.items ? (
                         <>
-                            { productCart.map((item, index) =>
-                            <tr key={item.id}>
-                                <td className="table_shop_list-inner">{index + 1}</td>
-                                <td className="table_shop_list-inner">{item.products.name}</td>
-                                <td className="table_shop_list-inner">{item.products.price}</td>
-                                <td className="table_shop_list-inner">{item.quantity}</td>
-                                <td className="table_shop_list-inner">{item.totalPrice}</td>
-                                {item.statusProductsCarts === "0" && <>
-                                    <td className="table_shop_list-inner">Đã xác thực</td>
-                                </>}
-                                {item.statusProductsCarts === "1" && <>
-                                    <td className="table_shop_list-inner">Đã hủy</td>
-                                </>}
-                                {item.statusProductsCarts === "2" && <>
-                                    <td className="table_shop_list-inner">Đang chờ</td>
-                                </>}
-                                {item.statusProductsCarts === "5" && <>
-                                    <td className="table_shop_list-inner">Đang chờ xác nhận</td>
-                                </>}
+                            {carts.items.map((item, index) =>
+                                <tr key={index}>
 
-                                {item.statusProductsCarts === "2" ? (<>
+                                    <td className="table_shop_list-inner">{index + 1}</td>
+                                    <td className="table_shop_list-inner"><img src={item.food.image} alt=""
+                                                                               className="header__Cart-img"/></td>
+                                    <td className="table_shop_list-inner">{item.food.name}</td>
                                     <td className="table_shop_list-inner">
-                                        <button onClick={() => createBill(item.id)}>Thanh toán</button>
+                                        <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(item.food.price)}
+                                                    </span>
                                     </td>
+                                    <td className="table_shop_list-inner">{item.quantity}</td>
                                     <td className="table_shop_list-inner">
-                                        <button onClick={() => deleteCart(item.id)}>Huỷ</button>
+                                        <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(item.money)}
+                                                    </span>
                                     </td>
-                                </>):(<>
+                                    <td className="table_shop_list-inner"><button type={"button"} onClick={() => dispatch(deleteItem({
+                                        index: index,
+                                        food: item
+                                    })) }>Huỷ</button></td>
                                     <td className="table_shop_list-inner">
-
                                     </td>
-                                    <td className="table_shop_list-inner">
-                                        <button onClick={() => createBill(item.id)}>Chi tiết</button>
-                                    </td>
-                                </>) }
-
-
-
-
-
-                            </tr>
-                        )
-                        }
+                                </tr>
+                            )
+                            }
                         </>
                     ) : (
                         <></>
                     )
                     }
-
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <span style={{marginLeft: `5px`}}> Tong tien:
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(carts.totalMoney)}
+                                                    </span>
+                        </td>
+                        <td>
+                            <button type={"submit"}>Thanh toan</button>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
+        </form>
         </>
     )
 

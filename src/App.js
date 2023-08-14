@@ -18,9 +18,19 @@ import QuickSearch from "./food/view/QuickSearch";
 import ProductsCarts from "./cart/ProductsCarts";
 import Confirm from "./confirm/Confirm";
 import PCByMerchant from "./cart/PCByMerchant";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {setCart} from "./features/cart/cartSlice";
+import {setCartMerchant} from "./features/cart/cartMC";
 
 
 function App() {
+    const cart = useSelector(state => state.cart);
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(setCart())
+        dispatch(setCartMerchant())
+    }, [])
     return (
         <>
             <Header/>
