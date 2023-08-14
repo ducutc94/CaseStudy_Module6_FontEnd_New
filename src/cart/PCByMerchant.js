@@ -58,7 +58,7 @@ export default function PCByMerchant() {
     const handleSumbit = (id, index, item) => {
         Swal.fire({
             position: 'center',
-            title: 'Bạn muốn thanh toán đơn hàng ?',
+            title: 'Bạn muốn xác thực đơn hàng ?',
             showDenyButton: true,
             confirmButtonText: 'Xác nhận',
             denyButtonText: 'Hủy',
@@ -67,10 +67,17 @@ export default function PCByMerchant() {
                 dispatch(confirmOrder({
                     index: index, item: item
                 }))
-                axios.put(`http://localhost:8080/api/products-carts/merchant-update/${id}`).then((res) => {
-                    Swal.fire({
-                        width: '450px', position: 'center', title: 'Thanh toán thành công!', icon: 'success'
-                    });
+                axios.put(`http://localhost:8080/api/products-carts/update-confirm/${id}`).then((res) => {
+                    if(res.data.statusProductsCarts === "0"){
+                        Swal.fire({
+                            width: '450px', position: 'center', title: 'Xác thực thành công!', icon: 'success'
+                        });
+                    }else{
+                        Swal.fire({
+                            width: '450px', position: 'center', title: 'Đơn hàng không đủ!', icon: 'info'
+                        });
+                    }
+
                 })
             } else if (result.isDenied) {
                 Swal.fire({
