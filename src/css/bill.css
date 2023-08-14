@@ -1,0 +1,36 @@
+.bill_about_title{
+    display: flex;
+}
+.btn-white > a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}
+
+.btn-white > a:active {
+    font-weight: 600;
+}
+.bill_about--shop{
+
+}
+.bill_about--shop-inner{
+}
+.bill_about--shop-inner--btn{
+    color: #000000;
+    border: 0;
+    background-color: #ffffff;
+    padding: 8px;
+    border-radius: 5px;
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.borderBill{
+    border-radius: 0;
+    border-width: 0 1px 1px 0;
+    border-style: solid;
+    border-color: rgba(51, 50, 50, 0.53);
+
+}

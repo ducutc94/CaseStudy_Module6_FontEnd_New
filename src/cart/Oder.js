@@ -72,7 +72,7 @@ export default function Oder(){
         <>
             <div>
                 <div className="title-form-container">
-                    <h1 className="title-form">Quản lý đơn hàng</h1>
+                    <h1 className="title-form">Lịch sử đơn hàng</h1>
                 </div>
                 <div>
                     <div><span className={"btn-white"}>
@@ -119,9 +119,23 @@ export default function Oder(){
                         key={item.id}>
                         <td className="table_shop_list-inner">{index + 1}</td>
                         <td className="table_shop_list-inner">{item.products.name}</td>
-                        <td className="table_shop_list-inner">{item.products.price}</td>
+                        <td className="table_shop_list-inner">
+                            <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(item.products.price)}
+                                    </span>
+                        </td>
                         <td className="table_shop_list-inner">{item.quantity}</td>
-                        <td className="table_shop_list-inner">{item.products.price*item.quantity}</td>
+                        <td className="table_shop_list-inner">
+                            <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(item.products.price*item.quantity)}
+                                    </span>
+                        </td>
                         {item.statusProductsCarts === "0" && <>
                             <td className="table_shop_list-inner">Đã thanh toán</td>
                         </>}

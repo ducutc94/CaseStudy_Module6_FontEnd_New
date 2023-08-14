@@ -103,29 +103,30 @@ export default function MerchantBillService() {
                 <div className="title-form-container">
                     <h1 className="title-form">Quản lý đơn hàng</h1>
                 </div>
-                <div className="header__select--address">
 
-                    <div className="header__select--address-inner">
-                        <select
-                            name=""
-                            id=""
-                            className="header__select--address--btn"
-                            onChange={handleCityChange}
-                        >
-                            {listShop.map((item, index) => (<option key={index} value={item.id}>
-                                {item.name}
-                            </option>))}
-                        </select>
+                <div className="bill_about_title">
+                    <span className={"btn-white borderBill"}>
+                        <Link to={'/products-carts-merchant'}>Đơn hàng</Link>
+                    </span>
+                    <span className={"btn-white borderBill"}>
+                       <b>Tổng đơn hàng</b>
+                    </span>
+                    <div className="bill_about--shop borderBill">
 
+                        <div className="bill_about--shop-inner">
+                            <select
+                                name=""
+                                id=""
+                                className="bill_about--shop-inner--btn"
+                                onChange={handleCityChange}
+                            >
+                                {listShop.map((item, index) => (<option key={index} value={item.id}>
+                                    {item.name}
+                                </option>))}
+                            </select>
+
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div><span className={"btn-white"}>
-                        <Link to={'/products-carts-merchant'}>Don Hang</Link>
-                    </span></div>
-                    <div><span className={"btn-white"}>
-                       <span>Tong Don Ban</span>
-                    </span></div>
                 </div>
                 <table className={"table table_shop_list"}>
                     <thead>
@@ -166,9 +167,23 @@ export default function MerchantBillService() {
                             <tr key={item.id}>
                                 <td className="table_shop_list-inner">{index + 1}</td>
                                 <td className="table_shop_list-inner">{item.products.name}</td>
-                                <td className="table_shop_list-inner">{item.products.price}</td>
+                                <td className="table_shop_list-inner">
+                                    <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(item.products.price)}
+                                    </span>
+                                </td>
                                 <td className="table_shop_list-inner">{item.quantity}</td>
-                                <td className="table_shop_list-inner">{item.totalPrice}</td>
+                                <td className="table_shop_list-inner">
+                                    <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(item.totalPrice)}
+                                    </span>
+                                </td>
                                 {item.statusProductsCarts === "0" && <>
                                     <td className="table_shop_list-inner">Đã thanh toán</td>
                                 </>}
