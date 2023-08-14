@@ -23,6 +23,9 @@ import {useEffect} from "react";
 import {setCart} from "./features/cart/cartSlice";
 import {setCartMerchant} from "./features/cart/cartMC";
 import Toast from "./layout/Toast";
+import MerchantBillService from "./cart/MerchantBillService";
+import FindShopById from "./cart/FindShopById";
+import Oder from "./cart/Oder";
 
 
 function App() {
@@ -60,6 +63,9 @@ function App() {
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                     <Route path={'/products-carts-merchant'} element={<PCByMerchant/>}></Route>
+                    <Route path={'/products-carts-merchant-all'} element={<MerchantBillService/>}></Route>
+                    <Route path={'/products-carts-shop/:id'} element={<FindShopById/>}></Route>
+                    <Route path={'/products-carts-oder'} element={<Oder/>}></Route>
                     <Route path={'/confirm'} element={<Confirm/>}></Route>
                 </Routes>
             </div>
