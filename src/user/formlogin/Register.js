@@ -11,6 +11,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 export default function Register({setRegister,handleCloseRegister}) {
     const [list,setList] = useState([]);
     useEffect(()=>{
+
         axios.get('http://localhost:8080/api/users').then((res=>{
             if(res.data !==""){
                 setList(res.data);
@@ -51,6 +52,7 @@ export default function Register({setRegister,handleCloseRegister}) {
             email: '',
             roles: ''
         },
+
         validationSchema:validation,
         onSubmit: values => {
             console.log(values.roles)
