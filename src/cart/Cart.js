@@ -67,7 +67,7 @@ export default function Cart() {
                                                 </div>
                                             </div>
                                             <div className="header__Cart-item-body">
-                                                <span className="header__Cart-item-description">Phân loại: </span>
+                                                <span className="header__Cart-item-description"> </span>
                                                 <span onClick={() => dispatch(deleteItem({
                                                     index: index,
                                                     food: item
@@ -82,7 +82,7 @@ export default function Cart() {
                         </div>
                     )}
                     {user ? (<>
-                        <span style={{marginLeft: `5px`}}>Tong tien :
+                        <span className="header__Cart-item-totalMoney">Tổng tiền : &nbsp;
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'

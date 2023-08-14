@@ -10,6 +10,8 @@ import '../src/css/form_CreateUpdate.css';
 import '../src/css/shop.css';
 import '../src/css/views_food.css';
 import '../src/css/confirm_email.css';
+import '../src/css/toast.css';
+import '../src/css/banner.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";

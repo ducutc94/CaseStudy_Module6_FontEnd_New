@@ -357,6 +357,11 @@
     color: var(--primary-color);
     cursor: pointer;
 }
+.header__Cart-item-totalMoney{
+    font-size: 15px;
+    font-weight: 600;
+    margin-left: -68px;
+}
 .header__cart-view{
     float: right;
     margin: 0 12px 12px 0;

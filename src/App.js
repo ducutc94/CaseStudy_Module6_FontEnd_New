@@ -22,6 +22,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {setCart} from "./features/cart/cartSlice";
 import {setCartMerchant} from "./features/cart/cartMC";
+import Toast from "./layout/Toast";
 
 
 function App() {
@@ -33,9 +34,12 @@ function App() {
     }, [])
     return (
         <>
+
+            {/*<---------------Thông báo khi bắt đầu vào trang chủ------------------>*/}
+            {/*<Toast/>*/}
+
             <Header/>
             <div className={`container-content`}>
-
                 <Routes>
                     <Route path={'/'} element={<List />}></Route>
                     <Route path={'/view-food/:id'} element={<View/>}></Route>

@@ -3,6 +3,7 @@ import axios from "axios";
 import {Link, useLocation} from "react-router-dom";
 import Filter from "./Filter";
 import Swal from "sweetalert2";
+import Banner from "../../layout/Banner";
 
 export default function List() {
     const [foods, setFoods] = useState([])
@@ -80,6 +81,7 @@ export default function List() {
 
     return (
         <>
+            <Banner/>
             <div className="grid">
                 <div className="grid__row app__content">
 
