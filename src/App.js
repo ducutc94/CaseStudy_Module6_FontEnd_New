@@ -18,6 +18,8 @@ import QuickSearch from "./food/view/QuickSearch";
 import ProductsCarts from "./cart/ProductsCarts";
 import Confirm from "./confirm/Confirm";
 import PCByMerchant from "./cart/PCByMerchant";
+import ShipperManager from "./shop/ShipperManager";
+import UpdateShipper from "./shop/UpdateShipper";
 
 
 function App() {
@@ -27,26 +29,28 @@ function App() {
             <div className={`container-content`}>
 
                 <Routes>
-                    <Route path={'/'} element={<List />}></Route>
+                    <Route path={'/'} element={<List/>}></Route>
                     <Route path={'/view-food/:id'} element={<View/>}></Route>
                     <Route path={'/create-food/:id'} element={<Create/>}></Route>
                     <Route path={'/update-food/:id'} element={<Update/>}></Route>
 
-                    <Route path={'/shop'} element={<ListShop />}></Route>
-                    <Route path={'/create-shop'} element={<CreateShop />}></Route>
-                    <Route path={'/update-shop/:id'} element={<UpdateShop />}></Route>
+                    <Route path={'/shop'} element={<ListShop/>}></Route>
+                    <Route path={'/create-shop'} element={<CreateShop/>}></Route>
+                    <Route path={'/update-shop/:id'} element={<UpdateShop/>}></Route>
 
-                    <Route path={'/carts'} element={<Cart />}></Route>
+                    <Route path={'/carts'} element={<Cart/>}></Route>
                     {/*<Route path={'/search-food/:search'} element={<Search/>}></Route>*/}
 
-                    <Route path={'/voucher'} element={<ListVoucher />}></Route>
-                    <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>
-                    <Route path={'/update-voucher/:id'} element={<UpdateVoucher />}></Route>
+                    <Route path={'/voucher'} element={<ListVoucher/>}></Route>
+                    <Route path={'/create-voucher'} element={<CreateVoucher/>}></Route>
+                    <Route path={'/update-voucher/:id'} element={<UpdateVoucher/>}></Route>
                     <Route path={'/category/:id'} element={<QuickSearch/>}></Route>
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                     <Route path={'/products-carts-merchant'} element={<PCByMerchant/>}></Route>
                     <Route path={'/confirm'} element={<Confirm/>}></Route>
+                    <Route path={'/shipper-manager'} element={<ShipperManager/>}></Route>
+                    <Route path={'/shipper-update/:id'} element={<UpdateShipper/>}></Route>
                 </Routes>
             </div>
             <Footer/>

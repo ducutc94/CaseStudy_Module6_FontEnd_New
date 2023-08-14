@@ -1,9 +1,10 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {useFormik} from "formik";
 import Swal from "sweetalert2";
 import * as yup from "yup";
+import {Modal} from "react-bootstrap";
 
 
 export default function UpdateShop() {
@@ -11,6 +12,59 @@ export default function UpdateShop() {
     const {id} = useParams();
     const user = JSON.parse(localStorage.getItem("user"))
     const idUser = user.id;
+    const [shop, setShop] = useState({});
+    const [shippers, setShippers] = useState([]);
+    const [newShipper, setNewShipper] = useState([]);
+    const [allShipper, setAllShipper] = useState([]);
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/shipper/by-status`).then((res) => {
+            setAllShipper(res.data);
+            window.scrollTo(0, 0);
+        });
+    }, []);
+
+    const handleCheck = (id) => {
+        setNewShipper(prev => {
+            const isChecked = newShipper.includes(id);
+            if (isChecked) {
+                return newShipper.filter(item => item !== id)
+            } else {
+                return [...prev, id]
+            }
+        });
+    }
+
+    const handleSubmit = () => {
+        const shipper = {
+            shipperId : newShipper
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+        axios.post(`http://localhost:8080/api/shipper/add-shipper/${id}`, shipper, config).then((response) => {
+            setNewShipper(response.data);
+
+            handleClose();
+        })
+    }
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/shipper/shops/${id}`).then((response) => {
+            console.log('response.data>>>', response.data)
+            setShop(response.data);
+            setShippers(response.data);
+            setNewShipper(response.data.map((item) => item.id));
+        })
+    }, [])
+
 
     const [city, setCity] = useState([])
     useEffect(() => {
@@ -179,6 +233,32 @@ export default function UpdateShop() {
                     </div>
                 </div>
             </form>
+            <button className={`btn btn-danger`} onClick={handleShow}>
+                Cập nhật dịch vụ giao hàng
+            </button>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>
+                        <div className={`service`}>
+                            Cập nhật giao hàng
+                        </div>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {allShipper.map(item =>
+                        <div className={"form-check form-switch"} key={item.id}>
+                            <input className={"form-check-input"} type={"checkbox"} id={item.id}
+                                   checked={newShipper.includes(item.id)}
+                                   onChange={() => handleCheck(item.id)}/>
+                            <label className={"form-check-label"} htmlFor={item.id}>{item.name}</label>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <button onClick={handleSubmit} className={"btn btn-danger"}>Cập nhật</button>
+                    <button className={"btn btn-light"} onClick={handleClose}>Đóng</button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }

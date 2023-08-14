@@ -1,142 +1,144 @@
-import {Link, useNavigate} from "react-router-dom";
-import * as Yup from 'yup'
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import axios from "axios";
-import React, {useEffect, useState} from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import {
     Checkbox,
-    FormControl,
     FormControlLabel,
     FormLabel,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField
+    TextField,
 } from "@mui/material";
-import {useFormik} from "formik";
-import storage from "../../config/FirebaseConfig";
-import {Food} from "../../model/Food";
+import { useFormik } from "formik";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import axios from "axios";
 import Swal from "sweetalert2";
+import storage from "../../config/FirebaseConfig";
 
 const getCategory = async () => {
-    return await axios.get(`http://localhost:8080/api/category`)
+    return await axios.get(`http://localhost:8080/api/category`);
 };
 
-
 export default function FormCreate(props) {
-    const [nameProducts, setNameProducts] = useState([])
-    const [category, setCategory] = useState([])
-    const [categoryChose, setCategoryChose] = useState([])
-    const [file, setFile] = useState("")
+    const [nameProducts, setNameProducts] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [categoryChose, setCategoryChose] = useState([]);
+    const [images, setImages] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        getCategory().then(res => {
-            setCategory(res.data)
-        })
+        getCategory().then((res) => {
+            setCategory(res.data);
+        });
     }, []);
+
     useEffect(() => {
-        axios.get('http://localhost:8080/api/products').then((res => {
+        axios.get("http://localhost:8080/api/products").then((res) => {
             setNameProducts(res.data);
-        }))
-    }, [])
+        });
+    }, []);
 
     const validation = Yup.object().shape({
-        name: Yup.string().min(2, "Độ dài không hợp lệ")
+        name: Yup.string()
+            .min(2, "Độ dài không hợp lệ")
             .max(500, "Độ dài không hợp lệ")
             .required("Hãy nhập dữ liệu!")
             .test("Tên đã tồn  tại", "Đã tồn tại", function (value) {
-                return !checkNameProduct(value)
+                return !checkNameProduct(value);
             }),
-        description: Yup.string().min(2, "Độ dài không hợp lệ")
+        description: Yup.string()
+            .min(2, "Độ dài không hợp lệ")
             .required("Hãy nhập dữ liệu!"),
+        quantity: Yup.number().min(0, "Độ dài không hợp lệ").required("Hãy nhập dữ liệu!"),
+        price: Yup.number().min(0, "Độ dài không hợp lệ").required("Hãy nhập dữ liệu!"),
+    });
 
-
-        quantity: Yup.number().min(0, "Độ dài không hợp lệ")
-            .required("Hãy nhập dữ liệu!"),
-
-        price: Yup.number().min(0, "Độ dài không hợp lệr")
-            .required("Hãy nhập dữ liệu!"),
-
-
-    })
     const checkNameProduct = (name) => {
         return nameProducts.some((products) => products.name === name);
     };
+
     const formik = useFormik({
         initialValues: {
             name: "",
             description: "",
             quantity: 0,
-            price: 0
+            image: images,
+            price: 0,
         },
         validationSchema: validation,
-        onSubmit: values => {
-            let data = {...values}
-            if (file) {
-                const time = new Date().getTime()
-                const nameFile = time + "-" + file.name
+        onSubmit: async (values) => {
+            let data = { ...values };
+
+            const uploadTasks = images.map((image) => {
+                const time = new Date().getTime();
+                const nameFile = time + "-" + image.name;
                 const storageRef = ref(storage, `image/${nameFile}`);
-                const uploadTask = uploadBytesResumable(storageRef, file);
-                uploadTask.on("state_changed", (snapshot) => {
-                    }, (error) => {
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            data.image = downloadURL;
-                        });
+                const uploadTask = uploadBytesResumable(storageRef, image);
+                return new Promise((resolve, reject) => {
+                    uploadTask.on(
+                        "state_changed",
+                        (snapshot) => {},
+                        (error) => reject(error),
+                        () => {
+                            getDownloadURL(uploadTask.snapshot.ref)
+                                .then((downloadURL) => {
+                                    resolve(downloadURL);
+                                })
+                                .catch((error) => reject(error));
+                        }
+                    );
+                });
+            });
+
+            try {
+                const imageUrls = await Promise.all(uploadTasks);
+                // data.images = imageUrls;
+                setImages(imageUrls);
+                data.categories = categoryChose;
+                data.shops = {
+                    id: props.idShop,
+                };
+                data.id = props.food.id;
+
+                Swal.fire({
+                    title: "Bạn có muốn thêm sản phẩm mới?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Lưu",
+                    denyButtonText: `Hủy`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios
+                            .post(`http://localhost:8080/api/products`, data)
+                            .then((res) => {
+                                Swal.fire("Thêm thành công!", "", "success");
+                                navigate("/");
+                            })
+                            .catch((err) => console.log(err));
+                    } else if (result.isDenied) {
+                        Swal.fire("Thêm thất bại", "", "info");
                     }
-                );
-            } else {data.image = "https://websitecukcukvn.misacdn.net/wp-content/uploads/2022/02/shopee-food.png";
+                });
+            } catch (error) {
+                console.error("Error uploading images:", error);
             }
-            data.categories = categoryChose;
-            data.shops = {
-                id: props.idShop
-            };
-            data.id = props.food.id;
-            Swal.fire({
-                title: 'Bạn có muốn thêm sản phẩm mới?',
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: 'Lưu',
-                denyButtonText: `Hủy`,
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    axios.post(`http://localhost:8080/api/products`, data).then((res) =>
-                    {
-                        Swal.fire('Thêm thành công!','', 'success')
-                        navigate('/')
-                    }).catch(err => console.log(err))
-                } else if (result.isDenied) {
-                    Swal.fire('Thêm thất bại', '', 'info')
-                }
-            }).catch(err => {
-                console.log(err.message)
-            })
         },
-
-    })
-    useEffect(() => {
-    }, [categoryChose])
-
+    });
 
     const choseCategory = (e) => {
         let id = +e.target.value;
-        let category = categoryChose.filter(item => item.id === id);
+        let category = categoryChose.filter((item) => item.id === id);
         if (category.length > 0) {
-            let data = categoryChose.filter(item => item.id !== id);
+            let data = categoryChose.filter((item) => item.id !== id);
             setCategoryChose([...data]);
         } else {
-            setCategoryChose([...categoryChose, {id: id}])
+            setCategoryChose([...categoryChose, { id: id }]);
         }
     };
 
-
     const choseFileUpload = (e) => {
-        const img = e.target.files[0]
-        setFile(img)
-    }
+        const selectedImages = e.target.files;
+        const imageArray = Array.from(selectedImages);
+        setImages(imageArray);
+    };
 
     return (
         <>
@@ -210,11 +212,21 @@ export default function FormCreate(props) {
                                                       label={item.name}/>
                                 )
                             )}
-                        </div><div className="mb-3">
-                        <label htmlFor="image" className="form-label">Chọn ảnh</label>
-                        <input type="file" className="form-control" id="image" onChange={choseFileUpload}
-                        />
-                    </div>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="image" className="form-label">Chọn ảnh</label>
+                            <input type="file" className="form-control" id="image" onChange={choseFileUpload} multiple/>
+                            {images.length > 0 && (
+                                <div>
+                                    <h4>Selected Images:</h4>
+                                    <ul>
+                                        {images.map((image, index) => (
+                                            <li key={index}>{image.name}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
                         <div className="mb-3">
                             <div style={{float: 'right'}}>
                                 <button type="submit" className={'btn btn-primary'}>
