@@ -68,10 +68,24 @@ export default function Register({setRegister,handleCloseRegister}) {
             }).then((res) => {
                 if(res.data !== null){
                     Swal.fire({
+                        title: 'Đang khởi tạo...',
+                        html: 'Vui lòng đợi trong giây lát...',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+
+                            // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                            const timeout = 2500; // 5 giây
+                            setTimeout(() => {
+                                Swal.close();
+                            }, timeout);
+                        }
+                    }).then((result) =>{  Swal.fire({
                         icon: 'success',
                         title: `Oops...Hello...${values.username}`,
                         text: 'Đăng kí thành công, Mời bạn đến email xác thực',
-                    });
+                    }); })
                     handleCloseRegister()
                 }else {
                     Swal.fire({
@@ -121,8 +135,9 @@ export default function Register({setRegister,handleCloseRegister}) {
                                     id="name_register"
                                     className="auth-form__input"
                                     placeholder="Tài khoản của bạn"
+                                    onBlur={formikRegister.handleBlur}
                                 />
-                                {<span className={"text-danger"}>{formikRegister.errors.username}</span>}
+                                {formikRegister.touched.username && formikRegister.errors.username ? (<span className={"text-danger"}>{formikRegister.errors.username}</span>) : null}
 
                             </div>
                             <div
@@ -133,8 +148,9 @@ export default function Register({setRegister,handleCloseRegister}) {
                                     type={showPassword ? "text" : "password"}
                                     id="pass_register"
                                     className="auth-form__input"
-                                    placeholder="Mật khẩu của bạn"/>
-                                {<span className={"text-danger"}>{formikRegister.errors.password}</span>}
+                                    placeholder="Mật khẩu của bạn"
+                                    onBlur={formikRegister.handleBlur}/>
+                                {formikRegister.touched.password && formikRegister.errors.password ? (<span className={"text-danger"}>{formikRegister.errors.password}</span>) : null}
 
                                 {showPassword ? (
                                         <span
@@ -157,15 +173,17 @@ export default function Register({setRegister,handleCloseRegister}) {
                                     type="email"
                                     className="auth-form__input"
                                     placeholder="Nhập email của bạn"
+                                    onBlur={formikRegister.handleBlur}
                                 />
-                                {<span className={"text-danger"}>{formikRegister.errors.email}</span>}
+                                {formikRegister.touched.email && formikRegister.errors.email ? (<span className={"text-danger"}>{formikRegister.errors.email}</span>) : null}
                             </div>
                             <div
                                 className="auth-form__group">
                                 <select name="roles"
                                         defaultValue="4"
                                         id="role"
-                                        onChange={formikRegister.handleChange}>
+                                        onChange={formikRegister.handleChange}
+                                        onBlur={formikRegister.handleBlur}>
                                     <option selected={true}
                                             value="4" >
                                         Chọn chức năng
@@ -177,7 +195,7 @@ export default function Register({setRegister,handleCloseRegister}) {
                                         value="2">Người Mua
                                     </option>
                                 </select><br/>
-                                {<span className={"text-danger"}>{formikRegister.errors.roles}</span>}
+                                {formikRegister.touched.roles && formikRegister.errors.roles ? (<span className={"text-danger"}>{formikRegister.errors.roles}</span>) : null}
                             </div>
                         </div>
                         <div

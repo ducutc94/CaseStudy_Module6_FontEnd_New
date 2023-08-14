@@ -3,7 +3,6 @@ import axios from "axios";
 import {Link, useLocation} from "react-router-dom";
 import Filter from "./Filter";
 import Swal from "sweetalert2";
-
 export default function List() {
     const [foods, setFoods] = useState([])
     const location = useLocation();
