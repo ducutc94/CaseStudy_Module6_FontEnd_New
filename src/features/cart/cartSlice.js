@@ -21,6 +21,7 @@ export const cartSlice = createSlice({
                     quantity: quantity,
                     money: quantity * foodBuy.price
                 };
+                console.log(foodBuy.quantity)
                 const updatedItems = [...state.items, newItem];
                 const updatedTotalQuantity = state.totalQuantity + 1; // Increment the total quantity
                 const updatedTotalMoney = state.totalMoney + newItem.money;
@@ -35,18 +36,25 @@ export const cartSlice = createSlice({
                 return updatedState;
             } else {
                 // Existing item
+                let updatedTotalMoney = state.totalMoney;
                 const updatedItems = state.items.map((item, index) => {
                     if (index === existingItemIndex) {
-                        return {
-                            ...item,
-                            quantity: item.quantity + quantity,
-                            money: (item.quantity + quantity) * foodBuy.price
-                        };
+                        if((item.quantity + quantity)<= foodBuy.quantity){
+                            updatedTotalMoney = state.totalMoney + (quantity * foodBuy.price)
+                            return {
+                                ...item,
+                                quantity: item.quantity + quantity,
+                                money: (item.quantity + quantity) * foodBuy.price
+                            };
+                        }else {
+                            updatedTotalMoney = state.totalMoney
+                        }
                     }
                     return item;
                 });
                 const updatedTotalQuantity = state.totalQuantity ; // Increment the total quantity
-                const updatedTotalMoney = state.totalMoney + (quantity * foodBuy.price);
+
+                // const updatedTotalMoney = state.totalMoney + (quantity * foodBuy.price);
                 const updatedState = {
                     ...state,
                     items: updatedItems,

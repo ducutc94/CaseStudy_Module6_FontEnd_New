@@ -45,7 +45,14 @@ export default function ProductsCarts() {
                     axios.post(`http://localhost:8080/api/bills/${user.id}/${idCart.id}`,
                         carts.items
                     ).then((res) => {
-                        console.log(res.data)
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Đã gửi yêu cầu đến chủ cửa hàng',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
                         dispatch(deleteAll())
                     })
                 } else if (result.isDenied) {
