@@ -16,9 +16,13 @@ import axios from 'axios';
 import storage from '../../config/FirebaseConfig';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { Food } from '../../model/Food';
+import Swal from "sweetalert2";
 
 const getCategory = async () => {
     return await axios.get(`http://localhost:8080/api/category`);
+};
+const getVoucher = async () => {
+    return await axios.get(`http://localhost:8080/api/vouchers`)
 };
 
 export default function FormCreate(props) {
@@ -28,6 +32,8 @@ export default function FormCreate(props) {
     const [shop, setShop] = useState([]);
     const [nameProducts, setNameProducts] = useState([]);
     const [category, setCategory] = useState([]);
+    const [voucher, setVoucher] = useState([])
+    const [voucherChose, setVoucherChose] = useState([])
     const [categoryChose, setCategoryChose] = useState([]);
     const [file, setFile] = useState('');
     const navigate = useNavigate();
@@ -43,6 +49,11 @@ export default function FormCreate(props) {
             setShop(response.data);
         });
     }, [idUser]);
+    useEffect(() => {
+        getVoucher().then(res => {
+            setVoucher(res.data)
+        })
+    }, []);
 
     const validation = Yup.object().shape({
         name: Yup.string()
@@ -104,6 +115,10 @@ export default function FormCreate(props) {
                 );
             } else {
                 data.image = props.food.image;
+                data.voucher = [{
+                    id: +props.voucher
+                }]
+                data.voucher = voucherChose;
                 data.categories = categoryChose;
                 data.shops = {
                     id: shopChose,
@@ -117,6 +132,25 @@ export default function FormCreate(props) {
                     .catch((err) => {
                         console.log(err.message);
                     });
+                Swal.fire({
+                    title: 'Bạn có muốn thêm sản phẩm mới?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: 'Lưu',
+                    denyButtonText: `Hủy`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        axios.post(`http://localhost:8080/api/products`, data).then((res) => {
+                            Swal.fire('Sửa thành công!', '', 'success')
+                            navigate('/')
+                        }).catch(err => console.log(err))
+                    } else if (result.isDenied) {
+                        Swal.fire('Sửa thất bại', '', 'info')
+                    }
+                }).catch(err => {
+                    console.log(err.message)
+                })
             }
         },
     });
@@ -125,7 +159,7 @@ export default function FormCreate(props) {
     useEffect(() => {
         // Lấy dữ liệu của sản phẩm và đẩy vào initialValues
         if (props.food) {
-            const { name, description, quantity, price, categories } = props.food;
+            const { name, description, quantity, price, categories,vouchers } = props.food;
             formik.setValues({
                 name: name,
                 description: description,
@@ -137,9 +171,15 @@ export default function FormCreate(props) {
             } else {
                 setCategoryChose([]);
             }
+            if (vouchers) {
+                setVoucherChose(vouchers.map((voucher) => ({id: voucher.id})));
+            }else {
+                setCategoryChose([]);
+            }
             setShopChose(props.food.shops ? props.food.shops.id : '');
         }
     }, [props.food]);
+
 
     const choseCategory = (e) => {
         let id = +e.target.value;
@@ -149,6 +189,16 @@ export default function FormCreate(props) {
             setCategoryChose([...data]);
         } else {
             setCategoryChose([...categoryChose, { id: id }]);
+        }
+    };
+    const choseVoucher = (e) => {
+        let id = +e.target.value;
+        let voucher = voucherChose.filter(item => item.id === id);
+        if (voucher.length > 0) {
+            let data = voucherChose.filter(item => item.id !== id);
+            setVoucherChose([...data]);
+        } else {
+            setVoucherChose([...voucherChose, {id: id}])
         }
     };
 
@@ -244,6 +294,16 @@ export default function FormCreate(props) {
                                 value={formik.values.price}
                                 helperText={formik.errors.price && formik.touched.price ? formik.errors.price : ''}
                             />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor={'voucher'} className={'form-label form-label-city'}>Mã giảm giá</label>
+                            <select name={"voucher"}
+                                    onChange={choseVoucher}>
+                                <option>Chọn mã giảm giá</option>
+                                {voucher.map((item, index)=> (
+                                    <option value={item.id} key={index}>{item.name}</option>
+                                ))}
+                            </select><br/>
                         </div>
                         <div className="mb-3">
                             <FormLabel component="legend">
