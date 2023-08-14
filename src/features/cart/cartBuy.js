@@ -1,21 +1,19 @@
 import {createSlice} from '@reduxjs/toolkit'
-
 const initialState = {
     items: [],
 }
-
-export const cartMerchantSlice = createSlice({
-    name: 'cartMerchant',
+export const cartBuySlice = createSlice({
+    name: 'cartBuy',
     initialState,
     reducers: {
-        addCartMerchant: (state, action) => {
+        addCartBuy: (state, action) => {
             let list = action.payload;
             console.log(list)
-           state.items = list;
-            localStorage.setItem('list', JSON.stringify(state))
+            state.items = list;
+            localStorage.setItem('cartBuy', JSON.stringify(state))
         },
         setCartMerchant: (state, action) => {
-            const list = localStorage.getItem('list');
+            const list = localStorage.getItem('cartBuy');
             if (list) {
                 const data = JSON.parse(list);
                 if (Array.isArray(data.items)) {
@@ -24,23 +22,22 @@ export const cartMerchantSlice = createSlice({
             }
             return state; // Return the unchanged state if there's an issue
         },
-        confirmOrder: (state, action) => {
+        confirmOrderBuy: (state, action) => {
             const indexItem = action.payload.index;
-            let cartMerchant = localStorage.getItem('list');
+            let cartMerchant = localStorage.getItem('cartBuy');
             let data = JSON.parse(cartMerchant);
             if (data && Array.isArray(data.items)) {
                 const updateItem = data.items[indexItem];
-                updateItem.statusProductsCarts = "0";
-                data.items.splice(indexItem, 1);
-                // data.items[indexItem] = updateItem;
-                localStorage.setItem('list', JSON.stringify(data)); // Store updated data in localStorage
+                updateItem.statusProductsCarts = "1";
+                data.items[indexItem] = updateItem;
+                localStorage.setItem('cartBuy', JSON.stringify(data)); // Store updated data in localStorage
                 return { ...state, items: data.items };
             }
             return state; // Return the unchanged state if there's an issue
         },
-        deleteByMerchant: (state, action) => {
+        deleteBy: (state, action) => {
             const indexItem = action.payload.index;
-            let cartMerchant = localStorage.getItem('list');
+            let cartMerchant = localStorage.getItem('cartBuy');
             let data = JSON.parse(cartMerchant);
             if (data) {
                 const updatedItems = data.items.map((item, index) => {
@@ -54,7 +51,7 @@ export const cartMerchantSlice = createSlice({
                 });
                 data.items.splice(indexItem, 1);
                 // const updatedData = { ...data, items: updatedItems };
-                localStorage.setItem('list', JSON.stringify(data));
+                localStorage.setItem('cartBuy', JSON.stringify(data));
                 return { ...state, items: data.items };
             }
             return state;
@@ -62,6 +59,6 @@ export const cartMerchantSlice = createSlice({
     },
 })
 
-export const {addCartMerchant, confirmOrder, setCartMerchant,deleteByMerchant} = cartMerchantSlice.actions
+export const {addCartBuy, deleteBy, confirmOrderBuy,deleteByMerchant} = cartBuySlice.actions
 
-export default cartMerchantSlice.reducer
+export default cartBuySlice.reducer

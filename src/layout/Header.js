@@ -162,9 +162,9 @@ export default function Header({search}) {
                                     </li>
                                     {user.authorities[0].authority === "ROLE_USER" && <>
                                         <li className="header__navbar-user-item">
-                                            <Link  to={'/products-carts-user'} className="header__navbar-user-manager">
+                                            <Link  to={'/products-carts-oder'} className="header__navbar-user-manager">
                                                 <i className="fa-solid fa-list-ul iconManager"></i>
-                                                Lịch sử đơn hàng
+                                               Quản lí đơn
                                             </Link>
                                         </li>
                                     </>}
@@ -172,7 +172,13 @@ export default function Header({search}) {
                                         <li className="header__navbar-user-item">
                                             <Link  to={'/products-carts-merchant'} className="header__navbar-user-manager">
                                                 <i className="fa-solid fa-bag-shopping iconManager"></i>
-                                                Đơn mua
+                                                Quản lí đơn
+                                            </Link>
+                                        </li>
+                                        <li className="header__navbar-user-item">
+                                            <Link  to={'/products-carts-oder'} className="header__navbar-user-manager">
+                                                <i className="fa-solid fa-clock-rotate-left iconManager"></i>
+                                                Lịch sử mua
                                             </Link>
                                         </li>
                                         <li className="header__navbar-user-item">
