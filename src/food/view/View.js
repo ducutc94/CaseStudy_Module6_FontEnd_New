@@ -19,6 +19,7 @@ export default function View() {
     // const idUser = checkUserID(user);
     const [idCart, setIdCart] = useState();
     const [vouchers, setVouchers] = useState([]);
+    const [listImg, setListImg] = useState([]);
     const cart = useSelector(state => state.cart)
     const navigate = useNavigate();
     const dispatch = useDispatch()
@@ -27,6 +28,7 @@ export default function View() {
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products/${id}`).then((res) => {
+            setListImg(res.data.image)
             setFood(res.data)
             setShopUserId(res.data.shops.user.id)
             setShop(res.data.shops.name)
@@ -116,7 +118,6 @@ export default function View() {
         return time >= startTime && time <= endTime;
     };
 
-
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
@@ -135,16 +136,18 @@ export default function View() {
                                         </div>
                                     </div>
 
+
                                     <div className="view_food-left">
                                         <div className="view_food-left-img-container">
-                                            <img className="view_food-left-img-container-item"
-                                                 src={food.image}/>
-                                            <img className="view_food-left-img-container-item"
-                                                 src={food.image}/>
-                                            <img className="view_food-left-img-container-item"
-                                                 src={food.image}/>
-                                            <img className="view_food-left-img-container-item"
-                                                 src={food.image}/>
+                                            {listImg.map(item => <img className="view_food-left-img-container-item"
+                                                                      src={item}/>)}
+
+                                            {/*<img className="view_food-left-img-container-item"*/}
+                                            {/*     src={food.image}/>*/}
+                                            {/*<img className="view_food-left-img-container-item"*/}
+                                            {/*     src={food.image}/>*/}
+                                            {/*<img className="view_food-left-img-container-item"*/}
+                                            {/*     src={food.image}/>*/}
                                         </div>
                                     </div>
                                 </div>
