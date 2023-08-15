@@ -50,6 +50,7 @@ export default function List() {
     const searchByCity = (city) => {
         axios.get(`http://localhost:8080/api/products/city/${city}`).then((res) => {
             setFoods(res.data)
+            console.log(res.data)
         }).catch(error => {
             setFoods(error.response.data)
             Swal.fire({
@@ -59,7 +60,6 @@ export default function List() {
             })
         });
     }
-
 
     // Xử lý chuyển trang
     const indexOfLastStudent = currentPage * foodsPerPage;
@@ -137,14 +137,16 @@ export default function List() {
                                                 <i className="fa fa-thumbs-up"></i>
                                                 <span>Yêu thích</span>
                                             </div>
-                                            <div className="home-product-item__sale-off">
-
-                                                {/*đây là phần lấy giảm giá ở Voucher*/}
-                                                <span className="home-product-item__sale-off-percent">
-                                                    {items.shops.id}%
+                                            {items.voucher.percent !== 0 && <>
+                                                <div className="home-product-item__sale-off">
+                                                    {/*đây là phần lấy giảm giá ở Voucher*/}
+                                                    <span className="home-product-item__sale-off-percent">
+                                                    {items.voucher.percent}%
                                                 </span>
-                                                <span className="home-product-item__sale-off-label">Giảm</span>
-                                            </div>
+                                                    <span className="home-product-item__sale-off-label">Giảm</span>
+                                                </div>
+                                            </>}
+
                                         </Link>
                                     </div>
                                 )}

@@ -79,14 +79,15 @@ export default function QuickSearch(){
                                                     <i className="fa fa-thumbs-up"></i>
                                                     <span>Yêu thích</span>
                                                 </div>
-                                                <div className="home-product-item__sale-off">
-
-                                                    {/*đây là phần lấy giảm giá ở Voucher*/}
-                                                    <span className="home-product-item__sale-off-percent">
-                                                    10%
+                                                {food.voucher.percent !== 0 && <>
+                                                    <div className="home-product-item__sale-off">
+                                                        {/*đây là phần lấy giảm giá ở Voucher*/}
+                                                        <span className="home-product-item__sale-off-percent">
+                                                    {food.voucher.percent}%
                                                 </span>
-                                                    <span className="home-product-item__sale-off-label">Giảm</span>
-                                                </div>
+                                                        <span className="home-product-item__sale-off-label">Giảm</span>
+                                                    </div>
+                                                </>}
                                             </Link>
                                         </div>
                                     )}
