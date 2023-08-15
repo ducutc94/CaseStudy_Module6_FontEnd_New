@@ -25,16 +25,16 @@ const getVoucher = async () => {
     return await axios.get(`http://localhost:8080/api/vouchers`)
 };
 
-
 export default function FormCreate(props) {
-    const [nameProducts, setNameProducts] = useState([])
-    const [category, setCategory] = useState([])
-    const [voucher, setVoucher] = useState([])
-    const [voucherChose, setVoucherChose] = useState([])
-    const [categoryChose, setCategoryChose] = useState([])
-    const [file, setFile] = useState("")
+    const [nameProducts, setNameProducts] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [voucher, setVoucher] = useState([]);
+    const [voucherChose, setVoucherChose] = useState([]);
+    const [categoryChose, setCategoryChose] = useState([]);
+    const [imageFiles, setImageFiles] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("user"))
+    const user = JSON.parse(localStorage.getItem("user"));
     const idUser = user.id;
 
     useEffect(() => {
@@ -49,70 +49,84 @@ export default function FormCreate(props) {
     }, []);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/products').then((res => {
+        axios.get(`http://localhost:8080/api/products/shop/${props.idShop}`).then((res => {
             setNameProducts(res.data);
         }))
     }, [])
-
 
     const validation = Yup.object().shape({
         name: Yup.string().min(2, "Độ dài không hợp lệ")
             .max(500, "Độ dài không hợp lệ")
             .required("Hãy nhập dữ liệu!")
-            .test("Tên đã tồn  tại", "Đã tồn tại", function (value) {
+            .test("Tên đã tồn tại", "Đã tồn tại", function (value) {
                 return !checkNameProduct(value)
             }),
         description: Yup.string().min(2, "Độ dài không hợp lệ")
             .required("Hãy nhập dữ liệu!"),
-
 
         quantity: Yup.number().min(0, "Độ dài không hợp lệ")
             .required("Hãy nhập dữ liệu!"),
 
         price: Yup.number().min(0, "Độ dài không hợp lệr")
             .required("Hãy nhập dữ liệu!"),
-
-
     })
+
     const checkNameProduct = (name) => {
         return nameProducts.some((products) => products.name === name);
     };
+
     const formik = useFormik({
         initialValues: {
             name: "",
             description: "",
             quantity: 0,
             price: 0,
-
         },
-        onSubmit: values => {
-            let data = {...values}
-            if (file) {
-                const time = new Date().getTime()
-                const nameFile = time + "-" + file.name
-                const storageRef = ref(storage, `image/${nameFile}`);
-                const uploadTask = uploadBytesResumable(storageRef, file);
-                uploadTask.on("state_changed", (snapshot) => {
-                    }, (error) => {
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            data.image = downloadURL;
-                        });
-                    }
-                );
+        onSubmit: async (values) => {
+            let data = {...values};
+            let fileUrls = [];
+
+            if (imageFiles.length > 0) {
+                const uploadPromises = imageFiles.map((file) => {
+                    const time = new Date().getTime();
+                    const nameFile = time + "-" + file.name;
+                    const storageRef = ref(storage, `image/${nameFile}`);
+                    const uploadTask = uploadBytesResumable(storageRef, file);
+
+                    return new Promise((resolve, reject) => {
+                        uploadTask.on(
+                            "state_changed",
+                            (snapshot) => {
+                            },
+                            (error) => {
+                                reject(error);
+                            },
+                            () => {
+                                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                                    fileUrls.push(downloadURL);
+                                    resolve();
+                                });
+                            }
+                        );
+                    });
+                });
+
+                try {
+                    await Promise.all(uploadPromises);
+                    data.image = fileUrls;
+                } catch (error) {
+                    console.error("Error uploading files:", error);
+                }
             } else {
-                data.image = "https://websitecukcukvn.misacdn.net/wp-content/uploads/2022/02/shopee-food.png";
+                data.image = ["https://websitecukcukvn.misacdn.net/wp-content/uploads/2022/02/shopee-food.png"];
             }
-            data.voucher = [{
-                id: +props.voucher
-            }]
+
             data.voucher = voucherChose;
             data.categories = categoryChose;
 
             data.shops = {
-                    id: props.idShop
-                };
+                id: props.idShop
+            };
             data.id = props.food.id;
 
             Swal.fire({
@@ -122,8 +136,6 @@ export default function FormCreate(props) {
                 confirmButtonText: 'Lưu',
                 denyButtonText: `Hủy`,
             }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-
                 if (result.isConfirmed) {
                     axios.post(`http://localhost:8080/api/products`, data).then((res) => {
                         Swal.fire({
@@ -133,30 +145,25 @@ export default function FormCreate(props) {
                             allowOutsideClick: false,
                             didOpen: () => {
                                 Swal.showLoading();
-
-                                // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
-                                const timeout = 2500; // 5 giây
+                                const timeout = 2500;
                                 setTimeout(() => {
                                     Swal.close();
                                 }, timeout);
                             }
-                        }).then((result) => {Swal.fire('Thêm thành công!', '', 'success')
-                            navigate('/')})
-                    }).catch(err => console.log(err))
+                        }).then((result) => {
+                            Swal.fire('Thêm thành công!', '', 'success');
+                            navigate('/');
+                        });
+                    }).catch(err => console.log(err));
                 } else if (result.isDenied) {
-                    Swal.fire('Thêm thất bại', '', 'info')
+                    Swal.fire('Thêm thất bại', '', 'info');
                 }
             }).catch(err => {
-                console.log(err.message)
-            })
+                console.log(err.message);
+            });
         },
         validationSchema: validation,
-
     })
-    useEffect(() => {
-    }, [categoryChose])
-    useEffect(() => {
-    }, [voucherChose])
 
     const choseCategory = (e) => {
         let id = +e.target.value;
@@ -165,9 +172,10 @@ export default function FormCreate(props) {
             let data = categoryChose.filter(item => item.id !== id);
             setCategoryChose([...data]);
         } else {
-            setCategoryChose([...categoryChose, {id: id}])
+            setCategoryChose([...categoryChose, {id: id}]);
         }
     };
+
     const choseVoucher = (e) => {
         let id = +e.target.value;
         let voucher = voucherChose.filter(item => item.id === id);
@@ -175,16 +183,17 @@ export default function FormCreate(props) {
             let data = voucherChose.filter(item => item.id !== id);
             setVoucherChose([...data]);
         } else {
-            setVoucherChose([...voucherChose, {id: id}])
+            setVoucherChose([...voucherChose, {id: id}]);
         }
     };
 
-
-
     const choseFileUpload = (e) => {
-        const img = e.target.files[0]
-        setFile(img)
-    }
+        const selectedFiles = Array.from(e.target.files);
+        setImageFiles(selectedFiles);
+        const previews = selectedFiles.map(file => URL.createObjectURL(file));
+        setPreviewImages(previews);
+    };
+
 
     return (
         <>
@@ -252,7 +261,7 @@ export default function FormCreate(props) {
                             <select name={"voucher"}
                                     onChange={choseVoucher}>
                                 <option>Chọn mã giảm giá</option>
-                                {voucher.map((item, index)=> (
+                                {voucher.map((item, index) => (
                                     <option value={item.id} key={index}>{item.name}</option>
                                 ))}
                             </select><br/>
@@ -262,28 +271,45 @@ export default function FormCreate(props) {
                                 <span className="type-text-form">Các thể loại</span>
                             </FormLabel>
                             {category.map((item) => (
-                                    <FormControlLabel key={item.id}
-                                                      classes="type-text-form"
-                                                      control={<Checkbox onChange={choseCategory} value={item.id}/>}
-                                                      label={item.name}/>
+                                    <FormControlLabel
+                                        key={item.id}
+                                        classes={{label: 'type-text-form'}}
+                                        control={<Checkbox onChange={choseCategory} value={item.id}/>}
+                                        label={item.name}
+                                    />
                                 )
                             )}
                         </div>
                         <div className="mb-3">
-                        <label htmlFor="image" className="form-label">Chọn ảnh</label>
-                        <input type="file" className="form-control" id="image" onChange={choseFileUpload}
-                        />
-                    </div>
+                            <label htmlFor="image" className="form-label">Chọn ảnh</label>
+                            <input
+                                type="file"
+                                className="form-control"
+                                id="image"
+                                onChange={choseFileUpload}
+                                multiple
+                            />
+                        </div>
                         <div className="mb-3">
-                            <div style={{float: 'right'}}>
-                                <button type="submit" className={'btn btn-primary'}>
-                                    <i className="fa-solid fa-floppy-disk"></i>
-                                </button>
-                                &ensp;&ensp;
-                                <Link className={'btn btn-primary'} to={'/'}>
-                                    <i className={"fa-solid fa-house"}></i>
-                                </Link>
-                            </div>
+                            {previewImages.map((preview, index) => (
+                                <img
+                                    key={index}
+                                    src={preview}
+                                    alt={`Preview ${index}`}
+                                    style={{maxWidth: '100px', maxHeight: '100px', marginRight: '10px'}}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <div style={{float: 'right'}}>
+                            <button type="submit" className={'btn btn-primary'}>
+                                <i className="fa-solid fa-floppy-disk"></i>
+                            </button>
+                            &ensp;&ensp;
+                            <Link className={'btn btn-primary'} to={'/'}>
+                                <i className={"fa-solid fa-house"}></i>
+                            </Link>
                         </div>
                     </div>
                 </div>

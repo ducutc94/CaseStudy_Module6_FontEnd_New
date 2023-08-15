@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import * as Yup from 'yup';
 import {
     Checkbox,
@@ -11,11 +11,11 @@ import {
     Select,
     TextField,
 } from '@mui/material';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import axios from 'axios';
 import storage from '../../config/FirebaseConfig';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { Food } from '../../model/Food';
+import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
+import {Food} from '../../model/Food';
 import Swal from "sweetalert2";
 
 const getCategory = async () => {
@@ -32,10 +32,11 @@ export default function FormCreate(props) {
     const [shop, setShop] = useState([]);
     const [nameProducts, setNameProducts] = useState([]);
     const [category, setCategory] = useState([]);
-    const [voucher, setVoucher] = useState([])
-    const [voucherChose, setVoucherChose] = useState([])
+    const [voucher, setVoucher] = useState([]);
+    const [voucherChose, setVoucherChose] = useState([]);
     const [categoryChose, setCategoryChose] = useState([]);
-    const [file, setFile] = useState('');
+    const [imageFiles, setImageFiles] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,10 +50,11 @@ export default function FormCreate(props) {
             setShop(response.data);
         });
     }, [idUser]);
+
     useEffect(() => {
-        getVoucher().then(res => {
-            setVoucher(res.data)
-        })
+        getVoucher().then((res) => {
+            setVoucher(res.data);
+        });
     }, []);
 
     const validation = Yup.object().shape({
@@ -60,7 +62,6 @@ export default function FormCreate(props) {
             .min(2, 'Độ dài không hợp lệ')
             .max(500, 'Độ dài không hợp lệ')
             .required('Hãy nhập dữ liệu!'),
-
         description: Yup.string().min(2, 'Độ dài không hợp lệ').required('Hãy nhập dữ liệu!'),
         quantity: Yup.number().min(0, 'Độ dài không hợp lệ').required('Hãy nhập dữ liệu!'),
         price: Yup.number().min(0, 'Độ dài không hợp lệ').required('Hãy nhập dữ liệu!'),
@@ -82,42 +83,78 @@ export default function FormCreate(props) {
             price: 0,
         },
         validationSchema: validation,
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             let data = { ...values };
-            if (file) {
-                const time = new Date().getTime();
-                const nameFile = time + '-' + file.name;
-                const storageRef = ref(storage, `image/${nameFile}`);
-                const uploadTask = uploadBytesResumable(storageRef, file);
+            let fileUrls = [];
+            if (imageFiles.length > 0) {
+                const uploadPromises = imageFiles.map((file) => {
+                    const time = new Date().getTime();
+                    const nameFile = time + '-' + file.name;
+                    const storageRef = ref(storage, `image/${nameFile}`);
+                    const uploadTask = uploadBytesResumable(storageRef, file);
 
-                uploadTask.on(
-                    'state_changed',
-                    (snapshot) => {},
-                    (error) => {},
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            data.image = downloadURL;
-                            data.categories = categoryChose;
-                            data.shops = {
-                                id: shopChose,
-                            };
-                            data.id = props.food.id;
-                            axios
-                                .post(`http://localhost:8080/api/products`, data)
-                                .then((res) => {
-                                    navigate('/');
-                                })
-                                .catch((err) => {
-                                    console.log(err.message);
+                    return new Promise((resolve, reject) => {
+                        uploadTask.on(
+                            'state_changed',
+                            (snapshot) => {},
+                            (error) => {
+                                reject(error);
+                            },
+                            () => {
+                                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                                    fileUrls.push(downloadURL);
+                                    if (fileUrls.length === imageFiles.length) {
+                                        data.image = fileUrls;
+                                        data.categories = categoryChose;
+                                        data.shops = {
+                                            id: shopChose,
+                                        };
+                                        data.id = props.food.id;
+                                        axios
+                                            .put(`http://localhost:8080/api/products/${data.id}`, data) // Sử dụng PUT request để cập nhật sản phẩm
+                                            .then((res) => {
+                                                Swal.fire({
+                                                    title: 'Bạn có muốn thêm sản phẩm mới?',
+                                                    showDenyButton: true,
+                                                    showCancelButton: false,
+                                                    confirmButtonText: 'Lưu',
+                                                    denyButtonText: 'Hủy',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        axios
+                                                            .post(`http://localhost:8080/api/products`, data)
+                                                            .then((res) => {
+                                                                Swal.fire('Sửa thành công!', '', 'success');
+                                                                navigate('/');
+                                                            })
+                                                            .catch((err) => {
+                                                                console.log(err.message);
+                                                            });
+                                                    } else if (result.isDenied) {
+                                                        Swal.fire('Sửa thất bại', '', 'info');
+                                                    }
+                                                });
+                                            })
+                                            .catch((err) => {
+                                                console.log(err.message);
+                                            });
+                                    }
                                 });
-                        });
-                    }
-                );
+                            }
+                        );
+                    });
+                });
+
+                Promise.all(uploadPromises)
+                    .then((results) => {
+                        // Tất cả ảnh đã được upload thành công
+                    })
+                    .catch((error) => {
+                        console.error('Error uploading images:', error);
+                    });
             } else {
+                // Logic để cập nhật sản phẩm khi không có hình ảnh mới
                 data.image = props.food.image;
-                data.voucher = [{
-                    id: +props.voucher
-                }]
                 data.voucher = voucherChose;
                 data.categories = categoryChose;
                 data.shops = {
@@ -125,41 +162,40 @@ export default function FormCreate(props) {
                 };
                 data.id = props.food.id;
                 axios
-                    .post(`http://localhost:8080/api/products`, data)
+                    .put(`http://localhost:8080/api/products/${data.id}`, data) // Sử dụng PUT request để cập nhật sản phẩm
                     .then((res) => {
-                        navigate('/');
+                        Swal.fire({
+                            title: 'Bạn có muốn thêm sản phẩm mới?',
+                            showDenyButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Lưu',
+                            denyButtonText: 'Hủy',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                axios
+                                    .post(`http://localhost:8080/api/products`, data)
+                                    .then((res) => {
+                                        Swal.fire('Sửa thành công!', '', 'success');
+                                        navigate('/');
+                                    })
+                                    .catch((err) => {
+                                        console.log(err.message);
+                                    });
+                            } else if (result.isDenied) {
+                                Swal.fire('Sửa thất bại', '', 'info');
+                            }
+                        });
                     })
                     .catch((err) => {
                         console.log(err.message);
                     });
-                Swal.fire({
-                    title: 'Bạn có muốn thêm sản phẩm mới?',
-                    showDenyButton: true,
-                    showCancelButton: false,
-                    confirmButtonText: 'Lưu',
-                    denyButtonText: `Hủy`,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                        axios.post(`http://localhost:8080/api/products`, data).then((res) => {
-                            Swal.fire('Sửa thành công!', '', 'success')
-                            navigate('/')
-                        }).catch(err => console.log(err))
-                    } else if (result.isDenied) {
-                        Swal.fire('Sửa thất bại', '', 'info')
-                    }
-                }).catch(err => {
-                    console.log(err.message)
-                })
             }
         },
     });
-
-
     useEffect(() => {
         // Lấy dữ liệu của sản phẩm và đẩy vào initialValues
         if (props.food) {
-            const { name, description, quantity, price, categories,vouchers } = props.food;
+            const {name, description, quantity, price, categories, vouchers} = props.food;
             formik.setValues({
                 name: name,
                 description: description,
@@ -167,13 +203,13 @@ export default function FormCreate(props) {
                 price: price,
             });
             if (categories) {
-                setCategoryChose(categories.map((category) => ({ id: category.id })));
+                setCategoryChose(categories.map((category) => ({id: category.id})));
             } else {
                 setCategoryChose([]);
             }
             if (vouchers) {
                 setVoucherChose(vouchers.map((voucher) => ({id: voucher.id})));
-            }else {
+            } else {
                 setCategoryChose([]);
             }
             setShopChose(props.food.shops ? props.food.shops.id : '');
@@ -183,14 +219,15 @@ export default function FormCreate(props) {
 
     const choseCategory = (e) => {
         let id = +e.target.value;
-        let category = categoryChose?.filter((item) => item.id === id);
+        let category = categoryChose.filter(item => item.id === id);
         if (category.length > 0) {
-            let data = categoryChose.filter((item) => item.id !== id);
+            let data = categoryChose.filter(item => item.id !== id);
             setCategoryChose([...data]);
         } else {
-            setCategoryChose([...categoryChose, { id: id }]);
+            setCategoryChose([...categoryChose, {id: id}]);
         }
     };
+
     const choseVoucher = (e) => {
         let id = +e.target.value;
         let voucher = voucherChose.filter(item => item.id === id);
@@ -198,15 +235,16 @@ export default function FormCreate(props) {
             let data = voucherChose.filter(item => item.id !== id);
             setVoucherChose([...data]);
         } else {
-            setVoucherChose([...voucherChose, {id: id}])
+            setVoucherChose([...voucherChose, {id: id}]);
         }
     };
 
     const choseFileUpload = (e) => {
-        const img = e.target.files[0];
-        setFile(img);
+        const selectedFiles = Array.from(e.target.files);
+        setImageFiles(selectedFiles);
+        const previews = selectedFiles.map(file => URL.createObjectURL(file));
+        setPreviewImages(previews);
     };
-
 
     return (
         <>
@@ -216,9 +254,9 @@ export default function FormCreate(props) {
                         <h1 className="title-form">Cập nhật món ăn</h1>
                     </div>
                     <div className={'col-md-6'}>
-                        <FormControl sx={{ m: 1, minWidth: 80, marginLeft: 0, display: `none` }}>
+                        <FormControl sx={{m: 1, minWidth: 80, marginLeft: 0, display: `none`}}>
                             {/*<InputLabel id="demo-simple-select-autowidth-label">Cửa hàng</InputLabel>*/}
-                            <label htmlFor={''}  className={'form-label'}>Cửa hàng</label>
+                            <label htmlFor={''} className={'form-label'}>Cửa hàng</label>
                             <Select
                                 labelId="demo-simple-select-autowidth-label"
                                 id="demo-simple-select-autowidth"
@@ -300,7 +338,7 @@ export default function FormCreate(props) {
                             <select name={"voucher"}
                                     onChange={choseVoucher}>
                                 <option>Chọn mã giảm giá</option>
-                                {voucher.map((item, index)=> (
+                                {voucher.map((item, index) => (
                                     <option value={item.id} key={index}>{item.name}</option>
                                 ))}
                             </select><br/>
@@ -322,8 +360,23 @@ export default function FormCreate(props) {
 
                         <div className="mb-3">
                             <label htmlFor="image" className="form-label">Chọn ảnh</label>
-                            <input type="file" className="form-control" id="image" onChange={choseFileUpload}
+                            <input
+                                type="file"
+                                className="form-control"
+                                id="image"
+                                onChange={choseFileUpload}
+                                multiple
                             />
+                        </div>
+                        <div className="mb-3">
+                            {previewImages.map((preview, index) => (
+                                <img
+                                    key={index}
+                                    src={preview}
+                                    alt={`Preview ${index}`}
+                                    style={{maxWidth: '100px', maxHeight: '100px', marginRight: '10px'}}
+                                />
+                            ))}
                         </div>
                         <div className="mb-3">
                             <div style={{float: 'right'}}>
