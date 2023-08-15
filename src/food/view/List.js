@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useParams} from "react-router-dom";
 import Filter from "./Filter";
 import Swal from "sweetalert2";
 import Banner from "../../layout/Banner";
@@ -13,6 +13,7 @@ export default function List() {
     const city = +searchParams.get("city");
     const [currentPage, setCurrentPage] = useState(1);
     const [foodsPerPage] = useState(8);
+    const { id } = useParams();
 
 
     useEffect(() => {
@@ -34,6 +35,19 @@ export default function List() {
             searchByCity(city);
         }
     },[city])
+
+    useEffect(()=>{
+        if (!id){
+            axios.get('http://localhost:8080/api/products').then((res) => {
+                setFoods(res.data)
+            })
+        }else {
+            searchByCategory(id);
+        }
+    },[id])
+
+
+
 
     const searchByName = (search) => {
         axios.get(`http://localhost:8080/api/products/search?search=${search}`).then((res) => {
@@ -60,6 +74,22 @@ export default function List() {
             })
         });
     }
+
+    const searchByCategory = (id) => {
+        axios.get(`http://localhost:8080/api/products/category/${id}`).then((res) => {
+            setFoods(res.data)
+        }).catch(error => {
+            setFoods(error.response.data)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Không tìm thấy !',
+            })
+        });
+    }
+
+
+
 
     // Xử lý chuyển trang
     const indexOfLastStudent = currentPage * foodsPerPage;

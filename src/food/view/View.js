@@ -215,7 +215,12 @@ export default function View() {
                                         <div className="view_food-right-container">
                                             <div className="view_food-right-item-price">
                                                 <i className="fas fa-dollar-sign"></i>
-                                                {food.price}
+                                                <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(food.price)}
+                                                    </span>
                                             </div>
                                         </div>
                                         <div className="view_food-right-container">
@@ -255,19 +260,16 @@ export default function View() {
                                                 </div>
                                             </div>
                                         </div>
+
+
                                         <div className="view_food-right-container">
-                                            <div className="view_food-right-voucher-container"
-                                                 style={{display: `none`}}>
-                                                <div className="view_food-right-voucher-title">
-                                                    Voucher:
+                                            <div className="view_food-right-voucher-container">
+                                                <div className="view_food-item__sale-off">
+                                                    <span className="view_food-item__sale-off-label">Giảm</span>
+                                                    <span className="view_food-item__sale-off-percent">
+                                                        {/*{food.voucher.percent}%*/}
+                                                    </span>
                                                 </div>
-                                                <select className="view_food-right-voucher-inner">
-                                                    {vouchers.map((items, index) =>
-                                                        <option className="view_food-right-voucher-item" key={index}>
-                                                            {items.name}
-                                                        </option>
-                                                    )}
-                                                </select>
                                             </div>
                                         </div>
 

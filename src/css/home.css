@@ -17,7 +17,6 @@
     border-bottom: 2px solid rgba(206, 202, 202, 0.92);
 }
 .filter_sort_food_select{
-    margin-bottom: 1px;
     color: #757373;
     background-color: rgba(240, 240, 240, 0.95);
     padding: 8px;
@@ -26,6 +25,7 @@
     z-index: 1;
     font-size: 16px;
     border: 1px solid #e3e2e2;
+    margin-bottom: 6px;
 }
 /*----------------*/
 

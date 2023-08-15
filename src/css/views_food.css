@@ -355,38 +355,55 @@
 }
 
 
+
+
+
 .view_food-right-voucher-container {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-}
-
-.view_food-right-voucher-title {
-    display: block;
-    font-size: 15px;
-    color: #d00d0d;
-    font-weight: 500;
-    text-align: center;
-    font-family: Roboto;
-}
-
-.view_food-right-voucher-inner {
-    color: #757373;
-    border: 0;
-    background-color: #f0f0f0;
-    padding: 8px;
-    border-radius: 5px;
     position: relative;
-    z-index: 1;
-    font-size: 16px;
-    margin-left: 5px;
+    top: -310px;
+    left: 600px;
+}
+.view_food-item__sale-off {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 130px;
+    height: 100px;
+    background-color: rgba(255, 216, 64, 0.93);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.view_food-item__sale-off::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -25px;
+    border-width: 0 65px 26px;
+    border-style: solid;
+    border-color: transparent rgba(255, 216, 64, 0.93) transparent rgba(255, 216, 64, 0.93);
+}
+.view_food-item__sale-off-percent {
+    color: #ee4d2d;
+    font-weight: 700;
+    font-size: 3.3rem;
+    line-height: 4.3rem;
+    position: relative;
+    top: 1px;
+}
+.view_food-item__sale-off-label {
+    font-size: 2.3rem;
+    line-height: 3.3rem;
+    font-weight: 700;
+    color: white;
+    position: relative;
+    top: 7px;
 }
 
-.view_food-right-voucher-item {
 
-}
+
+
+
 
 .view_food-right-select-number{
     display: flex;
@@ -412,8 +429,6 @@
 }
 
 .el-input__inner {
-    /*padding-left: 50px;*/
-    /*padding-right: 50px;*/
     height: 40px;
     line-height: 40px;
     border-radius: 10px;
@@ -424,6 +439,7 @@
     border: 1px solid #ccc;
     font-size: 14px;
     font-weight: 600;
+    margin: 0 10px;
 }
 .no-arrows {
     -moz-appearance: textfield; /* Firefox */

@@ -47,6 +47,7 @@ function App() {
             <div className={`container-content`}>
                 <Routes>
                     <Route path={'/'} element={<List />}></Route>
+                    <Route path={'/:id'} element={<List />}></Route>
                     <Route path={'/view-food/:id'} element={<View/>}></Route>
                     <Route path={'/create-food/:id'} element={<Create/>}></Route>
                     <Route path={'/update-food/:id'} element={<Update/>}></Route>
@@ -61,7 +62,7 @@ function App() {
                     <Route path={'/voucher'} element={<ListVoucher />}></Route>
                     <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>
                     <Route path={'/update-voucher/:id'} element={<UpdateVoucher />}></Route>
-                    <Route path={'/category/:id'} element={<QuickSearch/>}></Route>
+                    {/*<Route path={'/category/:id'} element={<QuickSearch/>}></Route>*/}
                     <Route path={'/shipper-update/:id'} element={<UpdateShipper/>}></Route>
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>

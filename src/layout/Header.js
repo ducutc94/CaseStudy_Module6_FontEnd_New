@@ -83,32 +83,32 @@ export default function Header({search}) {
 
                         <div className="header__select--category">
                             <button className="header__select--category--btn">
-                                <Link to={`/category/${1}`} className="header__select--category--btn-link">
+                                <Link to={`/${1}`} className="header__select--category--btn-link">
                                     Đồ ăn
                                 </Link>
                             </button>
                             <button className="header__select--category--btn">
-                                <Link to={`/category/${2}`} className="header__select--category--btn-link">
+                                <Link to={`/${2}`} className="header__select--category--btn-link">
                                     Thực phẩm
                                 </Link>
                             </button>
                             <button className="header__select--category--btn">
-                                <Link to={`/category/${3}`} className="header__select--category--btn-link">
+                                <Link to={`/${3}`} className="header__select--category--btn-link">
                                     Bia
                                 </Link>
                             </button>
                             <button className="header__select--category--btn">
-                                <Link to={`/category/${4}`} className="header__select--category--btn-link">
-                                   Hoa
+                                <Link to={`/${4}`} className="header__select--category--btn-link">
+                                    Hoa
                                 </Link>
                             </button>
                             <button className="header__select--category--btn">
-                                <Link to={`/category/${5}`} className="header__select--category--btn-link">
+                                <Link to={`/${5}`} className="header__select--category--btn-link">
                                     Siêu thị
                                 </Link>
                             </button>
                             <button className="header__select--category--btn">
-                                <Link to={`/category/${6}`} className="header__select--category--btn-link">
+                                <Link to={`/${6}`} className="header__select--category--btn-link">
                                     Thú cưng
                                 </Link>
                             </button>
@@ -129,7 +129,7 @@ export default function Header({search}) {
 
                     {/*header__Cart*/}
                     <div className="header__cart">
-                      <Cart/>
+                        <Cart/>
                     </div>
 
 
@@ -164,7 +164,7 @@ export default function Header({search}) {
                                         <li className="header__navbar-user-item">
                                             <Link  to={'/products-carts-oder'} className="header__navbar-user-manager">
                                                 <i className="fa-solid fa-list-ul iconManager"></i>
-                                               Quản lí đơn
+                                                Quản lí đơn
                                             </Link>
                                         </li>
                                     </>}
