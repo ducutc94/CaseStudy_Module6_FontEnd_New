@@ -197,7 +197,7 @@ export default function MerchantBillService() {
                                 </>}
                                     <td className="table_shop_list-inner">
                                         <button onClick={handleShowBills}>Chi tiết</button>
-                                        <BillsDetail showBills={showBills} handleClose={handleCloseBills} />
+                                        <BillsDetail idDetail = {item.id} showBills={showBills} handleClose={handleCloseBills} />
                                     </td>
                             </tr>
                         )

@@ -2,7 +2,7 @@
 import {Button, Modal} from "react-bootstrap";
 
 
-export default function BillsDetail({id,showBills,handleClose}) {
+export default function BillsDetail({idDetail,showBills,handleClose}) {
 
     return (
         <>
