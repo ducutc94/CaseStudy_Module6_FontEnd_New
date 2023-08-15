@@ -82,6 +82,7 @@ export default function FormCreate(props) {
             description: '',
             quantity: 0,
             price: 0,
+            voucher: ""
         },
         validationSchema: validation,
         onSubmit: async (values) => {
@@ -157,7 +158,7 @@ export default function FormCreate(props) {
                 // Logic để cập nhật sản phẩm khi không có hình ảnh mới
                 data.image = props.food.image;
                 data.voucher = [{
-                    id: +props.voucher
+                    id: +values.voucher
                 }]
                 data.voucher = voucherChose;
                 data.categories = categoryChose;
@@ -233,16 +234,16 @@ export default function FormCreate(props) {
             setCategoryChose([...categoryChose, {id: id}]);
         }
     };
-    const choseVoucher = (e) => {
-        let id = +e.target.value;
-        let voucher = voucherChose.filter(item => item.id === id);
-        if (voucher.length > 0) {
-            let data = voucherChose.filter(item => item.id !== id);
-            setVoucherChose([...data]);
-        } else {
-            setVoucherChose([...voucherChose, {id: id}]);
-        }
-    };
+    // const choseVoucher = (e) => {
+    //     let id = +e.target.value;
+    //     let voucher = voucherChose.filter(item => item.id === id);
+    //     if (voucher.length > 0) {
+    //         let data = voucherChose.filter(item => item.id !== id);
+    //         setVoucherChose([...data]);
+    //     } else {
+    //         setVoucherChose([...voucherChose, {id: id}]);
+    //     }
+    // };
 
     const choseFileUpload = (e) => {
         const selectedFiles = Array.from(e.target.files);
@@ -341,7 +342,7 @@ export default function FormCreate(props) {
                         <div className="mb-3">
                             <label htmlFor={'voucher'} className={'form-label form-label-city'}>Mã giảm giá</label>
                             <select name={"voucher"}
-                                    onChange={choseVoucher}>
+                                    onChange={formik.handleChange}>
                                 <option>Chọn mã giảm giá</option>
                                 {voucher.map((item, index) => (
                                     <option value={item.id} key={index}>{item.name}</option>
