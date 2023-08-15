@@ -43,9 +43,9 @@ export default function FormCreate(props) {
         })
     }, []);
     useEffect(() => {
-        getVoucher().then(res => {
-            setVoucher(res.data)
-        })
+      getVoucher().then(res => {
+          setVoucher(res.data)
+      })
     }, []);
 
     useEffect(() => {
@@ -83,6 +83,7 @@ export default function FormCreate(props) {
             description: "",
             quantity: 0,
             price: 0,
+            voucher: ""
 
         },
         onSubmit: values => {
@@ -104,10 +105,9 @@ export default function FormCreate(props) {
             } else {
                 data.image = "https://websitecukcukvn.misacdn.net/wp-content/uploads/2022/02/shopee-food.png";
             }
-            data.voucher = [{
-                id: +props.voucher
-            }]
-            data.voucher = voucherChose;
+            data.voucher = {
+                id: +values.voucher
+            }
             data.categories = categoryChose;
 
             data.shops = {
@@ -155,8 +155,8 @@ export default function FormCreate(props) {
     })
     useEffect(() => {
     }, [categoryChose])
-    useEffect(() => {
-    }, [voucherChose])
+    // useEffect(() => {
+    // }, [voucherChose])
 
     const choseCategory = (e) => {
         let id = +e.target.value;
@@ -168,18 +168,16 @@ export default function FormCreate(props) {
             setCategoryChose([...categoryChose, {id: id}])
         }
     };
-    const choseVoucher = (e) => {
-        let id = +e.target.value;
-        let voucher = voucherChose.filter(item => item.id === id);
-        if (voucher.length > 0) {
-            let data = voucherChose.filter(item => item.id !== id);
-            setVoucherChose([...data]);
-        } else {
-            setVoucherChose([...voucherChose, {id: id}])
-        }
-    };
-
-
+    // const choseVoucher = (e) => {
+    //     let id = +e.target.value;
+    //     let voucher = voucherChose.filter(item => item.id === id);
+    //     if (voucher.length > 0) {
+    //         let data = voucherChose.filter(item => item.id !== id);
+    //         setVoucherChose([...data]);
+    //     } else {
+    //         setVoucherChose([...voucherChose, {id: id}])
+    //     }
+    // };
 
     const choseFileUpload = (e) => {
         const img = e.target.files[0]
@@ -250,7 +248,7 @@ export default function FormCreate(props) {
                         <div className="mb-3">
                             <label htmlFor={'voucher'} className={'form-label form-label-city'}>Mã giảm giá</label>
                             <select name={"voucher"}
-                                    onChange={choseVoucher}>
+                                    onChange={formik.handleChange}>
                                 <option>Chọn mã giảm giá</option>
                                 {voucher.map((item, index)=> (
                                     <option value={item.id} key={index}>{item.name}</option>
