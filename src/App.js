@@ -26,6 +26,8 @@ import Toast from "./layout/Toast";
 import MerchantBillService from "./cart/MerchantBillService";
 import FindShopById from "./cart/FindShopById";
 import Oder from "./cart/Oder";
+import UpdateShipper from "./shipper/UpdateShipper";
+import ShipperManager from "./shipper/ShipManager";
 
 
 function App() {
@@ -60,12 +62,14 @@ function App() {
                     <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>
                     <Route path={'/update-voucher/:id'} element={<UpdateVoucher />}></Route>
                     <Route path={'/category/:id'} element={<QuickSearch/>}></Route>
+                    <Route path={'/shipper-update/:id'} element={<UpdateShipper/>}></Route>
 
                     <Route path={'/products-carts'} element={<ProductsCarts/>}></Route>
                     <Route path={'/products-carts-merchant'} element={<PCByMerchant/>}></Route>
                     <Route path={'/products-carts-merchant-all'} element={<MerchantBillService/>}></Route>
                     <Route path={'/products-carts-shop/:idShop'} element={<FindShopById/>}></Route>
                     <Route path={'/products-carts-oder'} element={<Oder/>}></Route>
+                    <Route path={'/shipper-manager'} element={<ShipperManager/>}></Route>
                     <Route path={'/confirm'} element={<Confirm/>}></Route>
                 </Routes>
             </div>
