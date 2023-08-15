@@ -111,10 +111,10 @@ export default function List() {
 
     return (
         <>
-            <Banner/>
+
             <div className="grid">
                 <div className="grid__row app__content">
-
+                    <Banner/>
                     <div className="grid__column-10">
 
                         <div className="home-product">
