@@ -105,6 +105,9 @@ export default function FormUpdate(props) {
                                             data.shops = {
                                                 id: shopChose,
                                             };
+                                            data.voucher = {
+                                                id: +values.voucher
+                                            }
                                             data.id = props.food.id;
 
                                             axios
