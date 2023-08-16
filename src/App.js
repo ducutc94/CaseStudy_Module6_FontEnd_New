@@ -28,6 +28,7 @@ import FindShopById from "./cart/FindShopById";
 import Oder from "./cart/Oder";
 import UpdateShipper from "./shipper/UpdateShipper";
 import ShipperManager from "./shipper/ShipManager";
+import Chartjs from "./chartis/Chartjs";
 import UserProfile from "./user/userManager/UserProfile";
 
 
@@ -76,6 +77,7 @@ function App() {
 
 
                     <Route path={'/userProfile'} element={<UserProfile/>}></Route>
+                    <Route path={'/bill-chartjs'} element={<Chartjs/>}></Route>
                 </Routes>
             </div>
             <Footer/>
