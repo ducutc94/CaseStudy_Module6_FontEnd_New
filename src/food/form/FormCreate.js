@@ -107,7 +107,7 @@ export default function FormCreate(props) {
             }
             data.voucher = {
                 id: +values.voucher
-            }
+            } 
             data.categories = categoryChose;
 
             data.shops = {
