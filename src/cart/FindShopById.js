@@ -15,6 +15,7 @@ export default function FindShopById(){
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products-carts/products-shop/${user.id}/${idShop}`).then((res) => {
             if (res.data !== null) {
+                console.log(res.data)
                setList(res.data)
             } else {
                 setList([])
@@ -46,7 +47,7 @@ export default function FindShopById(){
                 </div>
                 <div className="bill_about_title">
                     <span className={"btn-white borderBill"}>
-                        <Link to={'/products-carts-merchant'}>Đơn hàng</Link>
+                        <Link to={'/products-carts-merchant'}>Đơn chờ xác nhận</Link>
                     </span>
                     <span className={"btn-white borderBill"}>
                         <Link to={'/products-carts-merchant-all'}>Tổng đơn hàng</Link>
@@ -80,16 +81,11 @@ export default function FindShopById(){
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
-                                TÊN
+                                TÊN KHÁCH HÀNG
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
-                                GIÁ TIỀN
-
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                SỐ LƯỢNG
+                                TÊN SẢN PHẨM
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
@@ -109,23 +105,15 @@ export default function FindShopById(){
                         <> {list.map((item, index) =>
                             <tr key={item.id}>
                                 <td className="table_shop_list-inner">{index + 1}</td>
+                                <td className="table_shop_list-inner">{item.bills.user.username}</td>
                                 <td className="table_shop_list-inner">{item.products.name}</td>
                                 <td className="table_shop_list-inner">
                                     <span style={{marginLeft: `5px`}}>
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
-                                                        }).format(item.products.price)}
-                                </span>
-                                </td>
-                                <td className="table_shop_list-inner">{item.quantity}</td>
-                                <td className="table_shop_list-inner">
-                                    <span style={{marginLeft: `5px`}}>
-                                                        {new Intl.NumberFormat('vi-VN', {
-                                                            style: 'currency',
-                                                            currency: 'VND'
                                                         }).format(item.products.price*item.quantity)}
-                                    </span>
+                                </span>
                                 </td>
                                 {item.statusProductsCarts === "0" && <>
                                     <td className="table_shop_list-inner">Đã thanh toán</td>
