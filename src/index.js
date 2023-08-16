@@ -14,6 +14,7 @@ import '../src/css/toast.css';
 import '../src/css/banner.css';
 import '../src/css/bill.css';
 import '../src/css/bils.css';
+import '../src/css/home_user.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";

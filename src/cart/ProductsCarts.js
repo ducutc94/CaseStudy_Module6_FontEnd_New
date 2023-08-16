@@ -79,7 +79,7 @@ export default function ProductsCarts() {
                                 </h5></td>
                             <td className="table_shop_list-header">
                                 <h5 className="table_shop_list-title">
-                                    ANH
+                                    ẢNH
                                 </h5></td>
                             <td>
                                 <h5 className="table_shop_list-title">
@@ -105,8 +105,7 @@ export default function ProductsCarts() {
                         </tr>
                         </thead>
                         <tbody>
-                        {carts.items ? (
-                            <>
+
                                 {carts.items.map((item, index) =>
                                     <tr key={index}>
 
@@ -135,34 +134,31 @@ export default function ProductsCarts() {
                                             <button type={"button"} onClick={() => dispatch(deleteItem({
                                                 index: index,
                                                 food: item
-                                            }))}>Huỷ
+                                            }))}>
+                                                <i className="fa-solid fa-trash"></i>
                                             </button>
                                         </td>
                                         <td className="table_shop_list-inner">
                                         </td>
                                     </tr>
-                                )
-                                }
-                            </>
-                        ) : (
-                            <></>
-                        )
-                        }
+                                )}
+
                         <tr>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td>
-                            <span style={{marginLeft: `5px`}}> Tong tien:
+                            <span style={{marginLeft: `5px`}}> Tổng tiền: &nbsp;
                                 {new Intl.NumberFormat('vi-VN', {
                                     style: 'currency',
                                     currency: 'VND'
                                 }).format(carts.totalMoney)}
                                                     </span>
                             </td>
-                            <td>
-                                <button type={"submit"}>Thanh toan</button>
-                            </td>
+                                <td>
+                                    <button type={"submit"} className="btn-orange">Thanh toán</button>
+                                </td>
+
                             <td></td>
                             <td></td>
                             <td></td>

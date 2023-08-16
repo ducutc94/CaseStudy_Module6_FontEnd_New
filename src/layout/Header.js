@@ -155,10 +155,10 @@ export default function Header({search}) {
 
                                 <ul className="header__navbar-user-menu">
                                     <li className="header__navbar-user-item">
-                                        <a href="src/layout" className="header__navbar-user-manager">
+                                        <Link  to={'/userProfile'} className="header__navbar-user-manager">
                                             <i className="fa-solid fa-user iconManager"></i>
                                             Tài khoản của tôi
-                                        </a>
+                                        </Link>
                                     </li>
                                     {user.authorities[0].authority === "ROLE_USER" && <>
                                         <li className="header__navbar-user-item">
