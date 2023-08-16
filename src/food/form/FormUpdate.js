@@ -46,6 +46,7 @@ export default function FormUpdate(props) {
     useEffect(() => {
         getCategory().then((res) => {
             setCategory(res);
+
         });
         axios.get('http://localhost:8080/api/products').then((res) => {
             // Set the data directly from the response
