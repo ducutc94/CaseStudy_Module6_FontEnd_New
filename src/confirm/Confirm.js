@@ -2,13 +2,6 @@ import {useEffect} from "react";
 import axios from "axios";
 
 export default function Confirm() {
-    useEffect(() => {
-        axios.post(`http://localhost:8080/api/shops/confirm-shop`, {}
-
-        ).then((res) => {})
-
-    }, [])
-
     return(
         <>
             <div className="confirmBody">
