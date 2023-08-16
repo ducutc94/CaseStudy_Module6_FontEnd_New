@@ -11,6 +11,7 @@ export const cartMerchantSlice = createSlice({
         addCartMerchant: (state, action) => {
             let list = action.payload;
            state.items = list;
+            // console.log(list)
             localStorage.setItem('list', JSON.stringify(state))
         },
         setCartMerchant: (state, action) => {

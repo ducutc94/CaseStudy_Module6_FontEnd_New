@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import {useDispatch, useSelector} from "react-redux";
 import {addCartMerchant, confirmOrder, deleteByMerchant} from "../features/cart/cartMC";
 import {Link, useNavigate} from "react-router-dom";
+import BillsDetail from "../features/cart/BillsDetail";
 
 export default function PCByMerchant() {
     const cartMerchant = useSelector(state => state.cartMerchant)
@@ -11,6 +12,12 @@ export default function PCByMerchant() {
     const user = JSON.parse(localStorage.getItem("user"))
     const [list, setList] = useState([]);
     const navigate = useNavigate()
+    const [showBillDetail, setBillDetail] = useState(false)
+    const handleClose = () => setBillDetail(false);
+    const handleShow = () => setBillDetail(true);
+
+
+
     useEffect(() => {
         axios.get(`http://localhost:8080/api/products-carts/merchant-service/${user.id}`).then((res) => {
             if (res.data !== null) {
@@ -102,7 +109,7 @@ export default function PCByMerchant() {
 
                 <div className="bill_about_title">
                     <span className={"btn-white borderBill"}>
-                        <b>Đơn hàng</b>
+                        <b>Đơn chờ xác nhận </b>
                     </span>
                      <span className={"btn-white borderBill"}>
                          <Link to={'/products-carts-merchant-all'}>Tổng đơn hàng</Link>
@@ -134,16 +141,11 @@ export default function PCByMerchant() {
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
-                                TÊN
+                                NGƯỜI MUA
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
-                                GIÁ TIỀN
-
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                SỐ LƯỢNG
+                                TÊN CỬA HÀNG
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
@@ -162,16 +164,8 @@ export default function PCByMerchant() {
                     {(Array.isArray(cartMerchant.items)) ? (<> {cartMerchant.items.map((item, index) => <tr
                             key={item.id}>
                             <td className="table_shop_list-inner">{index + 1}</td>
-                            <td className="table_shop_list-inner">{item.products.name}</td>
-                            <td className="table_shop_list-inner">
-                                <span style={{marginLeft: `5px`}}>
-                                                        {new Intl.NumberFormat('vi-VN', {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        }).format(item.products.price)}
-                                </span>
-                            </td>
-                            <td className="table_shop_list-inner">{item.quantity}</td>
+                            <td className="table_shop_list-inner">{item.bills.user.username}</td>
+                            <td className="table_shop_list-inner">{item.products.shops.name}</td>
                             <td className="table_shop_list-inner">
                                 <span style={{marginLeft: `5px`}}>
                                                         {new Intl.NumberFormat('vi-VN', {
@@ -189,20 +183,6 @@ export default function PCByMerchant() {
                             {item.statusProductsCarts === "2" && <>
                                 <td className="table_shop_list-inner">Đang chờ xác nhận</td>
                             </>}
-
-                            {item.statusProductsCarts === "5" ? (<>
-
-                                <td className="table_shop_list-inner">
-                                    <button>Chi tiết</button>
-                                </td>
-                            </>) : (<>
-                                <td className="table_shop_list-inner">
-                                </td>
-                                <td className="table_shop_list-inner">
-                                </td>
-
-                            </>)}
-
                             {item.statusProductsCarts === "2" ? (<>
                                 <td className="table_shop_list-inner">
                                     <button type={"submit"} onClick={() => handleSumbit(item.id, index, item)}>Xác
@@ -215,7 +195,8 @@ export default function PCByMerchant() {
                                     </button>
                                 </td>
                                 <td className="table_shop_list-inner">
-                                    <button>Chi tiết</button>
+                                    <button onClick={handleShow}>Chi tiết</button>
+                                    <BillsDetail item = {item} showBills = {showBillDetail} handleClose = {handleClose}/>
                                 </td>
                             </>) : (<>
                                 <td className="table_shop_list-inner">
@@ -223,7 +204,7 @@ export default function PCByMerchant() {
                                 <td className="table_shop_list-inner">
                                 </td>
                                 <td className="table_shop_list-inner">
-                                    <Link to={`/bills/${item.id}`}>Chi tiết</Link>
+
                                 </td>
                             </>)}
                         </tr>)}

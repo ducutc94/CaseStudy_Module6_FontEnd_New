@@ -152,17 +152,22 @@ export default function ProductsCarts() {
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>
+
+                            {carts.items ? (<>
+                                    <td>
                             <span style={{marginLeft: `5px`}}> Tong tien:
                                 {new Intl.NumberFormat('vi-VN', {
                                     style: 'currency',
                                     currency: 'VND'
                                 }).format(carts.totalMoney)}
                                                     </span>
-                            </td>
-                            <td>
-                                <button type={"submit"}>Thanh toan</button>
-                            </td>
+                                    </td>
+                                    <td>
+                                        <button type={"submit"}>Thanh toan</button>
+                                    </td>
+                                </>
+                               ):(<></>)
+                            }
                             <td></td>
                             <td></td>
                             <td></td>
