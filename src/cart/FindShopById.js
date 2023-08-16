@@ -29,8 +29,14 @@ export default function FindShopById(){
         })
     }, [])
     const handleCityChange = (event) => {
-        const shopID = event.target.value;
-        navigate(`/products-carts-shop/${shopID}`);
+        const shopI = event.target.value;
+        axios.get(`http://localhost:8080/api/products-carts/products-shop/${user.id}/${shopI}`).then((res) => {
+            if (res.data !== null) {
+                setList(res.data)
+            } else {
+                setList([])
+            }
+        })
     };
     return(
         <>
