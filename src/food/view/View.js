@@ -9,6 +9,7 @@ import {addCart} from "../../features/cart/cartSlice";
 
 export default function View() {
     const [food, setFood] = useState({});
+    const [foodVoucher, setFoodVoucher] = useState({});
     const {id} = useParams();
     const [shopsUserId, setShopUserId] = useState("");
     const [shops, setShop] = useState("");
@@ -16,11 +17,7 @@ export default function View() {
     const [shopsTimeStart, setShopsTimeStart] = useState("");
     const [shopsTimeEnd, setShopsTimeEnd] = useState("");
     const user = JSON.parse(localStorage.getItem("user"))
-    // const idUser = checkUserID(user);
-    const [idCart, setIdCart] = useState();
-    const [vouchers, setVouchers] = useState([]);
     const [listImg, setListImg] = useState([]);
-    const cart = useSelector(state => state.cart)
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
@@ -35,12 +32,8 @@ export default function View() {
             setShopsDescription(res.data.shops.description)
             setShopsTimeStart(res.data.shops.startTime)
             setShopsTimeEnd(res.data.shops.endTime)
-
+            setFoodVoucher(res.data.voucher)
         })
-        axios.get(`http://localhost:8080/api/vouchers`).then((res) => {
-            setVouchers(res.data)
-        })
-
     }, [])
 
     const deleteFood = (id) => {
@@ -108,15 +101,48 @@ export default function View() {
     };
 
 
-    const today = new Date();
-    const hour = today.getHours();
-    const minu = today.getMinutes();
-    const sec = today.getSeconds();
-    const time = hour + ":" + minu + ":" + sec;
 
     const check = (startTime, endTime) => {
-        return time >= startTime && time <= endTime;
+        const currentTime = new Date();
+        const startTimeObj = new Date(currentTime.toDateString() + " " + startTime);
+        const endTimeObj = new Date(currentTime.toDateString() + " " + endTime);
+        return currentTime >= startTimeObj && currentTime <= endTimeObj;
     };
+
+
+    // phần này sẽ giới hạn phần hiện ảnh sử dụng lớp after trong css
+    const MAX_DISPLAY_IMAGES = 4; // Số lượng ảnh tối đa hiển thị
+
+    // Thay đoạn render ảnh trong useEffect bằng đoạn sau
+    const imagesToDisplay = listImg.slice(0, MAX_DISPLAY_IMAGES);
+    const shouldDisplayEllipsis = listImg.length > MAX_DISPLAY_IMAGES;
+
+
+
+
+    const [selectedImage, setSelectedImage] = useState('');
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (food && food.image) {
+            setSelectedImage(food.image);
+        }
+    }, [food]);
+
+    const handleImageClick = (image) => {
+        setSelectedImage(image);
+    };
+
+    const handleArrowClick = (direction) => {
+        if (direction === 'prev') {
+            setCurrentIndex(Math.max(0, currentIndex - 1));
+        } else if (direction === 'next') {
+            setCurrentIndex((currentIndex + 1) % imagesToDisplay.length);
+            setSelectedImage(imagesToDisplay[(currentIndex + 1) % imagesToDisplay.length]);
+        }
+    };
+
+
 
     return (
         <>
@@ -131,23 +157,36 @@ export default function View() {
                             <div className="view_food-container">
                                 <div className="grid__column-5">
                                     <div className="view_food-left">
+                                        {/*<div className="view_food-left-img">*/}
+                                        {/*    <img src={selectedImage} alt="Main Food Image" />*/}
+                                        {/*</div>*/}
+
                                         <div className="view_food-left-img">
-                                            <img src={food.image}/>
+                                            <img src={selectedImage} alt="Main Food Image" />
+                                            <div className="arrow-left" onClick={() => handleArrowClick('prev')}>
+                                                <i className="fa-solid fa-angle-left"></i>
+                                            </div>
+                                            <div className="arrow-right" onClick={() => handleArrowClick('next')}>
+                                                <i className="fa-solid fa-angle-right"></i>
+                                            </div>
                                         </div>
+
                                     </div>
 
 
+                                    {/*---------------------------------*/}
                                     <div className="view_food-left">
-                                        <div className="view_food-left-img-container">
-                                            {listImg.map(item => <img className="view_food-left-img-container-item"
-                                                                      src={item}/>)}
-
-                                            {/*<img className="view_food-left-img-container-item"*/}
-                                            {/*     src={food.image}/>*/}
-                                            {/*<img className="view_food-left-img-container-item"*/}
-                                            {/*     src={food.image}/>*/}
-                                            {/*<img className="view_food-left-img-container-item"*/}
-                                            {/*     src={food.image}/>*/}
+                                        <div className={`view_food-left-img-container 
+                                        ${shouldDisplayEllipsis ? 'more-images' : ''}`}>
+                                            {imagesToDisplay.map((item, index) => (
+                                                <img
+                                                    key={index}
+                                                    className="view_food-left-img-container-item"
+                                                    src={item}
+                                                    alt={`Image ${index + 1}`}
+                                                    onClick={() => handleImageClick(item)}
+                                                />
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -266,57 +305,62 @@ export default function View() {
 
 
                                         <div className="view_food-right-container">
+                                            {foodVoucher.percent !== 0 && <>
                                             <div className="view_food-right-voucher-container">
                                                 <div className="view_food-item__sale-off">
                                                     <span className="view_food-item__sale-off-label">Giảm</span>
                                                     <span className="view_food-item__sale-off-percent">
-                                                        {/*{food.voucher.percent}%*/}
+                                                        {foodVoucher.percent}%
                                                     </span>
                                                 </div>
                                             </div>
+                                            </>}
                                         </div>
 
 
                                         <div className="view_food-right-container">
-                                            {user?.id !== shopsUserId ? (
-                                                <div className="view_food-right-item-container-btn">
-                                                    <div className="view_food-right-select-number">
-                                                        <div className="view_food-right-select-number-title">
-                                                            Số lượng:
-                                                        </div>
-                                                        <div className="view_food-right-select-number-container">
-                                                            <div className="view_food-right-select-number-item">
-                                                                <div className="el-input-number">
-                                                                    <div className="el-input-number__decrease"
-                                                                         onClick={decreaseQuantity}>
-                                                                        <i className="fas fa-minus-circle"></i>
-                                                                    </div>
-                                                                    <div className="input-selecter-number">
-                                                                        <input
-                                                                            onChange={formik.handleChange}
-                                                                            name={"quantity"}
-                                                                            value={formik.values.quantity}
-                                                                            className="el-input__inner no-arrows"
-                                                                            max={food.quantity}
-                                                                            min="1"
-                                                                            type="number" step="1"/>
-                                                                    </div>
-                                                                    <div className="el-input-number__increase"
-                                                                         onClick={increaseQuantity}>
-                                                                        <i className="fas fa-plus-circle"></i>
-                                                                    </div>
+                                            {user?.id !== shopsUserId   ? (
+                                                check(shopsTimeStart, shopsTimeEnd) &&
+                                                <>
+                                                    <div className="view_food-right-item-container-btn">
+                                                        <div className="view_food-right-select-number">
+                                                            <div className="view_food-right-select-number-title">
+                                                                Số lượng:
+                                                            </div>
+                                                            <div className="view_food-right-select-number-container">
+                                                                <div className="view_food-right-select-number-item">
+                                                                    <div className="el-input-number">
+                                                                        <div className="el-input-number__decrease"
+                                                                             onClick={decreaseQuantity}>
+                                                                            <i className="fas fa-minus-circle"></i>
+                                                                        </div>
+                                                                        <div className="input-selecter-number">
+                                                                            <input
+                                                                                onChange={formik.handleChange}
+                                                                                name={"quantity"}
+                                                                                value={formik.values.quantity}
+                                                                                className="el-input__inner no-arrows"
+                                                                                max={food.quantity}
+                                                                                min="1"
+                                                                                type="number" step="1"/>
+                                                                        </div>
+                                                                        <div className="el-input-number__increase"
+                                                                             onClick={increaseQuantity}>
+                                                                            <i className="fas fa-plus-circle"></i>
+                                                                        </div>
 
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div className="view_food-right-item-buy">
+                                                            <i className="fa-solid fa-cart-plus"></i>
+                                                            <button className="view_food-right-item-buy-btn"
+                                                                    type={"submit"}>Thêm vào giỏ hàng
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div className="view_food-right-item-buy">
-                                                        <i className="fa-solid fa-cart-plus"></i>
-                                                        <button className="view_food-right-item-buy-btn"
-                                                                type={"submit"}>Thêm vào giỏ hàng
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                                </>
                                             ) : (
                                                 <div className="view_food-right-item-container-btn">
                                                     <div className="view_food-right-item-edit">
