@@ -27,9 +27,22 @@ export default function MerchantBillService() {
     const navigate = useNavigate()
     useEffect(() => {
         Promise.all([getOderByUserId(user.id), getBillsByUserId(user.id), getShopByUserId(user.id)]).then(res => {
-            setList(res[0].data)
-            setListBill(res[1].data)
-            setListShop(res[2].data)
+            if(res[0].data != null){
+                setList(res[0].data)
+            }else {
+                setList([])
+            }
+            if(res[1].data != null){
+                setListBill(res[1].data)
+            }else {
+                setListBill([])
+            }
+            if(res[2].data != null){
+                setListShop(res[2].data)
+            }else {
+                setListShop([])
+            }
+
         })
     }, [])
 
