@@ -8,7 +8,6 @@ export const cartBuySlice = createSlice({
     reducers: {
         addCartBuy: (state, action) => {
             let list = action.payload;
-            console.log(list)
             state.items = list;
             localStorage.setItem('cartBuy', JSON.stringify(state))
         },

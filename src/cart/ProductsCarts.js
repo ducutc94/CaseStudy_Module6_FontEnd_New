@@ -29,8 +29,8 @@ export default function ProductsCarts() {
 
     const formik = useFormik({
         initialValues: {
-            id:"",
-            totalMoney:""
+            id: "",
+            totalMoney: ""
         },
         onSubmit: values => {
             Swal.fire({
@@ -43,8 +43,7 @@ export default function ProductsCarts() {
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
                     axios.post(`http://localhost:8080/api/bills/${user.id}/${idCart.id}`,
-                        carts.items
-                    ).then((res) => {
+                        carts.items).then((res) => {
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
@@ -72,116 +71,120 @@ export default function ProductsCarts() {
 
 
     return (
-        <> <form onSubmit={formik.handleSubmit}>
-            <div>
-                <div className="title-form-container">
-                    <h1 className="title-form">Quản lý giỏ hàng</h1>
-                </div>
+        <>
+            <form onSubmit={formik.handleSubmit}>
                 <div>
-                    <div><span className={"btn-white"}>
+                    <div className="title-form-container">
+                        <h1 className="title-form">Quản lý giỏ hàng</h1>
+                    </div>
+                    <div>
+                        <div><span className={"btn-white"}>
                         <b>GIỎ HÀNG</b>
                     </span></div>
-                </div>
+                    </div>
 
-                <table className={"table table_shop_list"}>
-                    <thead>
-                    <tr>
+                    <table className={"table table_shop_list"}>
+                        <thead>
+                        <tr>
 
-                        <td className="table_shop_list-header">
-                            <h5 className="table_shop_list-title">
-                                STT
-                            </h5></td>
-                        <td className="table_shop_list-header">
-                            <h5 className="table_shop_list-title">
-                                ANH
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TÊN
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                GIÁ TIỀN
+                            <td className="table_shop_list-header">
+                                <h5 className="table_shop_list-title">
+                                    STT
+                                </h5></td>
+                            <td className="table_shop_list-header">
+                                <h5 className="table_shop_list-title">
+                                    ANH
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    TÊN
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    GIÁ TIỀN
 
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                SỐ LƯỢNG
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TỔNG TIỀN
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                            </h5></td>
-                        <td></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {carts.items ? (
-                        <>
-                            {carts.items.map((item, index) =>
-                                <tr key={index}>
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    SỐ LƯỢNG
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    TỔNG TIỀN
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                </h5></td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {carts.items ? (
+                            <>
+                                {carts.items.map((item, index) =>
+                                    <tr key={index}>
 
-                                    <td className="table_shop_list-inner">{index + 1}</td>
-                                    <td className="table_shop_list-inner"><img src={item.food.image} alt=""
-                                                                               className="header__Cart-img"/></td>
-                                    <td className="table_shop_list-inner">{item.food.name}</td>
-                                    <td className="table_shop_list-inner">
+                                        <td className="table_shop_list-inner">{index + 1}</td>
+                                        <td className="table_shop_list-inner"><img src={item.food.image} alt=""
+                                                                                   className="header__Cart-img"/></td>
+                                        <td className="table_shop_list-inner">{item.food.name}</td>
+                                        <td className="table_shop_list-inner">
                                         <span style={{marginLeft: `5px`}}>
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
                                                         }).format(item.food.price)}
                                                     </span>
-                                    </td>
-                                    <td className="table_shop_list-inner">{item.quantity}</td>
-                                    <td className="table_shop_list-inner">
+                                        </td>
+                                        <td className="table_shop_list-inner">{item.quantity}</td>
+                                        <td className="table_shop_list-inner">
                                         <span style={{marginLeft: `5px`}}>
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
                                                         }).format(item.money)}
                                                     </span>
-                                    </td>
-                                    <td className="table_shop_list-inner"><button type={"button"} onClick={() => dispatch(deleteItem({
-                                        index: index,
-                                        food: item
-                                    })) }>Huỷ</button></td>
-                                    <td className="table_shop_list-inner">
-                                    </td>
-                                </tr>
-                            )
-                            }
-                        </>
-                    ) : (
-                        <></>
-                    )
-                    }
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
+                                        </td>
+                                        <td className="table_shop_list-inner">
+                                            <button type={"button"} onClick={() => dispatch(deleteItem({
+                                                index: index,
+                                                food: item
+                                            }))}>Huỷ
+                                            </button>
+                                        </td>
+                                        <td className="table_shop_list-inner">
+                                        </td>
+                                    </tr>
+                                )
+                                }
+                            </>
+                        ) : (
+                            <></>
+                        )
+                        }
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
                             <span style={{marginLeft: `5px`}}> Tong tien:
-                                                        {new Intl.NumberFormat('vi-VN', {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        }).format(carts.totalMoney)}
+                                {new Intl.NumberFormat('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND'
+                                }).format(carts.totalMoney)}
                                                     </span>
-                        </td>
-                        <td>
-                            <button type={"submit"}>Thanh toan</button>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </form>
+                            </td>
+                            <td>
+                                <button type={"submit"}>Thanh toan</button>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         </>
     )
 

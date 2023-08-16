@@ -10,7 +10,6 @@ export const cartMerchantSlice = createSlice({
     reducers: {
         addCartMerchant: (state, action) => {
             let list = action.payload;
-            console.log(list)
            state.items = list;
             localStorage.setItem('list', JSON.stringify(state))
         },

@@ -106,7 +106,6 @@ export const cartSlice = createSlice({
         },
         setStatus: (state, action) => {
             let id = action.payload.food.statusProducts
-            console.log(id)
         },
         deleteAll: (state, action) => {
             state.items = []

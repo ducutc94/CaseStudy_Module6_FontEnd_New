@@ -1,102 +1,38 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
 import {useDispatch, useSelector} from "react-redux";
-import { confirmOrder, deleteByMerchant,} from "../features/cart/cartMC";
+
 import {Link, useNavigate} from "react-router-dom";
-import BillsDetail from "../features/cart/BillsDetail";
-import {Button} from "react-bootstrap";
+
+async function getOderByUserId(id) {
+    return await axios.get(`http://localhost:8080/api/products-carts/merchant-service-all/${id}`)
+}
+
+
+async function getBillsByUserId(id) {
+    return await axios.get(`http://localhost:8080/api/bills/bill-dto/${id}`) //api/users/1/bills
+}
+
+async function getShopByUserId(id) {
+    return await  axios.get(`http://localhost:8080/api/shops/user/${id}`) //api/users/1/shops
+}
 
 export default function MerchantBillService() {
-    const [list,setList] = useState([]);
-    const [listShop,setListShop] = useState([]);
+    const [list, setList] = useState([]);
+    const [listBill, setListBill] = useState([]);
+    const [listShop, setListShop] = useState([]);
     const cartMerchant = useSelector(state => state.cartMerchant)
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem("user"))
     const navigate = useNavigate()
-    const [showBills, setShowBills] = useState(false);
-    const handleCloseBills = () => setShowBills(false);
-    const handleShowBills = () => setShowBills(true);
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/products-carts/merchant-service-all/${user.id}`).then((res) => {
-            if (res.data !== null) {
-                setList(res.data)
-            } else {
-                setList([])
-            }
+        Promise.all([getOderByUserId(user.id), getBillsByUserId(user.id), getShopByUserId(user.id)]).then(res => {
+            setList(res[0].data)
+            setListBill(res[1].data)
+            setListShop(res[2].data)
         })
-        axios.get(`http://localhost:8080/api/shops/user/${user.id}`).then((res) => {
-            if (res.data !== null) {
-                setListShop(res.data)
-            } else {
-                setListShop([])
-            }
-        })
-
     }, [])
-    const deleteCartMerchant = (id, index, item) => {
-        Swal.fire({
-            position: 'center',
-            title: 'Bạn muốn huỷ đơn hàng ?',
-            showDenyButton: true,
-            confirmButtonText: 'Xác nhận',
-            denyButtonText: 'Hủy',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                dispatch(deleteByMerchant({
-                    index: index,
-                    item: item
-                }))
-                axios.delete(`http://localhost:8080/api/products-carts/merchant/${id}`).then(() => {
-                    Swal.fire({
-                        width: '450px',
-                        position: 'center',
-                        title: 'Huỷ thành công!',
-                        icon: 'success'
-                    });
 
-                })
-            } else if (result.isDenied) {
-                Swal.fire({
-                    width: '450px',
-                    position: 'center',
-                    title: 'Hủy!',
-                    icon: 'info'
-                })
-            }
-        })
-    }
-    const handleSumbit = (id, index, item) => {
-        Swal.fire({
-            position: 'center',
-            title: 'Bạn muốn thanh toán đơn hàng ?',
-            showDenyButton: true,
-            confirmButtonText: 'Xác nhận',
-            denyButtonText: 'Hủy',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                dispatch(confirmOrder({
-                    index: index,
-                    item: item
-                }))
-                axios.put(`http://localhost:8080/api/products-carts/merchant-update/${id}`).then((res) => {
-                    Swal.fire({
-                        width: '450px',
-                        position: 'center',
-                        title: 'Thanh toán thành công!',
-                        icon: 'success'
-                    });
-                })
-            } else if (result.isDenied) {
-                Swal.fire({
-                    width: '450px',
-                    position: 'center',
-                    title: 'Hủy!',
-                    icon: 'info'
-                })
-            }
-        })
-    }
     const handleCityChange = (event) => {
         const shopID = event.target.value;
         navigate(`/products-carts-shop/${shopID}`);
@@ -124,7 +60,8 @@ export default function MerchantBillService() {
                                 id=""
                                 className="bill_about--shop-inner--btn"
                                 onChange={handleCityChange}
-                            ><option value="">---Đơn theo cửa hàng---</option>
+                            >
+                                <option value="">---Đơn theo cửa hàng---</option>
                                 {listShop.map((item, index) => (<option key={index} value={item.id}>
                                     {item.name}
                                 </option>))}
@@ -140,9 +77,18 @@ export default function MerchantBillService() {
                             <h5 className="table_shop_list-title">
                                 STT
                             </h5></td>
+                        <td className="table_shop_list-header">
+                            <h5 className="table_shop_list-title">
+                                NGƯỜI MUA
+                            </h5></td>
+                        <td className="table_shop_list-header">
+                            <h5 className="table_shop_list-title">
+                                TÊN SHOP
+                            </h5></td>
+
                         <td>
                             <h5 className="table_shop_list-title">
-                                TÊN
+                                TÊN SP
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
@@ -167,43 +113,49 @@ export default function MerchantBillService() {
                     </tr>
                     </thead>
                     <tbody>
-                    {(Array.isArray(list)) ? (
-                        <> {list.map((item, index) =>
-                            <tr key={item.id}>
-                                <td className="table_shop_list-inner">{index + 1}</td>
-                                <td className="table_shop_list-inner">{item.products.name}</td>
-                                <td className="table_shop_list-inner">
-                                    <span style={{marginLeft: `5px`}}>
-                                                        {new Intl.NumberFormat('vi-VN', {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        }).format(item.products.price)}
-                                    </span>
-                                </td>
-                                <td className="table_shop_list-inner">{item.quantity}</td>
-                                <td className="table_shop_list-inner">
+                    {listBill.length > 0 && listBill.map((item, index) =>
+                        <tr key={item.id}>
+                            <td className="table_shop_list-inner">{index + 1}</td>
+                            <td className="table_shop_list-inner">{item.username}</td>
+                            <td className="table_shop_list-inner">{item.shops.name}</td>
+
+
+                            {/*{item.productsCartsList && item.productsCartsList.map((value, index1) => <>*/}
+                            {/*        /!*<td className="table_shop_list-inner">{value.shops.name}</td>*!/*/}
+                            {/*        /!*<td className="table_shop_list-inner">{value.products.name}</td>*!/*/}
+                            {/*        <td className="table_shop_list-inner">{value.quantity}</td>*/}
+                            {/*        <td className="table_shop_list-inner">{value.products.price}</td>*/}
+                            {/*        <td className="table_shop_list-inner">*/}
+                            {/*        <span style={{marginLeft: `5px`}}>*/}
+                            {/*                            {new Intl.NumberFormat('vi-VN', {*/}
+                            {/*                                style: 'currency',*/}
+                            {/*                                currency: 'VND'*/}
+                            {/*                            }).format(value.products.price * value.quantity)}*/}
+                            {/*        </span>*/}
+                            {/*        </td>*/}
+                            {/*    </>*/}
+                            {/*)*/}
+                            {/*}*/}
+                            <td className="table_shop_list-inner">
                                     <span style={{marginLeft: `5px`}}>
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
                                                         }).format(item.totalPrice)}
                                     </span>
-                                </td>
-                                {item.statusProductsCarts === "0" && <>
-                                    <td className="table_shop_list-inner">Đã thanh toán</td>
-                                </>}
-                                {item.statusProductsCarts === "1" && <>
-                                    <td className="table_shop_list-inner">Huỷ thanh toán</td>
-                                </>}
-                                    <td className="table_shop_list-inner">
-                                        <button onClick={handleShowBills}>Chi tiết</button>
-                                        <BillsDetail idDetail = {item.id} showBills={showBills} handleClose={handleCloseBills} />
-                                    </td>
-                            </tr>
-                        )
-                        }
-                        </>
-                    ) : (<></>)}
+                            </td>
+                            {item.status === "0" && <>
+                                <td className="table_shop_list-inner">Đã thanh toán</td>
+                            </>}
+                            {item.status === "1" && <>
+                                <td className="table_shop_list-inner">Huỷ thanh toán</td>
+                            </>}
+                            <td className="table_shop_list-inner">
+                                {item.localDateTime}
+                            </td>
+                        </tr>
+                    )
+                    }
                     </tbody>
                 </table>
             </div>
