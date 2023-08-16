@@ -5,18 +5,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {addCartMerchant, confirmOrder, deleteByMerchant} from "../features/cart/cartMC";
 import {Link, useNavigate} from "react-router-dom";
 
-
-async function getOderByUser(id) {
-    return await axios.get(`http://localhost:8080/api/products-carts/merchant-service/${id}`)
-}
-
-
-async function getShopByUser(id) {
-    return await axios.get(`http://localhost:8080/api/shops/user/${id}`)
-}
-
-
-
 export default function PCByMerchant() {
     const cartMerchant = useSelector(state => state.cartMerchant)
     const dispatch = useDispatch()
@@ -24,26 +12,21 @@ export default function PCByMerchant() {
     const [list, setList] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
-        Promise.all([getOderByUser(user.id),getShopByUser(user.id)]).then((res)=>{
-            dispatch(addCartMerchant(res[0].data))
-            setList(res[1].data)
+        axios.get(`http://localhost:8080/api/products-carts/merchant-service/${user.id}`).then((res) => {
+            if (res.data !== null) {
+                dispatch(addCartMerchant(res.data))
+            } else {
+                dispatch(addCartMerchant([]))
+            }
+        })
+        axios.get(`http://localhost:8080/api/shops/user/${user.id}`).then((res) => {
+            if (res.data !== null) {
+                setList(res.data)
+            } else {
+                setList([])
+            }
         })
 
-    //     axios.get(`http://localhost:8080/api/products-carts/merchant-service/${user.id}`).then((res) => {
-    //         if (res.data !== null) {
-    //             dispatch(addCartMerchant(res.data))
-    //         } else {
-    //             dispatch(addCartMerchant([]))
-    //         }
-    //     })
-    //     axios.get(`http://localhost:8080/api/shops/user/${user.id}`).then((res) => {
-    //         if (res.data !== null) {
-    //             setList(res.data)
-    //         } else {
-    //             setList([])
-    //         }
-    //     })
-    //
     }, [])
 
     const deleteCartMerchant = (id, index, item) => {
@@ -104,6 +87,7 @@ export default function PCByMerchant() {
     }
     const handleCityChange = (event) => {
         const shopID = event.target.value;
+        console.log(shopID)
         navigate(`/products-carts-shop/${shopID}`);
     };
 
@@ -132,7 +116,7 @@ export default function PCByMerchant() {
                                 onChange={handleCityChange}
                             >
                                 <option value="">---Đơn theo cửa hàng---</option>
-                                {list.map((item, index) => (<option key={index} value={item.id}>
+                                {list.length > 0 && list.map((item, index) => (<option key={index} value={item.id}>
                                     {item.name}
                                 </option>))}
                             </select>

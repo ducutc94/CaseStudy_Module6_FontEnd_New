@@ -7,16 +7,12 @@ import {Link, useNavigate} from "react-router-dom";
 async function getOderByUserId(id) {
     return await axios.get(`http://localhost:8080/api/products-carts/merchant-service-all/${id}`)
 }
-
-
 async function getBillsByUserId(id) {
     return await axios.get(`http://localhost:8080/api/bills/bill-dto/${id}`) //api/users/1/bills
 }
-
 async function getShopByUserId(id) {
     return await  axios.get(`http://localhost:8080/api/shops/user/${id}`) //api/users/1/shops
 }
-
 export default function MerchantBillService() {
     const [list, setList] = useState([]);
     const [listBill, setListBill] = useState([]);
@@ -33,6 +29,7 @@ export default function MerchantBillService() {
                 setList([])
             }
             if(res[1].data != null){
+                console.log(res[1].data)
                 setListBill(res[1].data)
             }else {
                 setListBill([])
@@ -75,7 +72,7 @@ export default function MerchantBillService() {
                                 onChange={handleCityChange}
                             >
                                 <option value="">---Đơn theo cửa hàng---</option>
-                                {listShop.map((item, index) => (<option key={index} value={item.id}>
+                                { listShop > 0 && listShop.map((item, index) => (<option key={index} value={item.id}>
                                     {item.name}
                                 </option>))}
                             </select>
@@ -98,7 +95,6 @@ export default function MerchantBillService() {
                             <h5 className="table_shop_list-title">
                                 TÊN SHOP
                             </h5></td>
-
                         <td>
                             <h5 className="table_shop_list-title">
                                 TÊN SP
@@ -131,24 +127,27 @@ export default function MerchantBillService() {
                             <td className="table_shop_list-inner">{index + 1}</td>
                             <td className="table_shop_list-inner">{item.username}</td>
                             <td className="table_shop_list-inner">{item.shops.name}</td>
-
-
-                            {/*{item.productsCartsList && item.productsCartsList.map((value, index1) => <>*/}
-                            {/*        /!*<td className="table_shop_list-inner">{value.shops.name}</td>*!/*/}
-                            {/*        /!*<td className="table_shop_list-inner">{value.products.name}</td>*!/*/}
-                            {/*        <td className="table_shop_list-inner">{value.quantity}</td>*/}
-                            {/*        <td className="table_shop_list-inner">{value.products.price}</td>*/}
-                            {/*        <td className="table_shop_list-inner">*/}
-                            {/*        <span style={{marginLeft: `5px`}}>*/}
-                            {/*                            {new Intl.NumberFormat('vi-VN', {*/}
-                            {/*                                style: 'currency',*/}
-                            {/*                                currency: 'VND'*/}
-                            {/*                            }).format(value.products.price * value.quantity)}*/}
-                            {/*        </span>*/}
-                            {/*        </td>*/}
-                            {/*    </>*/}
-                            {/*)*/}
-                            {/*}*/}
+                            <td colSpan={4} className="table_shop_list-inner">
+                                <table>
+                                    {item.productsCartsList && item.productsCartsList.map((value, index1) => <>
+                                        <tr key={value.id}>
+                                            <td className="table_shop_list-inner">{value.products.name}</td>
+                                            <td className="table_shop_list-inner">{value.products.price}</td>
+                                            <td className="table_shop_list-inner">{value.quantity}</td>
+                                            <td className="table_shop_list-inner">
+                                    <span style={{marginLeft: `5px`}}>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND'
+                                                        }).format(value.products.price * value.quantity)}
+                                    </span>
+                                            </td>
+                                        </tr>
+                                        </>
+                                    )
+                                    }
+                                </table>
+                            </td>
                             <td className="table_shop_list-inner">
                                     <span style={{marginLeft: `5px`}}>
                                                         {new Intl.NumberFormat('vi-VN', {

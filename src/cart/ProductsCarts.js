@@ -10,18 +10,7 @@ export default function ProductsCarts() {
     const carts = useSelector(state => state.cart)
     const dispatch = useDispatch();
     const idCart = JSON.parse(localStorage.getItem("idCart"));
-    const id = idCart.id;
-    const checkUserID = (value) => {
-        let id;
-        if (value) {
-            id = value.id;
-        } else {
-            id = 1000;
-        }
-        return id;
-    }
     const user = JSON.parse(localStorage.getItem("user"))
-    const idUser = checkUserID(user);
     useEffect(() => {
         setProductCart(carts);
         dispatch(setCart())
@@ -64,11 +53,8 @@ export default function ProductsCarts() {
                 }
             })
 
-
         },
-
     })
-
 
     return (
         <>
