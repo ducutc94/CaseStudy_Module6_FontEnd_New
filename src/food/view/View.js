@@ -135,7 +135,9 @@ export default function View() {
 
     const handleArrowClick = (direction) => {
         if (direction === 'prev') {
-            setCurrentIndex(Math.max(0, currentIndex - 1));
+            const prevIndex = (currentIndex - 1 + imagesToDisplay.length) % imagesToDisplay.length;
+            setCurrentIndex(prevIndex);
+            setSelectedImage(imagesToDisplay[prevIndex]);
         } else if (direction === 'next') {
             setCurrentIndex((currentIndex + 1) % imagesToDisplay.length);
             setSelectedImage(imagesToDisplay[(currentIndex + 1) % imagesToDisplay.length]);
