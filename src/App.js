@@ -28,6 +28,7 @@ import FindShopById from "./cart/FindShopById";
 import Oder from "./cart/Oder";
 import UpdateShipper from "./shipper/UpdateShipper";
 import ShipperManager from "./shipper/ShipManager";
+import UserProfile from "./user/userManager/UserProfile";
 
 
 function App() {
@@ -72,6 +73,9 @@ function App() {
                     <Route path={'/products-carts-oder'} element={<Oder/>}></Route>
                     <Route path={'/shipper-manager'} element={<ShipperManager/>}></Route>
                     <Route path={'/confirm'} element={<Confirm/>}></Route>
+
+
+                    <Route path={'/userProfile'} element={<UserProfile/>}></Route>
                 </Routes>
             </div>
             <Footer/>

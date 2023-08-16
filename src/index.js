@@ -13,6 +13,8 @@ import '../src/css/confirm_email.css';
 import '../src/css/toast.css';
 import '../src/css/banner.css';
 import '../src/css/bill.css';
+import '../src/css/bils.css';
+import '../src/css/home_user.css';
 import './css/detailbils.css';
 import './css/merchantBillService.css';
 import App from './App';
