@@ -74,7 +74,12 @@ export default function FormCreate(props) {
     const checkNameProduct = (name) => {
         return nameProducts.some((products) => products.name === name);
     };
-
+    const setVoucherId = (values) => {
+        if (values === ""){
+            values = 1;
+        }
+        return values
+    }
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -123,7 +128,7 @@ export default function FormCreate(props) {
                 data.image = ["https://websitecukcukvn.misacdn.net/wp-content/uploads/2022/02/shopee-food.png"];
             }
             data.voucher = {
-                id: +values.voucher
+                id: +setVoucherId(values.voucher)
             } 
             data.categories = categoryChose;
 
@@ -131,42 +136,41 @@ export default function FormCreate(props) {
                 id: props.idShop
             };
             data.id = props.food.id;
-
             Swal.fire({
-                title: 'Bạn có muốn thêm sản phẩm mới?',
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: 'Lưu',
-                denyButtonText: `Hủy`,
+                title: 'Đang tạo sản phẩm...',
+                html: 'Vui lòng đợi trong giây lát...',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                    const timeout = 2500; // 5 giây
+                    setTimeout(() => {
+                        Swal.close();
+                    }, timeout);
+                }
             }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
+                Swal.fire({
+                    title: 'Bạn có muốn thêm sản phẩm mới?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: 'Lưu',
+                    denyButtonText: `Hủy`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
 
-                if (result.isConfirmed) {
-                    axios.post(`http://localhost:8080/api/products`, data).then((res) => {
-                        Swal.fire({
-                            title: 'Đang tạo sản phẩm...',
-                            html: 'Vui lòng đợi trong giây lát...',
-                            allowEscapeKey: false,
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-
-                                // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
-                                const timeout = 2500; // 5 giây
-                                setTimeout(() => {
-                                    Swal.close();
-                                }, timeout);
-                            }
-                        }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.post(`http://localhost:8080/api/products`, data).then((res) => {
                             Swal.fire('Thêm thành công!', '', 'success');
                             navigate('/');
-                        });
-                    }).catch(err => console.log(err));
-                } else if (result.isDenied) {
-                    Swal.fire('Thêm thất bại', '', 'info');
-                }
-            }).catch(err => {
-                console.log(err.message);
+                        }).catch(err => console.log(err));
+                    } else if (result.isDenied) {
+                        Swal.fire('Thêm thất bại', '', 'info');
+                    }
+                }).catch(err => {
+                    console.log(err.message);
+                });
             });
         },
         validationSchema: validation,
@@ -271,7 +275,6 @@ export default function FormCreate(props) {
                             <label htmlFor={'voucher'} className={'form-label form-label-city'}>Mã giảm giá</label>
                             <select name={"voucher"}
                                     onChange={formik.handleChange}>
-                                <option>Chọn mã giảm giá</option>
                                 {voucher.map((item, index) => (
                                     <option value={item.id} key={index}>{item.name}</option>
                                 ))}

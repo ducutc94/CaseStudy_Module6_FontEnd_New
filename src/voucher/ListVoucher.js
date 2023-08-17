@@ -13,7 +13,7 @@ export default function ListVoucher() {
     const idShop = 1;
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/vouchers/shop/${idShop}`).then(res => {
+        axios.get(`http://localhost:8080/api/vouchers`).then(res => {
             if (res.data !== "") {
                 setVoucher(res.data);
             } else {
@@ -74,7 +74,7 @@ export default function ListVoucher() {
                             </h5></td>
                         <td>
                             <h5 className="table_shop_list-title">
-                                QUANTITY
+                                PERCENT
                             </h5></td>
                         <td colSpan={2}>
                             <h5 className="table_shop_list-title">
@@ -88,11 +88,19 @@ export default function ListVoucher() {
                             <tr key={item.id}>
                                 <td className="table_shop_list-inner">{index + 1}</td>
                                 <td className="table_shop_list-inner">{item.name}</td>
-                                <td className="table_shop_list-inner">{item.quantity}</td>
+                                <td className="table_shop_list-inner">{item.percent}</td>
 
-                                <td><Link to={`/update-voucher/${item.id}`}>Sửa</Link></td>
-                                <td className="table_shop_list-inner">
-                                    <button onClick={() => deleteVoucher(item.id)}>Xóa</button>
+                                <td  className="table_shop_list-inner iconEditShop">
+                                    <Link to={`/update-voucher/${item.id}`} >
+                                        <i className="fa-regular fa-pen-to-square"></i>
+                                    </Link>
+                                    <span className="iconEditShop-inner">Sửa</span>
+                                </td>
+                                <td className="table_shop_list-inner iconDeleteShop">
+                                    <button onClick={() => deleteVoucher(item.id)}>
+                                        <i className="fa-solid fa-trash"></i>
+                                    </button>
+                                    <span className="iconDeleteShop-inner">Xóa</span>
                                 </td>
                             </tr>
                         )

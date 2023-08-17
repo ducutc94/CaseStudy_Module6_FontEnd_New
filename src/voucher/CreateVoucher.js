@@ -22,23 +22,19 @@ export default function CreateVoucher(){
         }))
     },[])
 
-    const checkNameExists = (name) => {
-        return list.some((voucher) => voucher.name === name);
-    };
+
     const validationV = yup.object().shape({
         name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .max(500, "Độ dài tối đa 500 ký tự")
-            .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
-            .required("Tên không được để trống!").test('Tên duy nhất', 'Tên đã tồn tại', function (value) {
-                return !checkNameExists(value);
-            })
+            .matches(/[a-zA-Z]+/, "Chưa đúng định dạng"),
+        percent: yup.number().min(0, "Không nhập số âm")
+            .max(99, "Giảm giá tối đa 99%")
     })
 
     const formik = useFormik({
         initialValues: {
             name:"",
             percent:"",
-            quantity:"",
             shops : "",
         },
 
@@ -55,7 +51,6 @@ export default function CreateVoucher(){
                     axios.post('http://localhost:8080/api/vouchers',{
                         name:values.name,
                         percent:values.percent,
-                        quantity:values.quantity,
                         shops:[
                             {
                                 id:idShop
@@ -88,7 +83,7 @@ export default function CreateVoucher(){
                                    type={'text'} className={'form-control'}
                                    id={'name'}
                                    onBlur={formik.handleBlur}
-                                   placeholder={'Nhập Tên Voucher'}/>
+                                   placeholder={'Giảm giá 10%'}/>
                             {formik.touched.name && formik.errors.name ? (<span className={"text-danger"}>{formik.errors.name}</span>) : null}
                         </div>
                         <div className="mb-3">
@@ -98,21 +93,9 @@ export default function CreateVoucher(){
                                    className={'form-control'}
                                    id={'percent'}
                                    onBlur={formik.handleBlur}
-                                   placeholder={'ví dụ: 10%'}/>
+                                   placeholder={'ví dụ: 10'}/>
                             {formik.touched.percent && formik.errors.percent ? (<span className={"text-danger"}>{formik.errors.percent}</span>) : null}
                         </div>
-
-                        <div className="mb-3">
-                            <label htmlFor={'quantity'} className={'form-label'}>Số lượng</label>
-                            <input onChange={formik.handleChange}
-                                   name={'quantity'}
-                                   type={'number'} className={'form-control'}
-                                   id={'quantity'}
-                                   onBlur={formik.handleBlur}
-                                   placeholder={'1,2,3.....'}/>
-                            {formik.touched.quantity && formik.errors.quantity ? (<span className={"text-danger"}>{formik.errors.quantity}</span>) : null}
-                        </div>
-
                         <div className="mb-3">
                             <div style={{float: 'right'}}>
                                 <button className={'btn btn-primary'} type={"submit"}>
