@@ -109,12 +109,25 @@ export default function FormUpdate(props) {
                                                 id: +values.voucher
                                             }
                                             data.id = props.food.id;
+                                            Swal.fire({
+                                                title: 'Đang tạo sản phẩm...',
+                                                html: 'Vui lòng đợi trong giây lát...',
+                                                allowEscapeKey: false,
+                                                allowOutsideClick: false,
+                                                didOpen: () => {
+                                                    Swal.showLoading();
 
-                                            axios
-                                                .put(`http://localhost:8080/api/products/${data.id}`, data)
+                                                    // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                                                    const timeout = 2500; // 5 giây
+                                                    setTimeout(() => {
+                                                        Swal.close();
+                                                    }, timeout);
+                                                }
+                                            }).then((result) => {
+                                            axios.put(`http://localhost:8080/api/products/${data.id}`, data)
                                                 .then(() => {
                                                     Swal.fire({
-                                                        title: 'Bạn có muốn thêm sản phẩm mới?',
+                                                        title: 'Bạn có muốn sửa sản phẩm?',
                                                         showDenyButton: true,
                                                         showCancelButton: false,
                                                         confirmButtonText: 'Lưu',
@@ -138,6 +151,7 @@ export default function FormUpdate(props) {
                                                 .catch((err) => {
                                                     console.log(err.message);
                                                 });
+                                        });
                                         }
                                     });
                                 }
