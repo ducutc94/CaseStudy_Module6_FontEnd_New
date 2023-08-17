@@ -48,10 +48,6 @@ export default function FormUpdate(props) {
             setCategory(res);
 
         });
-        axios.get('http://localhost:8080/api/products').then((res) => {
-            // Set the data directly from the response
-            // setNameProducts(res.data);
-        });
         axios.get(`http://localhost:8080/api/shops/user/${idUser}`).then((response) => {
             setShop(response.data);
         });
@@ -222,15 +218,15 @@ export default function FormUpdate(props) {
     };
 
     useEffect(() => {
-        if (props.food) {
-            const {name, description, quantity, price, vouchers, categories, shops} = props.food;
-
+        if (props.food.name) {
+            console.log(props.food)
+            const {name, description, quantity, price, voucher, categories, shops} = props.food;
             formik.setValues({
                 name: name || '',
                 description: description || '',
                 quantity: quantity || 0,
                 price: price || 0,
-                voucher: vouchers?.length > 0 ? vouchers[0].id : '',
+                voucher: voucher.id,
             });
 
             if (categories) {
@@ -339,7 +335,7 @@ export default function FormUpdate(props) {
                             <select
                                 name="voucher"
                                 onChange={formik.handleChange}
-                                value={formik.values.voucher || ""}
+                                value={formik.values.voucher}
                             >
                                 <option value="">Chọn mã giảm giá</option>
                                 {voucher.map((item, index) => (
