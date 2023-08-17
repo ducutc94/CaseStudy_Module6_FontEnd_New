@@ -4,9 +4,11 @@ import Swal from "sweetalert2";
 import {useDispatch, useSelector} from "react-redux";
 import {addCart, deleteAll, deleteItem, setCart, setStatus} from "../features/cart/cartSlice";
 import formik, {useFormik} from "formik";
+import React from 'react';
 
 export default function ProductsCarts() {
     const [productCart, setProductCart] = useState([JSON.parse(localStorage.getItem("cart"))]);
+    const [abcArray, setAbcArray] = useState([]);
     const carts = useSelector(state => state.cart)
     const dispatch = useDispatch();
     const idCart = JSON.parse(localStorage.getItem("idCart"));
@@ -15,6 +17,7 @@ export default function ProductsCarts() {
         setProductCart(carts);
         dispatch(setCart())
     }, [])
+
 
     const formik = useFormik({
         initialValues: {
@@ -56,118 +59,122 @@ export default function ProductsCarts() {
         },
     })
 
+    const groupedItems = {};
+// Nhóm các món hàng dựa trên tên cửa hàng
+    carts.items.forEach(item => {
+        const shopName = item.food.shops.name;
+        if (!groupedItems[shopName]) {
+            groupedItems[shopName] = [];
+        }
+        groupedItems[shopName].push(item);
+    });
     return (
         <>
-            <form onSubmit={formik.handleSubmit}>
-                <div>
-                    <div className="title-form-container">
-                        <h1 className="title-form">Quản lý giỏ hàng</h1>
-                    </div>
-                    <div>
-                        <div><span className={"btn-white"}>
-                        <b>GIỎ HÀNG</b>
-                    </span></div>
-                    </div>
+            <div className="grid">
+                <div className="grid__row app__content">
+                    <div className="grid__column-12 mgBT">
 
-                    <table className={"table table_shop_list"}>
-                        <thead>
-                        <tr>
-
-                            <td className="table_shop_list-header">
-                                <h5 className="table_shop_list-title">
-                                    STT
-                                </h5></td>
-                            <td className="table_shop_list-header">
-                                <h5 className="table_shop_list-title">
-                                    ẢNH
-                                </h5></td>
-                            <td>
-                                <h5 className="table_shop_list-title">
-                                    TÊN
-                                </h5></td>
-                            <td>
-                                <h5 className="table_shop_list-title">
-                                    GIÁ TIỀN
-
-                                </h5></td>
-                            <td>
-                                <h5 className="table_shop_list-title">
-                                    SỐ LƯỢNG
-                                </h5></td>
-                            <td>
-                                <h5 className="table_shop_list-title">
-                                    TỔNG TIỀN
-                                </h5></td>
-                            <td>
-                                <h5 className="table_shop_list-title">
-                                </h5></td>
-                            <td></td>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                                {carts.items.map((item, index) =>
-                                    <tr key={index}>
-
-                                        <td className="table_shop_list-inner">{index + 1}</td>
-                                        <td className="table_shop_list-inner"><img src={item.food.image} alt=""
-                                                                                   className="header__Cart-img"/></td>
-                                        <td className="table_shop_list-inner">{item.food.name}</td>
-                                        <td className="table_shop_list-inner">
-                                        <span style={{marginLeft: `5px`}}>
+                                <div className="view_category">
+                                    {Object.keys(groupedItems).map(shopName => (
+                                        <React.Fragment key={shopName}>
+                                    <div className="view_category_container">
+                                        <div className="view_category_container_header">
+                                            <i className="fa-solid fa-store "></i>
+                                            <span> {shopName} </span>
+                                        </div>
+                                        {groupedItems[shopName].map((item, index) => (
+                                            <div className="view_category_container_body" key={index}>
+                                                <div className="view_category_container_inner">
+                                                    <div className="view_category_item-top"></div>
+                                                    <div className="view_category_item">
+                                                        <div className="view_category_item-1">
+                                                            <i className="fa-solid fa-cookie-bite"></i>
+                                                            <i className="fa-solid fa-beer-mug-empty"></i>
+                                                            <i className="fa-solid fa-burger"></i>
+                                                        </div>
+                                                        <div className="view_category_item-2">
+                                                            <div className="view_category_item-21">
+                                                                <div className="view_category_item-21-img">
+                                                                    <img src={item.food.image}/>
+                                                                </div>
+                                                                <div className="view_category_item-21-about">
+                                                    <span className="view_category_item-21-name">
+                                                        {item.food.name}
+                                                    </span>
+                                                                    <div className="view_category_item-21-category">
+                                                                        <span className="view_category_item-21-category-voucher">Voucher: </span>
+                                                                        <span className="view_category_item-21-category-percent">{item.food.voucher.name}</span>
+                                                                    </div>
+                                                                    <div className="view_category_item-21-img1">
+                                                                        <img src="../static/img/category.jpg"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="view_category_item-3"></div>
+                                                        <div className="view_category_item-4">
+                                                            <span className="view_category_item-41">Đơn giá</span>
+                                                            <span className="view_category_item-42">
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
                                                         }).format(item.food.price)}
                                                     </span>
-                                        </td>
-                                        <td className="table_shop_list-inner">{item.quantity}</td>
-                                        <td className="table_shop_list-inner">
-                                        <span style={{marginLeft: `5px`}}>
-                                                        {new Intl.NumberFormat('vi-VN', {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        }).format(item.money)}
+                                                        </div>
+                                                        <div className="view_category_item-4">
+                                                            <span className="view_category_item-41">Số lượng </span>
+                                                            <span
+                                                                className="view_category_item-42"> {item.quantity} </span>
+                                                        </div>
+                                                        <div className="view_category_item-4">
+                                                            <span className="view_category_item-41">Số tiền </span>
+                                                            <span className="view_category_item-42">
+                                                         {new Intl.NumberFormat('vi-VN', {
+                                                             style: 'currency',
+                                                             currency: 'VND'
+                                                         }).format(item.money)}
                                                     </span>
-                                        </td>
-                                        <td className="table_shop_list-inner">
-                                            <button type={"button"} onClick={() => dispatch(deleteItem({
-                                                index: index,
-                                                food: item
-                                            }))}>
-                                                <i className="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
-                                        <td className="table_shop_list-inner">
-                                        </td>
-                                    </tr>
-                                )}
+                                                        </div>
+                                                        <div className="view_category_item-4">
+                                                            <span className="view_category_item-41">Thao tác </span>
+                                                            <div className="view_category_item-42">
+                                                                <button className="view_category_item-43"
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            dispatch(deleteItem({
+                                                                                index: index,
+                                                                                food: item
+                                                                            }))
+                                                                        }>
+                                                                    <i className="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                        </React.Fragment>
+                                    ))}
+                                </div>
 
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                            <span style={{marginLeft: `5px`}}> Tổng tiền: &nbsp;
-                                {new Intl.NumberFormat('vi-VN', {
-                                    style: 'currency',
-                                    currency: 'VND'
-                                }).format(carts.totalMoney)}
-                                                    </span>
-                            </td>
-                                <td>
-                                    <button type={"submit"} className="btn-orange">Thanh toán</button>
-                                </td>
-
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                        <form onSubmit={formik.handleSubmit}>
+                            <div className="view_category_container_inner-btn">
+                                <span className="view_category_totalMoney"> Tổng tiền : &nbsp;
+                                    {new Intl.NumberFormat('vi-VN', {
+                                        style: 'currency',
+                                        currency: 'VND'
+                                    }).format(carts.totalMoney)}
+                                </span>
+                                <button className="btn-orange" type={"submit"}> Thanh toán</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
+            </div>
         </>
     )
+
 
 }

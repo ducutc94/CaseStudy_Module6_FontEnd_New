@@ -20,7 +20,7 @@ export const cartSlice = createSlice({
                 const newItem = {
                     food: foodBuy,
                     quantity: quantity,
-                    money: quantity * foodBuy.price
+                    money: (quantity * foodBuy.price)-(quantity * foodBuy.price*(foodBuy.voucher.percent/100))
                 };
                 console.log(foodBuy.quantity)
                 const updatedItems = [...state.items, newItem];
