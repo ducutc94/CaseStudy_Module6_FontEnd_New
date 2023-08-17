@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { Line } from "react-chartjs-2";
+import {Line} from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -28,6 +28,7 @@ export default function Chartjs() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user.id;
     const [bill, setBill] = useState([]);
+    const [displayType, setDisplayType] = useState("day"); // Đặt giá trị mặc định là "day"
 
     useEffect(() => {
         axios
@@ -38,10 +39,22 @@ export default function Chartjs() {
             });
     }, [userId]);
 
-    // Gộp ngày và tính tổng tiền theo ngày
+    const handleDisplayTypeChange = (type) => {
+        setDisplayType(type);
+    };
+
+    // Gộp ngày và tính tổng tiền theo ngày/tháng/năm
     const dateTotals = {};
     bill.forEach((item) => {
-        const date = item.localDateTime.split("T")[0]; // Lấy phần ngày
+        let date = "";
+        if (displayType === "day") {
+            date = item.localDateTime.split("T")[0];
+        } else if (displayType === "month") {
+            date = item.localDateTime.split("-").slice(0, 2).join("-");
+        } else if (displayType === "year") {
+            date = item.localDateTime.split("-")[0];
+        }
+
         if (!dateTotals[date]) {
             dateTotals[date] = 0;
         }
@@ -57,18 +70,39 @@ export default function Chartjs() {
             {
                 label: "Tổng doanh thu",
                 data: totalAmounts,
-                pointBackgroundColor: "rgba(75, 192, 192, 1)", // Màu nền điểm
-                pointBorderColor: "rgba(75, 192, 192, 1)", // Màu viền điểm
-                borderColor: "rgba(255, 0, 0, 1)", // Màu đỏ đậm cho đường viền
-                borderWidth: 2, // Độ dày đường viền
+                pointBackgroundColor: "rgba(75, 192, 192, 1)",
+                pointBorderColor: "rgba(75, 192, 192, 1)",
+                borderColor: "rgba(255, 0, 0, 1)",
+                borderWidth: 2,
             },
         ],
     };
 
     return (
         <div>
-            <h1>Biểu đồ tổng tiền từng ngày</h1>
-            <Line data={chartData} />
+            <div className={`row`} style={{marginTop: "50px", marginBottom: "20px"}}>
+                <div className={`col-md-8`}>
+                    <p>THỐNG KÊ</p>
+                </div>
+                <div className={`col-md-4`}>
+                    <div className="d-flex statistical">
+                        <div className="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" className="btn btn-secondary btn-danger"
+                                    onClick={() => handleDisplayTypeChange("day")}>Ngày
+                            </button>
+                            <button type="button" className="btn btn-secondary btn-danger false"
+                                    onClick={() => handleDisplayTypeChange("month")}>Tháng
+                            </button>
+                            <button type="button" className="btn btn-secondary  btn-danger false"
+                                    onClick={() => handleDisplayTypeChange("year")}>Năm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <Line data={chartData}/>
         </div>
     );
 }
