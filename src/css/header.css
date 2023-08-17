@@ -289,6 +289,24 @@
     height: 32vh;
     overflow-y: auto;
 }
+.header__Cart-list-item::-webkit-scrollbar {
+    width: 8px; /* Độ rộng của thanh cuộn */
+}
+
+.header__Cart-list-item::-webkit-scrollbar-thumb {
+    background-color: #888; /* Màu nền của thanh cuộn */
+    border-radius: 4px;
+}
+
+.header__Cart-list-item::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Màu nền của thanh cuộn khi di chuột qua */
+}
+
+.header__Cart-list-item::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* Màu nền của phần dưới thanh cuộn */
+    border-radius: 4px;
+}
+
 .header__Cart-item {
     display: flex;
     align-items: center;

@@ -2,30 +2,35 @@
     margin-top: 5px;
     margin-bottom: 100px;
 }
+
 .view_category{
     max-height: 600px;
     overflow: scroll;
     scrollbar-width: none;
 }
 .view_category::-webkit-scrollbar {
-    width: 0; /* Chiều rộng của thanh cuộn */
+    width: 0; /* Độ rộng của thanh cuộn */
 }
 
 .view_category::-webkit-scrollbar-thumb {
-    background-color: transparent; /* Màu của thanh cuộn */
-    border-radius: 5px; /* Bo tròn các góc của thanh cuộn */
+    background-color: transparent; /* Màu nền của thanh cuộn */
+    border-radius: 4px;
+}
+
+.view_category::-webkit-scrollbar-thumb:hover {
+    background-color: transparent; /* Màu nền của thanh cuộn khi di chuột qua */
 }
 
 .view_category::-webkit-scrollbar-track {
-    background-color:transparent /* Màu nền của vùng track */
+    background-color: transparent; /* Màu nền của phần dưới thanh cuộn */
+    border-radius: 4px;
 }
-
 
 
 .view_category_container{
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
     border-radius: 0.125rem;
-    overflow: hidden;
+    /*overflow: hidden;*/
     background: #fff;
     overflow: visible;
     padding-top: 15px ;
@@ -72,7 +77,6 @@
 .view_category_item-1 > i{
     padding: 6px;
     font-size: 20px;
-
 }
 
 
@@ -108,7 +112,6 @@
 .view_category_item-1 > i:nth-child(1) {
     animation: colorTransition 3.9s infinite;
 }
-
 
 
 
@@ -243,10 +246,59 @@
     }
 }
 
-.btn-orange {
+.view_category_item-43 {
     transition: transform 0.6s linear; /* Thêm hiệu ứng chuyển đổi mượt mà */
 }
 
-.btn-orange:hover {
+.view_category_item-43:hover {
     animation: buttonShake 1s infinite;
+}
+
+/*chưa có gì trong cart*/
+.view_category-NoItem{
+    display: flex;
+    justify-content: center;
+    margin: 36px;
+}
+@keyframes fade {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.view_category-NoItem-container {
+    animation: fade 2.5s infinite;
+}
+.view_category-NoItem-container{
+    max-height: 393px;
+}
+
+
+
+/*----------------------Lịch sử mua hàng ở đây---------------------------*/
+.mrTop{
+    margin-top: 15px;
+}
+.view_category-NoItem-container-p{
+    position: relative;
+    font-size: 42px;
+    font-weight: 800;
+    color: #fbe74a;
+    text-align: center;
+    font-family: ui-rounded;
+    top: -62px;
+}
+.view_category-NoItem-container-h{
+    position: relative;
+    font-size: 42px;
+    font-weight: 800;
+    color: #fbe74a;
+    text-align: center;
+    font-family: ui-rounded;
 }

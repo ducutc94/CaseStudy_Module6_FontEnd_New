@@ -73,104 +73,115 @@ export default function ProductsCarts() {
             <div className="grid">
                 <div className="grid__row app__content">
                     <div className="grid__column-12 mgBT">
-
+                        {carts.items != "" ? (
+                            <>
                                 <div className="view_category">
                                     {Object.keys(groupedItems).map(shopName => (
                                         <React.Fragment key={shopName}>
-                                    <div className="view_category_container">
-                                        <div className="view_category_container_header">
-                                            <i className="fa-solid fa-store "></i>
-                                            <span> {shopName} </span>
-                                        </div>
-                                        {groupedItems[shopName].map((item, index) => (
-                                            <div className="view_category_container_body" key={index}>
-                                                <div className="view_category_container_inner">
-                                                    <div className="view_category_item-top"></div>
-                                                    <div className="view_category_item">
-                                                        <div className="view_category_item-1">
-                                                            <i className="fa-solid fa-cookie-bite"></i>
-                                                            <i className="fa-solid fa-beer-mug-empty"></i>
-                                                            <i className="fa-solid fa-burger"></i>
-                                                        </div>
-                                                        <div className="view_category_item-2">
-                                                            <div className="view_category_item-21">
-                                                                <div className="view_category_item-21-img">
-                                                                    <img src={item.food.image}/>
+                                            <div className="view_category_container">
+                                                <div className="view_category_container_header">
+                                                    <i className="fa-solid fa-store "></i>
+                                                    <span> {shopName} </span>
+                                                </div>
+                                                {groupedItems[shopName].map((item, index) => (
+                                                    <div className="view_category_container_body" key={index}>
+                                                        <div className="view_category_container_inner">
+                                                            <div className="view_category_item-top"></div>
+                                                            <div className="view_category_item">
+                                                                <div className="view_category_item-1">
+                                                                    <i className="fa-solid fa-cookie-bite"></i>
+                                                                    <i className="fa-solid fa-beer-mug-empty"></i>
+                                                                    <i className="fa-solid fa-burger"></i>
                                                                 </div>
-                                                                <div className="view_category_item-21-about">
+                                                                <div className="view_category_item-2">
+                                                                    <div className="view_category_item-21">
+                                                                        <div className="view_category_item-21-img">
+                                                                            <img src={item.food.image}/>
+                                                                        </div>
+                                                                        <div className="view_category_item-21-about">
                                                     <span className="view_category_item-21-name">
                                                         {item.food.name}
                                                     </span>
-                                                                    <div className="view_category_item-21-category">
-                                                                        <span className="view_category_item-21-category-voucher">Voucher: </span>
-                                                                        <span className="view_category_item-21-category-percent">{item.food.voucher.name}</span>
-                                                                    </div>
-                                                                    <div className="view_category_item-21-img1">
-                                                                        <img src="../static/img/category.jpg"/>
+                                                                            <div className="view_category_item-21-category">
+                                                                        <span
+                                                                            className="view_category_item-21-category-voucher">Voucher: </span>
+                                                                                <span
+                                                                                    className="view_category_item-21-category-percent">{item.food.voucher.name}</span>
+                                                                            </div>
+                                                                            <div className="view_category_item-21-img1">
+                                                                                <img src="../static/img/category.jpg"/>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="view_category_item-3"></div>
-                                                        <div className="view_category_item-4">
-                                                            <span className="view_category_item-41">Đơn giá</span>
-                                                            <span className="view_category_item-42">
+                                                                <div className="view_category_item-3"></div>
+                                                                <div className="view_category_item-4">
+                                                                    <span className="view_category_item-41">Đơn giá</span>
+                                                                    <span className="view_category_item-42">
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
                                                         }).format(item.food.price)}
                                                     </span>
-                                                        </div>
-                                                        <div className="view_category_item-4">
-                                                            <span className="view_category_item-41">Số lượng </span>
-                                                            <span
-                                                                className="view_category_item-42"> {item.quantity} </span>
-                                                        </div>
-                                                        <div className="view_category_item-4">
-                                                            <span className="view_category_item-41">Số tiền </span>
-                                                            <span className="view_category_item-42">
+                                                                </div>
+                                                                <div className="view_category_item-4">
+                                                                    <span className="view_category_item-41">Số lượng </span>
+                                                                    <span
+                                                                        className="view_category_item-42"> {item.quantity} </span>
+                                                                </div>
+                                                                <div className="view_category_item-4">
+                                                                    <span className="view_category_item-41">Số tiền </span>
+                                                                    <span className="view_category_item-42">
                                                          {new Intl.NumberFormat('vi-VN', {
                                                              style: 'currency',
                                                              currency: 'VND'
                                                          }).format(item.money)}
                                                     </span>
-                                                        </div>
-                                                        <div className="view_category_item-4">
-                                                            <span className="view_category_item-41">Thao tác </span>
-                                                            <div className="view_category_item-42">
-                                                                <button className="view_category_item-43"
-                                                                        title="xóa sản phẩm"
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            dispatch(deleteItem({
-                                                                                index: index,
-                                                                                food: item
-                                                                            }))
-                                                                        }>
-                                                                    <i className="fa-solid fa-trash"></i>
-                                                                </button>
+                                                                </div>
+                                                                <div className="view_category_item-4">
+                                                                    <span className="view_category_item-41">Thao tác </span>
+                                                                    <div className="view_category_item-42">
+                                                                        <button className="view_category_item-43"
+                                                                                title="xóa sản phẩm"
+                                                                                type="button"
+                                                                                onClick={() =>
+                                                                                    dispatch(deleteItem({
+                                                                                        index: index,
+                                                                                        food: item
+                                                                                    }))
+                                                                                }>
+                                                                            <i className="fa-solid fa-trash"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
                                         </React.Fragment>
                                     ))}
                                 </div>
-
-                        <form onSubmit={formik.handleSubmit}>
-                            <div className="view_category_container_inner-btn">
+                                <form onSubmit={formik.handleSubmit}>
+                                    <div className="view_category_container_inner-btn">
                                 <span className="view_category_totalMoney"> Tổng tiền : &nbsp;
                                     {new Intl.NumberFormat('vi-VN', {
                                         style: 'currency',
                                         currency: 'VND'
                                     }).format(carts.totalMoney)}
                                 </span>
-                                <button className="btn-orange" type={"submit"}> Thanh toán</button>
+                                        <button className="btn-orange" type={"submit"}> Thanh toán</button>
+                                    </div>
+                                </form>
+                            </>
+                        ) : (
+                                <div className="view_category-NoItem">
+                                <div className="view_category-NoItem-container">
+                                    <img src="../static/img/empty-cart.png"/>
+                                    <p className="view_category-NoItem-container-p"> Giỏ hàng trống </p>
+                                </div>
                             </div>
-                        </form>
+                        )}
                     </div>
                 </div>
             </div>
