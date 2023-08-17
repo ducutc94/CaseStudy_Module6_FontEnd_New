@@ -5,8 +5,8 @@ import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import storage from "../../config/FirebaseConfig";
 
+
 export default function UserProfile() {
-    const [list, setList] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
     const idUser = user.id;
 
@@ -60,18 +60,37 @@ export default function UserProfile() {
                 },
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            axios.put(`http://localhost:8080/api/users/upload-img/${idUser}`, downloadURL)
+                        const imageDTO = {img: downloadURL};
+                        user.image = downloadURL;
+                        localStorage.setItem("user", JSON.stringify(user));
+
+                        Swal.fire({
+                            title: 'Đang tạo sản phẩm...',
+                            html: 'Vui lòng đợi trong giây lát...',
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+
+                                // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                                const timeout = 2500; // 5 giây
+                                setTimeout(() => {
+                                    Swal.close();
+                                }, timeout);
+                            }
+                        }).then((result) => {
+                            axios.put(`http://localhost:8080/api/users/upload-img/${idUser}`, imageDTO)
                                 .then(res => {
-                                    console.log(res.data)
-                                    localStorage.setItem("user", JSON.stringify(res.data));
+                                    Swal.fire("Cập nhật ảnh thành công!", "", "success");
                                     window.location.reload();
                                 });
+                        })
+
                         }
                     );
                 })
         }
     }
-
 
     return (
         <>
@@ -84,7 +103,7 @@ export default function UserProfile() {
                                     <div className="home-user-left-header">
                                         <div className="home-user-left-header-container">
                                             <div className="home-user-left-header-item-avatar">
-                                                <img src="../static/img/userDF.jpg"/>
+                                                <img src={user.image}/>
                                             </div>
                                             <div className="home-user-left-header-item-name">
                                                 <span className="home-user-left-header-item-name-text">ThaiNguyen</span>
@@ -135,11 +154,10 @@ export default function UserProfile() {
                                     <div className="home-user-right-content">
                                         <div className="home-user-right-content-info">
                                             <div className="home-user-title-user">Tải ảnh đại diện</div>
-                                            <form onSubmit={formik.handleSubmit}>
                                                 <div className="home-user">
                                                     <div className="grid__column-3">
                                                         <div className="home-user-avatar-image">
-                                                            <img src="../static/img/userDF.jpg"/>
+                                                            <img src={user.image}/>
                                                         </div>
                                                     </div>
                                                     <div className="grid__column-9">
@@ -154,17 +172,11 @@ export default function UserProfile() {
                                                                        htmlFor="uploadAvatar">Chọn</label>
                                                                 <span style={{fontStyle: `italic`}}>Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB </span>
                                                             </div>
-                                                            {/*<div className="mb-3">*/}
-                                                            {/*    <label htmlFor="image" className="form-label">Image</label>*/}
-                                                            {/*    <input type="file" className="form-control" id="image"*/}
-                                                            {/*           onChange={(e) => uploadFile(e)}/>*/}
-                                                            {/*</div>*/}
                                                         </div>
-                                                        <button onClick={uploadImage} className="btn-orange">Cập nhật
+                                                        <button  onClick={uploadImage} className="btn-orange">Cập nhật
                                                         </button>
                                                     </div>
                                                 </div>
-                                            </form>
                                         </div>
                                         <div className="home-user-right-content-info">
                                             <form onSubmit={formik.handleSubmit}>
@@ -182,8 +194,6 @@ export default function UserProfile() {
                                                                    name={'username'}
                                                                    onBlur={formik.handleBlur}
                                                                    className=""/>
-                                                            {/*{formik.touched.username && formik.errors.username ?*/}
-                                                            {/*    (<span className={"text-danger"}>{formik.errors.username}</span>) : null}*/}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -194,11 +204,12 @@ export default function UserProfile() {
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
                                                             <select name={"gender"}
-                                                                    onChange={formik.handleChange}>
+                                                                    onChange={formik.handleChange}
+                                                                    value={formik.values.gender}>
                                                                 <option>Chọn giới tính</option>
-                                                                <option value={formik.values.gender}>Nam</option>
-                                                                <option value={formik.values.gender}>Nữ</option>
-                                                                <option value={formik.values.gender}>Khác</option>
+                                                                <option >Nam</option>
+                                                                <option >Nữ</option>
+                                                                <option >Khác</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -216,8 +227,6 @@ export default function UserProfile() {
                                                                    id={'email'}
                                                                    onBlur={formik.handleBlur}
                                                             />
-                                                            {/*{formik.touched.email && formik.errors.email ?*/}
-                                                            {/*    (<span className={"text-danger"}>{formik.errors.email}</span>) : null}*/}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -236,7 +245,7 @@ export default function UserProfile() {
                                                     </div>
                                                 </div>
                                                 <div className="grid__column-3">
-                                                    <button className="btn-orange">Lưu thay đổi</button>
+                                                    <button  className="btn-orange">Lưu thay đổi</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -262,7 +271,7 @@ export default function UserProfile() {
                                                             </div>
                                                         </div>
                                                         <div className="grid__column-3">
-                                                            <button className="btn-orange">Lưu thay đổi</button>
+                                                            <button  className="btn-orange">Lưu thay đổi</button>
                                                         </div>
                                                     </div>
                                                 </div>
