@@ -1,7 +1,79 @@
-export default function UserProfile(){
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {useFormik} from "formik";
+import Swal from "sweetalert2";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import storage from "../../config/FirebaseConfig";
+
+export default function UserProfile() {
+    const [list, setList] = useState([]);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const idUser = user.id;
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/users/${idUser}`).then((res) => {
+            let data = {...res.data};
+            formik.setValues(data);
+        });
+    }, [idUser]);
+
+    const formik = useFormik({
+        initialValues: {
+            username: "",
+            email: "",
+            gender: "",
+            birthday: "",
+            image: "",
+            phone: "",
+        },
+        onSubmit: async (values) => {
+            try {
+                Swal.fire({
+                    title: "Bạn có muốn cập nhật ?",
+                    showDenyButton: true,
+                    confirmButtonText: "Lưu",
+                    denyButtonText: `Hủy`,
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        await axios.put(`http://localhost:8080/api/users/${idUser}`, values);
+                        await Swal.fire("Cập nhật thành công!", "", "success");
+                    } else if (result.isDenied) {
+                        await Swal.fire("Cập nhật thất bại", "", "info");
+                    }
+                });
+            } catch (error) {
+                console.error("Error submitting form:", error);
+            }
+        },
+    });
+
+    async function uploadImage() {
+        const file = document.getElementById("uploadAvatar").files[0];
+        if (file) {
+            const storageRef = ref(storage, `files/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            uploadTask.on("state_changed",
+                () => {
+                },
+                (error) => {
+                    alert(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            axios.put(`http://localhost:8080/api/users/upload-img/${idUser}`, downloadURL)
+                                .then(res => {
+                                    console.log(res.data)
+                                    localStorage.setItem("user", JSON.stringify(res.data));
+                                    window.location.reload();
+                                });
+                        }
+                    );
+                })
+        }
+    }
 
 
-    return(
+    return (
         <>
             <div className="grid">
                 <div className="grid__row app__content">
@@ -12,7 +84,7 @@ export default function UserProfile(){
                                     <div className="home-user-left-header">
                                         <div className="home-user-left-header-container">
                                             <div className="home-user-left-header-item-avatar">
-                                                <img src="../static/img/userDF.jpg" />
+                                                <img src="../static/img/userDF.jpg"/>
                                             </div>
                                             <div className="home-user-left-header-item-name">
                                                 <span className="home-user-left-header-item-name-text">ThaiNguyen</span>
@@ -63,29 +135,39 @@ export default function UserProfile(){
                                     <div className="home-user-right-content">
                                         <div className="home-user-right-content-info">
                                             <div className="home-user-title-user">Tải ảnh đại diện</div>
-                                            <div className="home-user">
-                                                <div className="grid__column-3">
-                                                    <div className="home-user-avatar-image">
-                                                        <img src="../static/img/userDF.jpg" />
+                                            <form onSubmit={formik.handleSubmit}>
+                                                <div className="home-user">
+                                                    <div className="grid__column-3">
+                                                        <div className="home-user-avatar-image">
+                                                            <img src="../static/img/userDF.jpg"/>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="grid__column-9">
-                                                    <div className="home-user-avatar-form">
-                                                        <span>Tải lên từ</span>
-                                                        <div className="home-user-file-image">
-                                                            <input id="uploadAvatar" type="file" hidden required
-                                                                   accept="image/*" />
+                                                    <div className="grid__column-9">
+                                                        <div className="home-user-avatar-form">
+                                                            <span>Tải lên từ</span>
+                                                            <div className="home-user-file-image">
+                                                                <input id="uploadAvatar" type="file" hidden required
+                                                                       name={'image'}
+                                                                       accept="image/*"
+                                                                />
                                                                 <label className="label-custom"
                                                                        htmlFor="uploadAvatar">Chọn</label>
                                                                 <span style={{fontStyle: `italic`}}>Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB </span>
+                                                            </div>
+                                                            {/*<div className="mb-3">*/}
+                                                            {/*    <label htmlFor="image" className="form-label">Image</label>*/}
+                                                            {/*    <input type="file" className="form-control" id="image"*/}
+                                                            {/*           onChange={(e) => uploadFile(e)}/>*/}
+                                                            {/*</div>*/}
                                                         </div>
+                                                        <button onClick={uploadImage} className="btn-orange">Cập nhật
+                                                        </button>
                                                     </div>
-                                                    <button className="btn-orange">Cập nhật</button>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                         <div className="home-user-right-content-info">
-                                            <form>
+                                            <form onSubmit={formik.handleSubmit}>
                                                 <div className="home-user-title-user">Thay đổi thông tin</div>
                                                 <div className="home-user-form">
                                                     <div className="grid__column-3">
@@ -93,7 +175,15 @@ export default function UserProfile(){
                                                     </div>
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
-                                                            <input type="text" placeholder="Tên" className="" />
+                                                            <input type="text"
+                                                                   onChange={formik.handleChange}
+                                                                   value={formik.values.username}
+                                                                   id={'username'}
+                                                                   name={'username'}
+                                                                   onBlur={formik.handleBlur}
+                                                                   className=""/>
+                                                            {/*{formik.touched.username && formik.errors.username ?*/}
+                                                            {/*    (<span className={"text-danger"}>{formik.errors.username}</span>) : null}*/}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -103,7 +193,13 @@ export default function UserProfile(){
                                                     </div>
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
-                                                            <input type="text" placeholder="Giới tính" />
+                                                            <select name={"gender"}
+                                                                    onChange={formik.handleChange}>
+                                                                <option>Chọn giới tính</option>
+                                                                <option value={formik.values.gender}>Nam</option>
+                                                                <option value={formik.values.gender}>Nữ</option>
+                                                                <option value={formik.values.gender}>Khác</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -113,17 +209,29 @@ export default function UserProfile(){
                                                     </div>
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
-                                                            <input type="text" placeholder="Email" />
+                                                            <input readOnly={true} type="text"
+                                                                   name={'email'}
+                                                                   onChange={formik.handleChange}
+                                                                   value={formik.values.email}
+                                                                   id={'email'}
+                                                                   onBlur={formik.handleBlur}
+                                                            />
+                                                            {/*{formik.touched.email && formik.errors.email ?*/}
+                                                            {/*    (<span className={"text-danger"}>{formik.errors.email}</span>) : null}*/}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="home-user-form">
                                                     <div className="grid__column-3">
-                                                        <span className="home-user-form-name">Mật khẩu</span>
+                                                        <span className="home-user-form-name">Ngày sinh</span>
                                                     </div>
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
-                                                            <input type="password" placeholder="Mật khẩu" />
+                                                            <input type="date"
+                                                                   name={'birthday'}
+                                                                   onChange={formik.handleChange}
+                                                                   value={formik.values.birthday}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -132,26 +240,34 @@ export default function UserProfile(){
                                                 </div>
                                             </form>
                                         </div>
-                                        <div className="home-user-right-content-info-last">
-                                            <div className="home-user-title-user">Quản lý số điện thoại</div>
-                                            <div className="home-user-title-user-list-phone">
-                                                <div className="home-user-form">
-                                                    <div className="grid__column-3">
-                                                        <span className="home-user-form-name">0379456789</span>
-                                                    </div>
-                                                    <div className="grid__column-4">
-                                                        <div className="home-user-right-input">
-                                                            <i className="fa-solid fa-circle-check"
-                                                               style={{color: `#5bcc0f`}}></i>
-                                                            <span>Số điện thoại đã được xác thực</span>
+                                        <form onSubmit={formik.handleSubmit}>
+                                            <div className="home-user-right-content-info-last">
+                                                <div className="home-user-title-user">Quản lý số điện thoại</div>
+                                                <div className="home-user-title-user-list-phone">
+                                                    <div className="home-user-form">
+                                                        <div className="grid__column-3">
+                                                            <div className="home-user-right-input">
+                                                                <input type="number"
+                                                                       name={'phone'}
+                                                                       onChange={formik.handleChange}
+                                                                       value={formik.values.phone}
+                                                                />
+                                                            </div>
+
                                                         </div>
-                                                    </div>
-                                                    <div className="grid__column-3">
-                                                        <button className="btn-orange">Lưu thay đổi</button>
+                                                        <div className="grid__column-4">
+                                                            <div className="home-user-right-input">
+                                                                <i className="fa-solid fa-circle-check"
+                                                                   style={{color: `#5bcc0f`}}></i>
+                                                            </div>
+                                                        </div>
+                                                        <div className="grid__column-3">
+                                                            <button className="btn-orange">Lưu thay đổi</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
