@@ -130,6 +130,9 @@ export default function PCByMerchant() {
 
                         </div>
                     </div>
+                    <span className={"btn-white borderBill"}>
+                        <Link to={'/bill-chartjs'}>Tổng doanh thu</Link>
+                    </span>
                 </div>
 
                 <table className={"table table_shop_list"}>
