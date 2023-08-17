@@ -139,6 +139,7 @@ export default function ProductsCarts() {
                                                             <span className="view_category_item-41">Thao tác </span>
                                                             <div className="view_category_item-42">
                                                                 <button className="view_category_item-43"
+                                                                        title="xóa sản phẩm"
                                                                         type="button"
                                                                         onClick={() =>
                                                                             dispatch(deleteItem({

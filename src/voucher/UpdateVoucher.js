@@ -14,19 +14,26 @@ export default function UpdateVoucher(){
     const idShop = 1;
     useEffect(()=>{
         axios.get(`http://localhost:8080/api/vouchers/${id}`).then((res=>{
-           formik.setValues(res.data);
+            formik.setValues(res.data);
         }))
     },[])
-
+    const validationV = yup.object().shape({
+        name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
+            .max(500, "Độ dài tối đa 500 ký tự")
+            .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
+            .required("Không để trống"),
+        percent: yup.number().min(0, "Không nhập số âm")
+            .max(99, "Giảm giá tối đa 99%")
+            .required("Không để trống")
+    })
 
     const formik = useFormik({
         initialValues: {
             name:"",
             percent:"",
-            quantity:"",
             shops : "",
         },
-
+        validationSchema:validationV,
         onSubmit: values => {
             Swal.fire({
                 title: 'Bạn có muốn sửa voucher?',
@@ -39,7 +46,6 @@ export default function UpdateVoucher(){
                     axios.put(`http://localhost:8080/api/vouchers/${id}`,{
                         name:values.name,
                         percent:values.percent,
-                        quantity:values.quantity,
                         shops:[
                             {
                                 id:idShop
@@ -73,7 +79,7 @@ export default function UpdateVoucher(){
                                    id={'name'}
                                    value={formik.values.name}
                                    onBlur={formik.handleBlur}
-                                   placeholder={'Nhập Tên Voucher'}/>
+                            />
                             {formik.touched.name && formik.errors.name ? (<span className={"text-danger"}>{formik.errors.name}</span>) : null}
                         </div>
                         <div className="mb-3">
@@ -84,22 +90,9 @@ export default function UpdateVoucher(){
                                    id={'percent'}
                                    onBlur={formik.handleBlur}
                                    value={formik.values.percent}
-                                   placeholder={'ví dụ: 10%'}/>
+                            />
                             {formik.touched.percent && formik.errors.percent ? (<span className={"text-danger"}>{formik.errors.percent}</span>) : null}
                         </div>
-
-                        <div className="mb-3">
-                            <label htmlFor={'quantity'} className={'form-label'}>Số lượng</label>
-                            <input onChange={formik.handleChange}
-                                   name={'quantity'}
-                                   type={'number'} className={'form-control'}
-                                   id={'quantity'}
-                                   onBlur={formik.handleBlur}
-                                   value={formik.values.quantity}
-                                   placeholder={'1,2,3.....'}/>
-                            {formik.touched.quantity && formik.errors.quantity ? (<span className={"text-danger"}>{formik.errors.quantity}</span>) : null}
-                        </div>
-
                         <div className="mb-3">
                             <div style={{float: 'right'}}>
                                 <button className={'btn btn-primary'} type={"submit"}>
