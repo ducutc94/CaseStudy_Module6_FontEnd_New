@@ -49,13 +49,13 @@
     padding: 16px 0;
 }
 .view_category_container_inner{
-    border: 1px solid rgb(255 243 237);
+    border: 1px solid rgb(244 203 190);
     margin: 10px 20px 20px;
 }
 .view_category_item-top{
     height: 30px;
     width: auto;
-    background-color: rgb(255 243 237);
+    background-color: rgb(244 203 190);
     margin: 0 0 20px;
 }
 .view_category_item{
@@ -74,13 +74,45 @@
     font-size: 20px;
 
 }
-.view_category_item-1 > i:nth-child(1){
-  color: #0022ff;
-}.view_category_item-1 > i:nth-child(2){
-  color: #0dea2a;
-}.view_category_item-1 > i:nth-child(3){
-  color: #ff0000;
+
+
+
+@keyframes colorTransition {
+    0% {
+        color: #223088;
+    }
+    20% {
+        color: rgba(227, 185, 15, 0.8);
+    }
+    40% {
+        color: #ea0ddf;
+    }
+    60% {
+        color: rgb(255, 0, 0);
+    }
+    80% {
+        color: rgb(151, 151, 206);
+    }
+    100% {
+        color: #00ff8c;
+    }
+
 }
+
+.view_category_item-1 > i:nth-child(3) {
+    animation: colorTransition 3.3s infinite;
+}
+.view_category_item-1 > i:nth-child(2) {
+    animation: colorTransition 3.6s infinite;
+}
+.view_category_item-1 > i:nth-child(1) {
+    animation: colorTransition 3.9s infinite;
+}
+
+
+
+
+
 
 .view_category_item-2{
 
@@ -136,7 +168,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 18%;
+    width: 25%;
 }
 
 .view_category_item-4{
@@ -151,7 +183,7 @@
 }
 
 .view_category_item-42{
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     text-decoration: none;
     color: rgba(0,0,0,.87);
@@ -162,16 +194,19 @@
 }
 .view_category_item-43{
    border: none;
-    color: #ff0000;
+    color: #720b0b;
     cursor: pointer;
     padding: 0 10px;
     background-color: transparent;
+    font-size: 18px;
 }
-
+.view_category_item-43:hover{
+    color: #ff0000;
+}
 .view_category_container_inner-btn{
     display: flex;
     justify-content: end;
-    border-top: 1px solid rgb(255 243 237);
+    border-top: 1px solid rgba(0,0,0,.09);
     position: relative;
     top: -20px;
     background-color: white;
@@ -188,4 +223,30 @@
     align-items: center;
     position: relative;
     margin-right: 120px;
+}
+
+@keyframes buttonShake {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-1.5px);
+    }
+    50% {
+        transform: translateX(1.5px);
+    }
+    75% {
+        transform: translateX(-1.5px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.btn-orange {
+    transition: transform 0.6s linear; /* Thêm hiệu ứng chuyển đổi mượt mà */
+}
+
+.btn-orange:hover {
+    animation: buttonShake 1s infinite;
 }
