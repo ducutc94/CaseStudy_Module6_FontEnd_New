@@ -136,21 +136,6 @@ export default function FormCreate(props) {
                 id: props.idShop
             };
             data.id = props.food.id;
-            Swal.fire({
-                title: 'Đang tạo sản phẩm...',
-                html: 'Vui lòng đợi trong giây lát...',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-
-                    // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
-                    const timeout = 2500; // 5 giây
-                    setTimeout(() => {
-                        Swal.close();
-                    }, timeout);
-                }
-            }).then((result) => {
                 Swal.fire({
                     title: 'Bạn có muốn thêm sản phẩm mới?',
                     showDenyButton: true,
@@ -159,11 +144,26 @@ export default function FormCreate(props) {
                     denyButtonText: `Hủy`,
                 }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
-
                     if (result.isConfirmed) {
                         axios.post(`http://localhost:8080/api/products`, data).then((res) => {
-                            Swal.fire('Thêm thành công!', '', 'success');
-                            navigate('/');
+                            Swal.fire({
+                                title: 'Đang tạo sản phẩm...',
+                                html: 'Vui lòng đợi trong giây lát...',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+
+                                    // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                                    const timeout = 2500; // 5 giây
+                                    setTimeout(() => {
+                                        Swal.close();
+                                    }, timeout);
+                                }
+                            }).then((result) => {
+                                Swal.fire('Thêm thành công!', '', 'success');
+                                navigate('/');
+                            })
                         }).catch(err => console.log(err));
                     } else if (result.isDenied) {
                         Swal.fire('Thêm thất bại', '', 'info');
@@ -171,7 +171,7 @@ export default function FormCreate(props) {
                 }).catch(err => {
                     console.log(err.message);
                 });
-            });
+
         },
         validationSchema: validation,
 

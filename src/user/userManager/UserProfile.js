@@ -72,8 +72,8 @@ export default function UserProfile() {
                             didOpen: () => {
                                 Swal.showLoading();
 
-                                // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
-                                const timeout = 2500; // 5 giây
+                                // Đợi 2,5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                                const timeout = 2500; // 2,5 giây
                                 setTimeout(() => {
                                     Swal.close();
                                 }, timeout);
@@ -106,7 +106,9 @@ export default function UserProfile() {
                                                 <img src={user.image}/>
                                             </div>
                                             <div className="home-user-left-header-item-name">
-                                                <span className="home-user-left-header-item-name-text">ThaiNguyen</span>
+                                                <span className="home-user-left-header-item-name-text">
+                                                    {user.name}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -152,6 +154,12 @@ export default function UserProfile() {
                                         Thông tin người dùng
                                     </div>
                                     <div className="home-user-right-content">
+                                        <div className="home-user-right-content-info-upContainer">
+                                            <div className="home-user-right-content-info-up" >
+                                                <span>Nâng cấp tài khoản</span>
+                                                <i className="fa-solid fa-cloud-arrow-up"></i>
+                                            </div>
+                                        </div>
                                         <div className="home-user-right-content-info">
                                             <div className="home-user-title-user">Tải ảnh đại diện</div>
                                                 <div className="home-user">
@@ -255,7 +263,7 @@ export default function UserProfile() {
                                                 <div className="home-user-title-user-list-phone">
                                                     <div className="home-user-form">
                                                         <div className="grid__column-3">
-                                                            <div className="home-user-right-input">
+                                                            <div className="cssPhone">
                                                                 <input type="number"
                                                                        name={'phone'}
                                                                        onChange={formik.handleChange}
@@ -266,7 +274,7 @@ export default function UserProfile() {
                                                         </div>
                                                         <div className="grid__column-4">
                                                             <div className="home-user-right-input">
-                                                                <i className="fa-solid fa-circle-check"
+                                                                <i className="fa-solid fa-circle-check "
                                                                    style={{color: `#5bcc0f`}}></i>
                                                             </div>
                                                         </div>

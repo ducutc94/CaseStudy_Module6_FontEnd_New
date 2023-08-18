@@ -66,6 +66,7 @@ export default function UpdateShop() {
     }, [])
 
 
+    const [list, setList] = useState([])
     const [city, setCity] = useState([])
     useEffect(() => {
         axios.get("http://localhost:8080/api/city").then(res => {
@@ -76,14 +77,26 @@ export default function UpdateShop() {
             let data = {...res.data, city: res.data.city.id}
             formik.setValues(data);
         })
+        axios.get('http://localhost:8080/api/shops').then((res=>{
+            if(res.data !==""){
+                setList(res.data);
+            }else {
+                setList([])
+            }
+        }))
 
     }, []);
+    const checkName = (name) => {
+        return list.some((shop) => shop.name === name);
+    };
 
     const validationS = yup.object().shape({
         name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .max(500, "Độ dài tối đa 500 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
-            .required("Tên không được để trống!"),
+            .required("Tên không được để trống!").test('Tên đã tồn tại', 'Tên đã tồn tại', function (value) {
+                return !checkName(value);
+            }),
         description: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
             .required("Mô tả không được để trống!"),
