@@ -8,7 +8,6 @@ import React from 'react';
 
 export default function ProductsCarts() {
     const [productCart, setProductCart] = useState([JSON.parse(localStorage.getItem("cart"))]);
-    const [abcArray, setAbcArray] = useState([]);
     const carts = useSelector(state => state.cart)
     const dispatch = useDispatch();
     const idCart = JSON.parse(localStorage.getItem("idCart"));
@@ -102,7 +101,8 @@ export default function ProductsCarts() {
                                                     <span className="view_category_item-21-name">
                                                         {item.food.name}
                                                     </span>
-                                                                            <div className="view_category_item-21-category">
+                                                                            <div
+                                                                                className="view_category_item-21-category">
                                                                         <span
                                                                             className="view_category_item-21-category-voucher">Voucher: </span>
                                                                                 <span
@@ -116,7 +116,8 @@ export default function ProductsCarts() {
                                                                 </div>
                                                                 <div className="view_category_item-3"></div>
                                                                 <div className="view_category_item-4">
-                                                                    <span className="view_category_item-41">Đơn giá</span>
+                                                                    <span
+                                                                        className="view_category_item-41">Đơn giá</span>
                                                                     <span className="view_category_item-42">
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
@@ -125,12 +126,14 @@ export default function ProductsCarts() {
                                                     </span>
                                                                 </div>
                                                                 <div className="view_category_item-4">
-                                                                    <span className="view_category_item-41">Số lượng </span>
+                                                                    <span
+                                                                        className="view_category_item-41">Số lượng </span>
                                                                     <span
                                                                         className="view_category_item-42"> {item.quantity} </span>
                                                                 </div>
                                                                 <div className="view_category_item-4">
-                                                                    <span className="view_category_item-41">Số tiền </span>
+                                                                    <span
+                                                                        className="view_category_item-41">Số tiền </span>
                                                                     <span className="view_category_item-42">
                                                          {new Intl.NumberFormat('vi-VN', {
                                                              style: 'currency',
@@ -139,7 +142,8 @@ export default function ProductsCarts() {
                                                     </span>
                                                                 </div>
                                                                 <div className="view_category_item-4">
-                                                                    <span className="view_category_item-41">Thao tác </span>
+                                                                    <span
+                                                                        className="view_category_item-41">Thao tác </span>
                                                                     <div className="view_category_item-42">
                                                                         <button className="view_category_item-43"
                                                                                 title="xóa sản phẩm"
@@ -175,7 +179,7 @@ export default function ProductsCarts() {
                                 </form>
                             </>
                         ) : (
-                                <div className="view_category-NoItem">
+                            <div className="view_category-NoItem">
                                 <div className="view_category-NoItem-container">
                                     <img src="../static/img/empty-cart.png"/>
                                     <p className="view_category-NoItem-container-p"> Giỏ hàng trống </p>
