@@ -22,7 +22,7 @@ export const cartSlice = createSlice({
                     quantity: quantity,
                     money: (quantity * foodBuy.price)-(quantity * foodBuy.price*(foodBuy.voucher.percent/100))
                 };
-                console.log(foodBuy.quantity)
+                // console.log(foodBuy.quantity)
                 const updatedItems = [...state.items, newItem];
                 const updatedTotalQuantity = state.totalQuantity + 1; // Increment the total quantity
                 const updatedTotalMoney = state.totalMoney + newItem.money;

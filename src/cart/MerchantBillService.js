@@ -36,13 +36,12 @@ export default function MerchantBillService() {
                 setList([])
             }
             if (res[1].data != null) {
-                console.log(res[1].data)
+                // console.log(res[1].data)
                 setListBill(res[1].data)
             } else {
                 setListBill([])
             }
             if (res[2].data != null) {
-                console.log(res[2].data)
                 setListShop(res[2].data)
             } else {
                 setListShop([])
@@ -80,7 +79,7 @@ export default function MerchantBillService() {
                                 onChange={handleCityChange}
                             >
                                 <option value="">---Đơn theo cửa hàng---</option>
-                                {listShop > 0 && listShop.map((item, index) => (<option key={index} value={item.id}>
+                                {listShop.length > 0 && listShop.map((item, index) => (<option key={index} value={item.id}>
                                     {item.name}
                                 </option>))}
                             </select>
