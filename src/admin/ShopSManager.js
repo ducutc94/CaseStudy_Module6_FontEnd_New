@@ -29,7 +29,7 @@ export default function ShopSManager() {
                         Swal.fire({
                             width: '450px',
                             position: 'center',
-                            title: `${newStatus === "0" ? 'Khóa' : 'Mở'} hoạt động thành công!`,
+                            title: `${newStatus === "0" ? 'Mở' : 'Khóa' } hoạt động thành công!`,
                             icon: 'success'
                         });
                         setReload(!reload);
@@ -52,70 +52,67 @@ export default function ShopSManager() {
         <>
             <div>
                 <div className="title-form-container">
-                    <h1 className="title-form">Quản lý cửa hàng</h1>
+                    <h1 className="title-form">Quản lý hoạt động của các cửa hàng</h1>
                 </div>
-                <div className="shopList_table_container">
-
+                <div className="admin_shopList_table_container">
+                    <table className={"table table_shop_list"}>
+                        <thead>
+                        <tr>
+                            <td className="table_shop_list-header">
+                                <h5 className="table_shop_list-title">
+                                    STT
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    TÊN
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    SỐ ĐIỆN THOẠI
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    TRẠNG THÁI
+                                </h5></td>
+                            <td colSpan={2}><h5 className="table_shop_list-title">
+                                TUỲ CHỌN
+                            </h5></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            shop.map((item, index) =>
+                                <tr key={item.id}>
+                                    <td className="table_shop_list-inner">{index + 1}</td>
+                                    <td className="table_shop_list-inner">{item.name}</td>
+                                    <td className="table_shop_list-inner">{item.phone}</td>
+                                    {item.statusShops === "0" && <>
+                                        <td className="text-success">Đang hoạt động</td>
+                                    </>}
+                                    {item.statusShops === "1" && <>
+                                        <td className="text-warning">Tạm dừng hoạt động</td>
+                                    </>}
+                                    <td colSpan={2} className="table_shop_list-inner iconDeleteShop">
+                                        <button onClick={() => toggleShop(item.id, item.statusShops)}>
+                                            {item.statusShops === "0" ? (
+                                                <>
+                                                    <i className="fa-solid fa-toggle-on"></i>
+                                                    <span className="iconDeleteShop-inner"></span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <i className="fa-solid fa-toggle-off"></i>
+                                                    <span className="iconDeleteShop-inner"></span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </td>
+                                </tr>
+                            )
+                        }
+                        </tbody>
+                    </table>
                 </div>
-
-                <table className={"table table_shop_list"}>
-                    <thead>
-                    <tr>
-                        <td className="table_shop_list-header">
-                            <h5 className="table_shop_list-title">
-                                STT
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TÊN
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                SỐ ĐIỆN THOẠI
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TRẠNG THÁI
-                            </h5></td>
-                        <td colSpan={3}><h5 className="table_shop_list-title">
-                            TUỲ CHỌN
-                        </h5></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        shop.map((item, index) =>
-                            <tr key={item.id}>
-                                <td className="table_shop_list-inner">{index + 1}</td>
-                                <td className="table_shop_list-inner">{item.name}</td>
-                                <td className="table_shop_list-inner">{item.phone}</td>
-                                {item.statusShops === "0" && <>
-                                    <td class="text-success">Đang hoạt động</td>
-                                </>}
-                                {item.statusShops === "1" && <>
-                                    <td class="text-warning">Tạm dừng hoạt động</td>
-                                </>}
-                                <td className="table_shop_list-inner"></td>
-                                <td className="table_shop_list-inner iconDeleteShop">
-                                    <button onClick={() => toggleShop(item.id, item.statusShops)}>
-                                        {item.statusShops === "0" ? (
-                                            <>
-                                                <i className="fa-solid fa-toggle-on"></i>
-                                                <span className="iconDeleteShop-inner"></span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <i className="fa-solid fa-toggle-off"></i>
-                                                <span className="iconDeleteShop-inner"></span>
-                                            </>
-                                        )}
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    }
-                    </tbody>
-                </table>
             </div>
         </>
     )

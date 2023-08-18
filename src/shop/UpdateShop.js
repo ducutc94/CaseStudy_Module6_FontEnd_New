@@ -246,32 +246,6 @@ export default function UpdateShop() {
                     </div>
                 </div>
             </form>
-            <button className={`btn btn-danger`} onClick={handleShow}>
-                Cập nhật dịch vụ giao hàng
-            </button>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header>
-                    <Modal.Title>
-                        <div className={`service`}>
-                            Cập nhật giao hàng
-                        </div>
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {allShipper.map(item =>
-                        <div className={"form-check form-switch"} key={item.id}>
-                            <input className={"form-check-input"} type={"checkbox"} id={item.id}
-                                   checked={newShipper.includes(item.id)}
-                                   onChange={() => handleCheck(item.id)}/>
-                            <label className={"form-check-label"} htmlFor={item.id}>{item.name}</label>
-                        </div>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <button onClick={handleSubmit} className={"btn btn-danger"}>Cập nhật</button>
-                    <button className={"btn btn-light"} onClick={handleClose}>Đóng</button>
-                </Modal.Footer>
-            </Modal>
         </>
     )
 }

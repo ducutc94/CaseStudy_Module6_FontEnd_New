@@ -365,7 +365,7 @@ export default function FormUpdate(props) {
                             <FormLabel component="legend">
                                 <span className="type-text-form">Các thể loại</span>
                             </FormLabel>
-                            <div className="check-box-category">
+                            {/*<div className="check-box-category">*/}
                                 {category.map((item) => (
                                     <FormControlLabel
                                         key={item.id}
@@ -379,19 +379,25 @@ export default function FormUpdate(props) {
                                         label={item.name}
                                     />
                                 ))}
-                            </div>
+                            {/*</div>*/}
 
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="image" className="form-label">Chọn ảnh</label>
-                            <input
-                                type="file"
-                                className="form-control"
-                                id="image"
-                                onChange={choseFileUpload}
-                                multiple
-                            />
+                            <div className="shopList_image_form">
+                                <span>Tải lên từ &nbsp;</span>
+                                <label htmlFor="image" className="label-custom_image_form">Chọn </label>
+                                <input
+                                    hidden={true}
+                                    type="file"
+                                    className="form-control"
+                                    id="image"
+                                    onChange={choseFileUpload}
+                                    multiple
+                                />
+                                <span style={{fontStyle: `italic`}}>Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB </span>
+                            </div>
+
                         </div>
                         <div className="mb-3">
                             {previewImages.map((preview, index) => (

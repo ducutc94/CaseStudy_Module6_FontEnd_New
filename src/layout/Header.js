@@ -154,12 +154,15 @@ export default function Header({search}) {
                                 <i className="header__navbar-user-icon fas fa-caret-down"></i>
 
                                 <ul className="header__navbar-user-menu">
-                                    <li className="header__navbar-user-item">
-                                        <Link  to={'/userProfile'} className="header__navbar-user-manager">
-                                            <i className="fa-solid fa-user iconManager"></i>
-                                            Tài khoản của tôi
-                                        </Link>
-                                    </li>
+                                    {user.authorities[0].authority !== "ROLE_ADMIN" && <>
+                                        <li className="header__navbar-user-item">
+                                            <Link  to={'/userProfile'} className="header__navbar-user-manager">
+                                                <i className="fa-solid fa-user iconManager"></i>
+                                                Tài khoản của tôi
+                                            </Link>
+                                        </li>
+                                    </>}
+
                                     {user.authorities[0].authority === "ROLE_USER" && <>
                                         <li className="header__navbar-user-item">
                                             <Link  to={'/products-carts-oder'} className="header__navbar-user-manager">
@@ -184,6 +187,21 @@ export default function Header({search}) {
                                         <li className="header__navbar-user-item">
                                             <Link to={"/shop"} className="header__navbar-user-manager">
                                                 <i className="fa-solid fa-store iconManager"></i>
+                                                Quản lý cửa hàng
+                                            </Link>
+                                        </li>
+                                    </>}
+
+                                    {user.authorities[0].authority === "ROLE_ADMIN" && <>
+                                        <li className="header__navbar-user-item">
+                                            <Link  to={'/user-manager'} className="header__navbar-user-manager">
+                                                <i className="fa-solid fa-users-gear iconManager"></i>
+                                                Quản tài khoản
+                                            </Link>
+                                        </li>
+                                        <li className="header__navbar-user-item">
+                                            <Link  to={'/shop-manager'} className="header__navbar-user-manager">
+                                                <i className="fa-solid fa-shop-lock iconManager"></i>
                                                 Quản lý cửa hàng
                                             </Link>
                                         </li>
