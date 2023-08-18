@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,6 +12,7 @@ import {
     Legend,
     BarElement,
 } from "chart.js";
+import { Box } from "@mui/material";
 
 ChartJS.register(
     CategoryScale,
@@ -28,47 +29,202 @@ export default function Chartjs() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user.id;
     const [bill, setBill] = useState([]);
+    const [displayType, setDisplayType] = useState("day"); // Đặt giá trị mặc định là "day"
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/api/bills/bill-dto/${userId}`)
+            .get(`http://localhost:8080/api/bills/bill-chartjs/${userId}`)
             .then((response) => {
-                console.log(response.data);
-                setBill(response.data);
+                if (response.data != null) {
+                    console.log(response.data);
+                    setBill(response.data);
+                } else {
+                    setBill([]);
+                }
             });
     }, [userId]);
 
-    // Gộp ngày và tính tổng tiền theo ngày
-    const dateTotals = {};
-    bill.forEach((item) => {
-        const date = item.localDateTime.split("T")[0]; // Lấy phần ngày
-        if (!dateTotals[date]) {
-            dateTotals[date] = 0;
+    const handleDisplayTypeChange = (type) => {
+        setDisplayType(type);
+
+        if (type === "day") {
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth();
+            const lastDayOfCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            const startDate = new Date(currentYear, currentMonth, lastDayOfCurrentMonth - 30);
+            const endDate = new Date(currentYear, currentMonth, lastDayOfCurrentMonth);
+
+            const filteredBills = bill.filter((item) => {
+                const billDate = new Date(item.localDateTime.split("T")[0]);
+                return billDate >= startDate && billDate <= endDate;
+            });
+
+            updateChart(filteredBills);
+        } else if (type === "month") {
+            const currentYear = new Date().getFullYear();
+            const filteredBills = bill.filter((item) => {
+                const billYear = new Date(item.localDateTime.split("T")[0]).getFullYear();
+                return billYear === currentYear;
+            });
+
+            const monthlyData = {};
+            filteredBills.forEach((item) => {
+                const billDate = new Date(item.localDateTime.split("T")[0]);
+                const monthYear = `${billDate.getMonth() + 1}-${billDate.getFullYear()}`;
+
+                if (!monthlyData[monthYear]) {
+                    monthlyData[monthYear] = 0;
+                }
+                monthlyData[monthYear] += item.total;
+            });
+
+            const dateLabels = Object.keys(monthlyData);
+            const totalAmounts = dateLabels.map((monthYear) => monthlyData[monthYear]);
+
+            const updatedChartData = {
+                labels: dateLabels,
+                datasets: [
+                    {
+                        label: "Tổng doanh thu",
+                        data: totalAmounts,
+                        backgroundColor: "rgba(75, 192, 192, 0.6)",
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        borderWidth: 1,
+                    },
+                ],
+            };
+
+            setChartData(updatedChartData);
+        } else if (type === "year") {
+            const filteredBills = bill.filter((item) => {
+                const billYear = new Date(item.localDateTime.split("T")[0]).getFullYear();
+                return billYear;
+            });
+
+            const yearlyData = {};
+            filteredBills.forEach((item) => {
+                const billYear = new Date(item.localDateTime.split("T")[0]).getFullYear();
+
+                if (!yearlyData[billYear]) {
+                    yearlyData[billYear] = 0;
+                }
+                yearlyData[billYear] += item.total;
+            });
+
+            const dateLabels = Object.keys(yearlyData);
+            const totalAmounts = dateLabels.map((year) => yearlyData[year]);
+
+            const updatedChartData = {
+                labels: dateLabels,
+                datasets: [
+                    {
+                        label: "Tổng doanh thu",
+                        data: totalAmounts,
+                        backgroundColor: "rgba(75, 192, 192, 0.6)",
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        borderWidth: 1,
+                    },
+                ],
+            };
+
+            setChartData(updatedChartData);
         }
-        dateTotals[date] += item.total;
-    });
+    };
 
-    const dateLabels = Object.keys(dateTotals);
-    const totalAmounts = dateLabels.map((date) => dateTotals[date]);
+    const updateChart = (filteredBills) => {
+        const updatedDateTotals = {};
+        filteredBills.forEach((item) => {
+            const date = item.localDateTime.split("T")[0];
+            if (!updatedDateTotals[date]) {
+                updatedDateTotals[date] = 0;
+            }
+            updatedDateTotals[date] += item.total;
+        });
 
-    const chartData = {
-        labels: dateLabels,
+        const dateLabels = Object.keys(updatedDateTotals);
+        const totalAmounts = dateLabels.map((date) => updatedDateTotals[date]);
+
+        const updatedChartData = {
+            labels: dateLabels,
+            datasets: [
+                {
+                    label: "Tổng doanh thu",
+                    data: totalAmounts,
+                    backgroundColor: "rgba(75, 192, 192, 0.6)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1,
+                },
+            ],
+        };
+
+        setChartData(updatedChartData);
+    };
+
+    const [chartData, setChartData] = useState({
+        labels: [],
         datasets: [
             {
                 label: "Tổng doanh thu",
-                data: totalAmounts,
-                pointBackgroundColor: "rgba(75, 192, 192, 1)", // Màu nền điểm
-                pointBorderColor: "rgba(75, 192, 192, 1)", // Màu viền điểm
-                borderColor: "rgba(255, 0, 0, 1)", // Màu đỏ đậm cho đường viền
-                borderWidth: 2, // Độ dày đường viền
+                data: [],
+                backgroundColor: "rgba(75, 192, 192, 0.6)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
             },
         ],
-    };
+    });
 
     return (
-        <div>
-            <h1>Biểu đồ tổng tiền từng ngày</h1>
-            <Line data={chartData} />
-        </div>
+        <>
+            {bill.length > 0 ? (
+                <div>
+                    <div>
+                        <div className={`row`} style={{ marginTop: "50px", marginBottom: "20px" }}>
+                            <div className={`col-md-8`}>
+                                <p>THỐNG KÊ</p>
+                            </div>
+                            <div className={`col-md-4`}>
+                                <div className="d-flex statistical">
+                                    <div className="btn-group" role="group" aria-label="Basic example">
+                                        <button
+                                            type="button"
+                                            className={`btn btn-secondary btn-${displayType === "day" ? "danger" : "light"}`}
+                                            onClick={() => handleDisplayTypeChange("day")}
+                                        >
+                                            Ngày
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`btn btn-secondary btn-${displayType === "month" ? "danger" : "light"}`}
+                                            onClick={() => handleDisplayTypeChange("month")}
+                                        >
+                                            Tháng
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`btn btn-secondary btn-${displayType === "year" ? "danger" : "light"}`}
+                                            onClick={() => handleDisplayTypeChange("year")}
+                                        >
+                                            Năm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {displayType === "day" ? (
+                            <Line data={chartData} />
+                        ) : (
+                            <Bar data={chartData} />
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <>
+                    Dữ liệu trống
+                </>
+            )}
+        </>
     );
 }
