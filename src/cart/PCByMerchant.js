@@ -100,9 +100,8 @@ export default function PCByMerchant() {
 
     }
 
-    return (<>
-
-        <div>
+    return (
+        <>
             <div className="title-form-container">
                 <h1 className="title-form">Quản lý đơn hàng</h1>
             </div>
@@ -134,71 +133,108 @@ export default function PCByMerchant() {
                     </span>
                 {/* Duyệt mảng */}
             </div>
-            {cartMerchant.items.length > 0 ? (<> {cartMerchant.items.map((item, index) =>
+            {cartMerchant.items.length > 0 ? (
+                <> <div className="pcMerchant_container_all">
+                    {cartMerchant.items.map((item, index) =>
 
-                <div>
-                    <div>
-                        <div>
-                            <span>Ten Khach hang: {item.username}</span><br/>
-                            <span>Ten Cua Hang: {item.shops.name}</span>
-                        </div>
-
-                        <div>
-                            <table>
-                                <tr>
-                                    <th>Anh</th>
-                                    <th>Ten Sp</th>
-                                    <th>Gia</th>
-                                    <th>So luong</th>
-                                    <th>Tong tien</th>
-                                </tr>
-                                {Array.isArray(item.productsCartsList) ? (<>{item.productsCartsList.map((items, index) =>
-                                        <tr>
-                                            <td>{items.products.name}</td>
-                                            <td>{items.products.name}</td>
-                                            <td className="table_shop_list-inner">
-                                <span style={{marginLeft: `5px`}}>
-                                                        {new Intl.NumberFormat('vi-VN', {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        }).format(items.products.price)}
-                                </span>
-                                            </td>
-                                            <td>{items.quantity}</td>
-                                            <td className="table_shop_list-inner">
-                                <span style={{marginLeft: `5px`}}>
-                                                        {new Intl.NumberFormat('vi-VN', {
-                                                            style: 'currency',
-                                                            currency: 'VND'
-                                                        }).format(items.totalPrice)}
-                                </span>
-                                            </td>
-                                        </tr>
-                                )}</>) : (<></>)}
-
-                            </table>
-                        </div>
-
-                        <div>
-
-                                <span>Trang Thai: Chờ Xác Nhận </span>
-
-                            <span>Tong tien: </span>
-                            <div>
-                                <button type={"submit"} onClick={() => handleSumbit(item.id, index, item)}>Xác
-                                    nhận
-                                </button>
-                                <button type={"submit"} onClick={() => deleteSumbit(item.id, index, item)}>Huỷ
-                                </button>
+                        <div className="pcMerchant_container">
+                            <div className="pcMerchant_container-info">
+                                <div className="pcMerchant_container-info-inner">
+                                             <span className="pcMerchant_container-info-inner-s">
+                                                <i className="fa-solid fa-user-astronaut"></i>  &nbsp;
+                                                 <b>Khách hàng:</b> &nbsp;
+                                                 {item.username}
+                                             </span>
+                                    <br/>
+                                    <span className="pcMerchant_container-info-inner-s">
+                                                <i className="fa-solid fa-store"></i>  &nbsp;
+                                        <b>Tên cửa hàng:</b> &nbsp;
+                                        {item.shops.name}
+                                            </span>
+                                </div>
                             </div>
 
+                            <div>
+                                <table class="table table-hover cssTablePc">
+                                    <thead>
+                                    <tr>
+                                        <th>Ảnh</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng tiền</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {Array.isArray(item.productsCartsList) ? (<>{item.productsCartsList.map((items, index) =>
+                                        <tr>
+                                            <td>
+                                                <img src={items.products.image} style={{ width:`80px` }}/>
+                                            </td>
+                                            <td>{items.products.name}</td>
+                                            <td>
+                                                        <span style={{marginLeft: `5px`}}>
+                                                            {new Intl.NumberFormat('vi-VN', {
+                                                                style: 'currency',
+                                                                currency: 'VND'
+                                                            }).format(items.products.price)}
+                                                         </span>
+                                            </td>
+                                            <td>{items.quantity}</td>
+                                            <td>
+                                                        <span style={{marginLeft: `5px`}}>
+                                                            {new Intl.NumberFormat('vi-VN', {
+                                                                style: 'currency',
+                                                                currency: 'VND'
+                                                            }).format(items.totalPrice)}
+                                                        </span>
+                                            </td>
+                                        </tr>
+                                    )}</>) : (<></>)}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="pcMerchant_container_end">
+                                        <span className="pcMerchant_container_end-stt">
+                                            Trạng Thái : &nbsp;
+                                            <p style={{color:`green`, fontWeight:`400`}}>Chờ Xác Nhận</p>
+                                        </span>
+                                <span className="pcMerchant_container_end-ttl">
+                                            Tổng tiền : &nbsp;
+                                    <p style={{color:`red`, fontWeight:`400`}}>
+                                                {new Intl.NumberFormat('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                }).format(item.total)}
+                                            </p>
+                                        </span>
+                                <div className="pcMerchant_container_end-cfm">
+                                    <button className="btn-history"
+                                            type={"submit"} onClick={() => handleSumbit(item.id, index, item)}>
+                                        Xác nhận
+                                    </button>
+                                    <button className="btn-history"
+                                            type={"submit"} onClick={() => deleteSumbit(item.id, index, item)}>
+                                        Huỷ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    )}
+                </div>
+                </> ) : (<>
+                <>
+                    <div className="view_history-NoItem">
+                        <div className="view_history-NoItem-container">
+                            <img src="../static/img/history-empty.png"/>
+                            <p className="view_history-NoItem-container-h"> Không có đơn hàng nào ! </p>
                         </div>
                     </div>
-                </div>
-            )}
-            </>) : (<></>)}
-
-        </div>
-    </>)
+                </>
+            </>)}
+        </>)
 
 }
