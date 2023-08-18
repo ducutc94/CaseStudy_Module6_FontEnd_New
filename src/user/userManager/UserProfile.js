@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useFormik} from "formik";
+import {Field, useFormik} from "formik";
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import storage from "../../config/FirebaseConfig";
+import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
 
 
 export default function UserProfile() {
@@ -196,6 +197,8 @@ export default function UserProfile() {
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
                                                             <input type="text"
+                                                                   readOnly={true}
+                                                                   style={{color:`#a3a0a0b0`}}
                                                                    onChange={formik.handleChange}
                                                                    value={formik.values.username}
                                                                    id={'username'}
@@ -210,16 +213,18 @@ export default function UserProfile() {
                                                         <span className="home-user-form-name">Giới tính</span>
                                                     </div>
                                                     <div className="grid__column-4">
-                                                        <div className="home-user-right-input">
-                                                            <select name={"gender"}
-                                                                    onChange={formik.handleChange}
-                                                                    value={formik.values.gender}>
-                                                                <option>Chọn giới tính</option>
-                                                                <option >Nam</option>
-                                                                <option >Nữ</option>
-                                                                <option >Khác</option>
-                                                            </select>
+                                                        <div className="home-user-right-input-container">
+                                                            {["Nam", "Nữ", "Khác"].map((option) => (
+                                                            <div className="home-user-right-input-inner" key={option}>
+                                                                <input type="radio"
+                                                                       name="gender"
+                                                                       value={option}
+                                                                       onChange={formik.handleChange}
+                                                                       checked={formik.values.gender === option}/>
+                                                                <span className="">{option}</span>
+                                                            </div>))}
                                                         </div>
+
                                                     </div>
                                                 </div>
                                                 <div className="home-user-form">
@@ -228,7 +233,9 @@ export default function UserProfile() {
                                                     </div>
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
-                                                            <input readOnly={true} type="text"
+                                                            <input readOnly={true}
+                                                                   type="text"
+                                                                   style={{color:`#a3a0a0b0`}}
                                                                    name={'email'}
                                                                    onChange={formik.handleChange}
                                                                    value={formik.values.email}
@@ -245,6 +252,7 @@ export default function UserProfile() {
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
                                                             <input type="date"
+                                                                   className="fixInputBirth"
                                                                    name={'birthday'}
                                                                    onChange={formik.handleChange}
                                                                    value={formik.values.birthday}
