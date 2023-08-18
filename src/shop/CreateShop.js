@@ -31,6 +31,9 @@ export default function CreateShop(){
     const checkPhone = (phone) => {
         return lists.some((shop) => shop.phone === phone);
     };
+    const checkName = (name) => {
+        return lists.some((shop) => shop.name === name);
+    };
     const setTime = (values) => {
         let str = values + ":00";
         return str;
@@ -39,7 +42,9 @@ export default function CreateShop(){
         name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .max(500, "Độ dài tối đa 500 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
-            .required("Tên không được để trống!"),
+            .required("Tên không được để trống!").test('Tên đã tồn tại', 'Tên đã tồn tại', function (value) {
+                return !checkName(value);
+            }),
 
         description: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")

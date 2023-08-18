@@ -90,6 +90,47 @@
 .home-user-right-content{
 
 }
+home-user-right-content-info-upContainer{
+    position: relative;
+    display: contents;
+}
+
+.home-user-right-content-info-up{
+    display: flex;
+    justify-content: end;
+    position: relative;
+    top: 25px;
+    right: 25px;
+    font-size: 26px;
+    z-index: 2;
+}
+.home-user-right-content-info-up > i{
+    margin-right: 10px;
+    cursor: pointer;
+    top: 25px;
+    right: 25px;
+    font-size: 26px;
+    z-index: 2;
+    color: blue;
+}
+.home-user-right-content-info-up > span{
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: blue;
+}
+
+.home-user-right-content-info-up > i{
+    margin-right: 10px;
+    cursor: pointer;
+    top: 25px;
+    right: 25px;
+    font-size: 26px;
+    z-index: 2;
+    color: blue;
+}
+
+
 .home-user-right-content-info{
     padding: 30px;
     position: relative;
@@ -157,6 +198,18 @@
 .home-user-right-input >input{
     width: 100%;
     height: 100%;
+}
+.home-user-right-input > i {
+    position: relative;
+    top: 5px;
+    left: -85px;
+}
+.cssPhone > input{
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 15px;
+    margin-left: 5px;
 }
 .home-user-right-content-info-last{
     padding: 30px;
