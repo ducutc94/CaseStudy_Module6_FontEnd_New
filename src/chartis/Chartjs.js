@@ -13,6 +13,7 @@ import {
     BarElement,
 } from "chart.js";
 import { Box } from "@mui/material";
+import {Link} from "react-router-dom";
 
 ChartJS.register(
     CategoryScale,
@@ -181,6 +182,16 @@ export default function Chartjs() {
                 <div>
                     <div>
                         <div className={`row`} style={{ marginTop: "50px", marginBottom: "20px" }}>
+                            <div className={`col-md-12`}>
+                                <Link to={'/products-carts-merchant'}
+                                      style={{textDecoration:`none`,position: `relative`,
+                                                                    top: `-20px`,
+                                                                    fontSize: `20px`,
+                                                                    color: `orange`}}>
+                                        <i className="fa-solid fa-backward"></i>
+                                    <span> Trở lại trang quản lý</span>
+                                </Link>
+                            </div>
                             <div className={`col-md-8`}>
                                 <p>THỐNG KÊ</p>
                             </div>

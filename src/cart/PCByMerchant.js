@@ -112,22 +112,7 @@ export default function PCByMerchant() {
                 <span className={"btn-white borderBill"}>
                          <Link to={'/products-carts-merchant-all'}>Tổng đơn hàng</Link>
                      </span>
-                <div className="bill_about--shop borderBill">
-                    <div className="bill_about--shop-inner">
-                        <select
-                            name=""
-                            id=""
-                            className="bill_about--shop-inner--btn"
-                            onChange={handleCityChange}
-                        >
-                            <option value="">---Đơn theo cửa hàng---</option>
-                            {list.length > 0 && list.map((item, index) => (<option key={index} value={item.id}>
-                                {item.name}
-                            </option>))}
-                        </select>
 
-                    </div>
-                </div>
                 <span className={"btn-white borderBill"}>
                         <Link to={'/bill-chartjs'}>Tổng doanh thu</Link>
                     </span>
@@ -155,7 +140,7 @@ export default function PCByMerchant() {
                             </div>
 
                             <div>
-                                <table class="table table-hover cssTablePc">
+                                <table className="table table-hover cssTablePc">
                                     <thead>
                                     <tr>
                                         <th>Ảnh</th>
