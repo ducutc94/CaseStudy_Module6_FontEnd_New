@@ -27,7 +27,7 @@ export const cartBuySlice = createSlice({
             let data = JSON.parse(cartMerchant);
             if (data && Array.isArray(data.items)) {
                 const updateItem = data.items[indexItem];
-                updateItem.statusProductsCarts = "1";
+                updateItem.status = "1";
                 data.items[indexItem] = updateItem;
                 localStorage.setItem('cartBuy', JSON.stringify(data)); // Store updated data in localStorage
                 return { ...state, items: data.items };
@@ -58,6 +58,6 @@ export const cartBuySlice = createSlice({
     },
 })
 
-export const {addCartBuy, deleteBy, confirmOrderBuy,deleteByMerchant} = cartBuySlice.actions
+export const {addCartBuy, confirmOrderBuy} = cartBuySlice.actions
 
 export default cartBuySlice.reducer
