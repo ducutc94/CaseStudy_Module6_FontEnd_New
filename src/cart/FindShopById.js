@@ -52,15 +52,18 @@ export default function FindShopById(){
                     <span className={"btn-white borderBill"}>
                         <Link to={'/products-carts-merchant-all'}>Tổng đơn hàng</Link>
                     </span>
+                    <span className={"btn-white borderBill"}>
+                        <Link to={'/bill-chartjs'}>Tổng doanh thu</Link>
+                    </span>
 
-                    <div className="bill_about--shop borderBill">
+                    <div className="bill_about--shop">
                         <div className="bill_about--shop-inner">
                             <select
                                 name=""
                                 id=""
                                 className="bill_about--shop-inner--btn"
                                 onChange={handleCityChange}
-                                
+
                             ><option value="">---Đơn theo cửa hàng---</option>
                                 {listShop.map((item, index) => (
                                     <option key={index} value={item.id}>
@@ -72,9 +75,6 @@ export default function FindShopById(){
                         </div>
 
                     </div>
-                    <span className={"btn-white borderBill"}>
-                        <Link to={'/bill-chartjs'}>Tổng doanh thu</Link>
-                    </span>
                 </div>
 
                 <table className={"table table_shop_list"}>

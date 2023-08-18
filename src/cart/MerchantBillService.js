@@ -74,8 +74,11 @@ export default function MerchantBillService() {
                     <span className={"btn-white borderBill"}>
                        <b>Tổng đơn hàng</b>
                     </span>
-                    <div className="bill_about--shop borderBill">
+                    <span className={"btn-white borderBill"}>
+                        <Link to={'/bill-chartjs'}>Tổng doanh thu</Link>
+                    </span>
 
+                    <div className="bill_about--shop">
                         <div className="bill_about--shop-inner">
                             <select
                                 name=""
@@ -91,9 +94,7 @@ export default function MerchantBillService() {
 
                         </div>
                     </div>
-                    <span className={"btn-white borderBill"}>
-                        <Link to={'/bill-chartjs'}>Tổng doanh thu</Link>
-                    </span>
+
                 </div>
                 <table className={"table table_shop_list"}>
                     <thead>
