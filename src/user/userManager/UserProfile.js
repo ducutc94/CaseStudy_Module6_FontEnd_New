@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import axios from "axios";
 import {useFormik} from "formik";
 import Swal from "sweetalert2";
@@ -60,31 +60,31 @@ export default function UserProfile() {
                 },
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        const imageDTO = {img: downloadURL};
-                        user.image = downloadURL;
-                        localStorage.setItem("user", JSON.stringify(user));
+                            const imageDTO = {img: downloadURL};
+                            user.image = downloadURL;
+                            localStorage.setItem("user", JSON.stringify(user));
 
-                        Swal.fire({
-                            title: 'Đang tạo sản phẩm...',
-                            html: 'Vui lòng đợi trong giây lát...',
-                            allowEscapeKey: false,
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
+                            Swal.fire({
+                                title: 'Đang tạo sản phẩm...',
+                                html: 'Vui lòng đợi trong giây lát...',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
 
-                                // Đợi 2,5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
-                                const timeout = 2500; // 2,5 giây
-                                setTimeout(() => {
-                                    Swal.close();
-                                }, timeout);
-                            }
-                        }).then((result) => {
-                            axios.put(`http://localhost:8080/api/users/upload-img/${idUser}`, imageDTO)
-                                .then(res => {
-                                    Swal.fire("Cập nhật ảnh thành công!", "", "success");
-                                    window.location.reload();
-                                });
-                        })
+                                    // Đợi 2,5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                                    const timeout = 2500; // 2,5 giây
+                                    setTimeout(() => {
+                                        Swal.close();
+                                    }, timeout);
+                                }
+                            }).then((result) => {
+                                axios.put(`http://localhost:8080/api/users/upload-img/${idUser}`, imageDTO)
+                                    .then(res => {
+                                        Swal.fire("Cập nhật ảnh thành công!", "", "success");
+                                        window.location.reload();
+                                    });
+                            })
 
                         }
                     );
@@ -155,36 +155,36 @@ export default function UserProfile() {
                                     </div>
                                     <div className="home-user-right-content">
                                         <div className="home-user-right-content-info-upContainer">
-                                            <div className="home-user-right-content-info-up" >
+                                            <div className="home-user-right-content-info-up">
                                                 <span>Nâng cấp tài khoản</span>
                                                 <i className="fa-solid fa-cloud-arrow-up"></i>
                                             </div>
                                         </div>
                                         <div className="home-user-right-content-info">
                                             <div className="home-user-title-user">Tải ảnh đại diện</div>
-                                                <div className="home-user">
-                                                    <div className="grid__column-3">
-                                                        <div className="home-user-avatar-image">
-                                                            <img src={user.image}/>
-                                                        </div>
-                                                    </div>
-                                                    <div className="grid__column-9">
-                                                        <div className="home-user-avatar-form">
-                                                            <span>Tải lên từ</span>
-                                                            <div className="home-user-file-image">
-                                                                <input id="uploadAvatar" type="file" hidden required
-                                                                       name={'image'}
-                                                                       accept="image/*"
-                                                                />
-                                                                <label className="label-custom"
-                                                                       htmlFor="uploadAvatar">Chọn</label>
-                                                                <span style={{fontStyle: `italic`}}>Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB </span>
-                                                            </div>
-                                                        </div>
-                                                        <button  onClick={uploadImage} className="btn-orange">Cập nhật
-                                                        </button>
+                                            <div className="home-user">
+                                                <div className="grid__column-3">
+                                                    <div className="home-user-avatar-image">
+                                                        <img src={user.image}/>
                                                     </div>
                                                 </div>
+                                                <div className="grid__column-9">
+                                                    <div className="home-user-avatar-form">
+                                                        <span>Tải lên từ</span>
+                                                        <div className="home-user-file-image">
+                                                            <input id="uploadAvatar" type="file" hidden required
+                                                                   name={'image'}
+                                                                   accept="image/*"
+                                                            />
+                                                            <label className="label-custom"
+                                                                   htmlFor="uploadAvatar">Chọn</label>
+                                                            <span style={{fontStyle: `italic`}}>Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB </span>
+                                                        </div>
+                                                    </div>
+                                                    <button onClick={uploadImage} className="btn-orange">Cập nhật
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="home-user-right-content-info">
                                             <form onSubmit={formik.handleSubmit}>
@@ -196,6 +196,8 @@ export default function UserProfile() {
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
                                                             <input type="text"
+                                                                   readOnly={true}
+                                                                   style={{color: `#a3a0a0b0`}}
                                                                    onChange={formik.handleChange}
                                                                    value={formik.values.username}
                                                                    id={'username'}
@@ -210,16 +212,19 @@ export default function UserProfile() {
                                                         <span className="home-user-form-name">Giới tính</span>
                                                     </div>
                                                     <div className="grid__column-4">
-                                                        <div className="home-user-right-input">
-                                                            <select name={"gender"}
-                                                                    onChange={formik.handleChange}
-                                                                    value={formik.values.gender}>
-                                                                <option>Chọn giới tính</option>
-                                                                <option >Nam</option>
-                                                                <option >Nữ</option>
-                                                                <option >Khác</option>
-                                                            </select>
+                                                        <div className="home-user-right-input-container">
+                                                            {["Nam", "Nữ", "Khác"].map((option) => (
+                                                                <div className="home-user-right-input-inner"
+                                                                     key={option}>
+                                                                    <input type="radio"
+                                                                           name="gender"
+                                                                           value={option}
+                                                                           onChange={formik.handleChange}
+                                                                           checked={formik.values.gender === option}/>
+                                                                    <span className="">{option}</span>
+                                                                </div>))}
                                                         </div>
+
                                                     </div>
                                                 </div>
                                                 <div className="home-user-form">
@@ -228,7 +233,9 @@ export default function UserProfile() {
                                                     </div>
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
-                                                            <input readOnly={true} type="text"
+                                                            <input readOnly={true}
+                                                                   type="text"
+                                                                   style={{color: `#a3a0a0b0`}}
                                                                    name={'email'}
                                                                    onChange={formik.handleChange}
                                                                    value={formik.values.email}
@@ -245,6 +252,7 @@ export default function UserProfile() {
                                                     <div className="grid__column-4">
                                                         <div className="home-user-right-input">
                                                             <input type="date"
+                                                                   className="fixInputBirth"
                                                                    name={'birthday'}
                                                                    onChange={formik.handleChange}
                                                                    value={formik.values.birthday}
@@ -253,7 +261,7 @@ export default function UserProfile() {
                                                     </div>
                                                 </div>
                                                 <div className="grid__column-3">
-                                                    <button  className="btn-orange">Lưu thay đổi</button>
+                                                    <button className="btn-orange">Lưu thay đổi</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -270,7 +278,6 @@ export default function UserProfile() {
                                                                        value={formik.values.phone}
                                                                 />
                                                             </div>
-
                                                         </div>
                                                         <div className="grid__column-4">
                                                             <div className="home-user-right-input">
@@ -279,7 +286,7 @@ export default function UserProfile() {
                                                             </div>
                                                         </div>
                                                         <div className="grid__column-3">
-                                                            <button  className="btn-orange">Lưu thay đổi</button>
+                                                            <button className="btn-orange">Lưu thay đổi</button>
                                                         </div>
                                                     </div>
                                                 </div>

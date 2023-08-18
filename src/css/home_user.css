@@ -198,18 +198,42 @@ home-user-right-content-info-upContainer{
 .home-user-right-input >input{
     width: 100%;
     height: 100%;
+    border: none;
+}
+.fixInputBirth{
+    max-width:120px;
+    height: 100%;
+    border: none;
 }
 .home-user-right-input > i {
     position: relative;
     top: 5px;
     left: -85px;
 }
+.home-user-right-input-container{
+    display: flex;
+    justify-content: start;
+    font-size: 15px;
+    font-weight: 400;
+}
+.home-user-right-input-inner{
+    display: flex;
+    justify-content: center;
+    margin-right: 20px;
+    text-align: center;
+    align-items: center;
+}
+.home-user-right-input-inner >input{
+  margin-right: 5px;
+}
+
 .cssPhone > input{
-    width: 100%;
+    max-width: 105px;
     height: 100%;
     border: none;
-    font-size: 15px;
+    font-size: 16px;
     margin-left: 5px;
+    font-weight: 500;
 }
 .home-user-right-content-info-last{
     padding: 30px;
