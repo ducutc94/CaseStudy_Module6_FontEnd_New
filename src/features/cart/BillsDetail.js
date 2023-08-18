@@ -1,9 +1,24 @@
 
 import {Button, Modal} from "react-bootstrap";
+import {useEffect} from "react";
 
 
-export default function BillsDetail({item,showBills,handleClose}) {
+export default function BillsDetail({bill,showBills,handleClose}) {
 
+    useEffect(()=> {
+        console.log(bill)
+    }, [])
+    function setDay(localDateTime) {
+        const date = localDateTime.split("T")[0];
+        return date;
+
+    }
+
+    function setTime(localDateTime) {
+        const time = localDateTime.split("T")[1];
+        const timeAll = time.split(".")[0];
+        return timeAll;
+    }
 
     return (
         <>
@@ -13,37 +28,42 @@ export default function BillsDetail({item,showBills,handleClose}) {
                 backdrop="static"
                 keyboard={false}
             >
-                <Modal.Header closeButton>
+                <Modal.Header >
                     <Modal.Title>Chi tiết đơn hàng</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="modal fade" id="orderDetailModal" tabIndex="-1"
-                         aria-labelledby="orderDetailModalLabel" aria-hidden="true">
-                        <div className="modal-dialog modal-lg">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="orderDetailModalLabel">Chi tiết đơn hàng #12345</h5>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
+                    <>
+                        <div>
+                            <div>
+                                Mã đơn hàng: &nbsp; ###{bill.id}
+                            </div>
+                            <div>
+                                Ngày đặt hàng: &nbsp; {setDay(bill.localDateTime)} &nbsp; {setTime(bill.localDateTime)}
+                            </div>
+                            <div>
+                                Mã đơn hàng: &nbsp; {bill.shops.name}
+                            </div>
+
+                            <div>
+
                                 <div className="modal-body">
                                     <p>Sản phẩm: Máy tính xách tay</p>
                                     <p>Số lượng: 2</p>
                                     <p>Tổng tiền: $2000</p>
                                 </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Đóng
-                                    </button>
-                                </div>
                             </div>
+
+
+
                         </div>
-                    </div>
+                    </>
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Trở lại
                     </Button>
-                    <Button variant="primary">Understood</Button>
+                    <Button variant="primary">In hoá đơn</Button>
                 </Modal.Footer>
             </Modal>
         </>
