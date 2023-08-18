@@ -155,10 +155,13 @@ export default function UserProfile() {
                                     </div>
                                     <div className="home-user-right-content">
                                         <div className="home-user-right-content-info-upContainer">
-                                            <div className="home-user-right-content-info-up">
-                                                <span>Nâng cấp tài khoản</span>
-                                                <i className="fa-solid fa-cloud-arrow-up"></i>
-                                            </div>
+                                            {user.authorities[0].authority === "ROLE_USER " &&
+                                                <>
+                                                    <div className="home-user-right-content-info-up">
+                                                        <span>Nâng cấp tài khoản</span>
+                                                        <i className="fa-solid fa-cloud-arrow-up"></i>
+                                                    </div>
+                                                </>}
                                         </div>
                                         <div className="home-user-right-content-info">
                                             <div className="home-user-title-user">Tải ảnh đại diện</div>
