@@ -30,6 +30,8 @@ import UpdateShipper from "./shipper/UpdateShipper";
 import ShipperManager from "./shipper/ShipManager";
 import Chartjs from "./chartis/Chartjs";
 import UserProfile from "./user/userManager/UserProfile";
+import ShopSManager from "./admin/ShopSManager";
+import UserManager from "./admin/UserManager";
 
 
 function App() {
@@ -78,6 +80,8 @@ function App() {
 
                     <Route path={'/userProfile'} element={<UserProfile/>}></Route>
                     <Route path={'/bill-chartjs'} element={<Chartjs/>}></Route>
+                    <Route path={'/shop-manager'} element={<ShopSManager/>}></Route>
+                    <Route path={'/user-manager'} element={<UserManager/>}></Route>
                 </Routes>
             </div>
             <Footer/>
