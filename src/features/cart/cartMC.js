@@ -11,11 +11,11 @@ export const cartMerchantSlice = createSlice({
         addCartMerchant: (state, action) => {
             let list = action.payload;
            state.items = list;
-            // console.log(list)
             localStorage.setItem('list', JSON.stringify(state))
         },
         setCartMerchant: (state, action) => {
             const list = localStorage.getItem('list');
+            // console.log(list)
             if (list) {
                 const data = JSON.parse(list);
                 if (Array.isArray(data.items)) {
@@ -30,7 +30,7 @@ export const cartMerchantSlice = createSlice({
             let data = JSON.parse(cartMerchant);
             if (data && Array.isArray(data.items)) {
                 const updateItem = data.items[indexItem];
-                updateItem.statusProductsCarts = "0";
+                updateItem.status = "0";
                 data.items.splice(indexItem, 1);
                 // data.items[indexItem] = updateItem;
                 localStorage.setItem('list', JSON.stringify(data)); // Store updated data in localStorage
@@ -47,13 +47,13 @@ export const cartMerchantSlice = createSlice({
                     if (index === indexItem) {
                         return {
                             ...item,
-                            statusProductsCarts: "1",
+                            status: "1",
                         };
                     }
                     return item;
                 });
                 data.items.splice(indexItem, 1);
-                // const updatedData = { ...data, items: updatedItems };
+                const updatedData = { ...data, items: updatedItems };
                 localStorage.setItem('list', JSON.stringify(data));
                 return { ...state, items: data.items };
             }

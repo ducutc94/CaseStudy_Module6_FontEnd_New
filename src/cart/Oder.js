@@ -216,5 +216,5 @@ export default function Oder() {
                 </div>
             </div>
         </>
-    );
+    )
 }
