@@ -91,7 +91,7 @@ export default function Oder() {
     });
     const updatedItems = items.map(item => {
         const updatedProductsCartsList = item.productsCartsList.map(productCart => {
-            const updatedProductCart = { ...productCart, quantity: productCart.quantity + 1 };
+            const updatedProductCart = { ...productCart, quantity: productCart.quantity };
             return updatedProductCart;
         });
 
