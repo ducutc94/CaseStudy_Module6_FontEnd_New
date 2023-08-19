@@ -22,7 +22,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {setCart} from "./features/cart/cartSlice";
 import {setCartMerchant} from "./features/cart/cartMC";
-import Toast from "./layout/Toast";
 import MerchantBillService from "./cart/MerchantBillService";
 import FindShopById from "./cart/FindShopById";
 import Oder from "./cart/Oder";
@@ -43,10 +42,6 @@ function App() {
     }, [])
     return (
         <>
-
-            {/*<---------------Thông báo khi bắt đầu vào trang chủ------------------>*/}
-            {/*<Toast/>*/}
-
             <Header/>
             <div className={`container-content`}>
                 <Routes>
@@ -61,7 +56,6 @@ function App() {
                     <Route path={'/update-shop/:id'} element={<UpdateShop />}></Route>
 
                     <Route path={'/carts'} element={<Cart />}></Route>
-                    {/*<Route path={'/search-food/:search'} element={<Search/>}></Route>*/}
 
                     <Route path={'/voucher'} element={<ListVoucher />}></Route>
                     <Route path={'/create-voucher'} element={<CreateVoucher />}></Route>

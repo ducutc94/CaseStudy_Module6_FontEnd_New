@@ -4,6 +4,7 @@ import {Link, useLocation, useParams} from "react-router-dom";
 import Filter from "./Filter";
 import Swal from "sweetalert2";
 import Banner from "../../layout/Banner";
+import Toast1 from "../../layout/Toast1";
 
 export default function List() {
     const [foods, setFoods] = useState([])
@@ -111,7 +112,7 @@ export default function List() {
 
     return (
         <>
-
+            <Toast1></Toast1>
             <div className="grid">
                 <div className="grid__row app__content">
                     <Banner/>
@@ -130,7 +131,10 @@ export default function List() {
                                                 <img className="" src={items.image} alt=""/>
                                             </div>
 
-                                            <h4 className="home-product-item__name">{items.name}</h4>
+                                            <h4 className="home-product-item__name">
+                                                <i className="fa-solid fa-pizza-slice"></i> &nbsp;
+                                                {items.name}
+                                            </h4>
                                             <div className="home-product-item__price">
                                                 <span className="home-product-item__price-old">
                                                     Số lượng: {items.quantity}</span>
@@ -155,13 +159,16 @@ export default function List() {
                                             </span>
 
                                                 <span className="home-product-item__sold">
-                                                Lượt xem: {items.views}
+                                                    <i className="fa-solid fa-eye"></i> &nbsp;
+                                                    Lượt xem: {items.views}
                                             </span>
                                             </div>
                                             <div className="home-product-item__origin">
                                                 <span className="home-product-item__brand"></span>
                                                 <span className="home-product-item__origin-name">
-                                                   Tên của hàng: {items.shops.name}</span>
+                                                    <i className="fa-solid fa-store"></i> &nbsp;
+                                                   Tên của hàng: {items.shops.name}
+                                                </span>
                                             </div>
                                             <div className="home-product-item__favourite">
                                                 <i className="fa fa-thumbs-up"></i>
