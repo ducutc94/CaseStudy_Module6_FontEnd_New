@@ -180,7 +180,7 @@ export default function Oder() {
                                 <div className="view_category-NoItem">
                                     <div className="view_category-NoItem-container">
                                         <img src="../static/img/history-empty.png"/>
-                                        <p className="view_category-NoItem-container-h"> Lịch sử trống </p>
+                                        <p className="view_category-NoItem-container-h"> Lịch sử trống... </p>
                                     </div>
                                 </div>
                             </>

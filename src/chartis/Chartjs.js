@@ -232,9 +232,24 @@ export default function Chartjs() {
                     </div>
                 </div>
             ) : (
-                <>
-                    Dữ liệu trống
-                </>
+                    <>
+                        <div className={`col-md-12 mrTopData`}>
+                            <Link to={'/products-carts-merchant'}
+                                  style={{textDecoration:`none`,position: `relative`,
+                                      top: `-20px`,
+                                      fontSize: `20px`,
+                                      color: `orange`}}>
+                                <i className="fa-solid fa-backward"></i>
+                                <span> Trở lại trang quản lý</span>
+                            </Link>
+                        </div>
+                        <div className="view_data-NoItem mrTopData ">
+                            <div className="view_data-NoItem-container">
+                                <img src="../static/img/empty-data.png"/>
+                                <p className="view_data-NoItem-container-h"> Dữ liệu trống ... </p>
+                            </div>
+                        </div>
+                    </>
             )}
         </>
     );

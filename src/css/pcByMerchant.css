@@ -133,22 +133,13 @@
         opacity: 1;
     }
 }
-.view_history-NoItem-container {
-    animation: fade 2s infinite;
-}
+/*.view_history-NoItem-container {*/
+/*    animation: fade 2s infinite;*/
+/*}*/
 .view_history-NoItem-container{
     max-height: 393px;
 }
 
-.view_history-NoItem-container-p{
-    position: relative;
-    font-size: 42px;
-    font-weight: 800;
-    color: #fbe74a;
-    text-align: center;
-    font-family: ui-rounded;
-    top: -62px;
-}
 .view_history-NoItem-container-h{
     position: relative;
     font-size: 42px;
@@ -156,4 +147,5 @@
     color: #fbe74a;
     text-align: center;
     font-family: ui-rounded;
+    animation: fade 2s infinite;
 }

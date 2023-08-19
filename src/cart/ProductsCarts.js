@@ -181,8 +181,8 @@ export default function ProductsCarts() {
                         ) : (
                             <div className="view_category-NoItem">
                                 <div className="view_category-NoItem-container">
-                                    <img src="../static/img/empty-cart.png"/>
-                                    <p className="view_category-NoItem-container-p"> Giỏ hàng trống </p>
+                                    <img src="../static/img/empty-cart123.png"/>
+                                    <p className="view_category-NoItem-container-p"> Giỏ hàng trống... </p>
                                 </div>
                             </div>
                         )}
