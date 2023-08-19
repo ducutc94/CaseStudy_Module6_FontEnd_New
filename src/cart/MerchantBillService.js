@@ -96,70 +96,89 @@ export default function MerchantBillService() {
                     </div>
 
                 </div>
-                <table className={"table table_shop_list"}>
-                    <thead>
-                    <tr>
-                        <td className="table_shop_list-header">
-                            <h5 className="table_shop_list-title">
-                                STT
-                            </h5></td>
-                        <td className="table_shop_list-header">
-                            <h5 className="table_shop_list-title">
-                                NGƯỜI MUA
-                            </h5></td>
-                        <td className="table_shop_list-header">
-                            <h5 className="table_shop_list-title">
-                                TÊN CỬA HÀNG
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TỔNG TIỀN
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TRANG THÁI ĐƠN
-                            </h5></td>
-                        <td colSpan={3}><h5 className="table_shop_list-title">
-                            TUỲ CHỌN
-                        </h5></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {listBill.length > 0 && listBill.map((item, index) =>
-                        (
-                            <tr key={item.id}>
-                                <td className="table_shop_list-inner">{index + 1}</td>
-                                <td className="table_shop_list-inner">{item.username}</td>
-                                <td className="table_shop_list-inner">{item.shops.name}</td>
-                                <td className="table_shop_list-inner">
+
+                {listBill.length > 0 ? (
+                    <>
+                        <div className="pcMerchant_container_all">
+                            <table className={"table table_shop_list"}>
+                                <thead>
+                                <tr>
+                                    <td className="table_shop_list-header">
+                                        <h5 className="table_shop_list-title">
+                                            STT
+                                        </h5></td>
+                                    <td className="table_shop_list-header">
+                                        <h5 className="table_shop_list-title">
+                                            NGƯỜI MUA
+                                        </h5></td>
+                                    <td className="table_shop_list-header">
+                                        <h5 className="table_shop_list-title">
+                                            TÊN CỬA HÀNG
+                                        </h5></td>
+                                    <td>
+                                        <h5 className="table_shop_list-title">
+                                            TỔNG TIỀN
+                                        </h5></td>
+                                    <td>
+                                        <h5 className="table_shop_list-title">
+                                            TRANG THÁI ĐƠN
+                                        </h5></td>
+                                    <td colSpan={3}><h5 className="table_shop_list-title">
+                                        TUỲ CHỌN
+                                    </h5></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {listBill.length > 0 && listBill.map((item, index) =>
+                                    (
+                                        <tr key={item.id}>
+                                            <td className="table_shop_list-inner">{index + 1}</td>
+                                            <td className="table_shop_list-inner">{item.username}</td>
+                                            <td className="table_shop_list-inner">{item.shops.name}</td>
+                                            <td className="table_shop_list-inner">
                                     <span style={{marginLeft: `5px`}}>
                                                         {new Intl.NumberFormat('vi-VN', {
                                                             style: 'currency',
                                                             currency: 'VND'
                                                         }).format(item.total)}
                                     </span>
-                                </td>
+                                            </td>
 
-                                {item.status === "0" && <>
-                                    <td className="table_shop_list-inner" style={{color:`#14c014`}}>Đã thanh
-                                        toán
-                                    </td>
-                                </>}
-                                {item.status === "1" && <>
-                                    <td  className="table_shop_list-inner" style={{color:`red`}}>Huỷ thanh
-                                        toán
-                                    </td>
-                                </>}
-                                <td className="table_shop_list-inner">
-                                    <button onClick={()=>handleShow(item)}>Chi tiết</button>
-                                    <BillsDetail bill={billDetail} showBills={showBillDetail} handleClose={handleClose}/>
-                                </td>
-                            </tr>
-                        )
-                    )
-                    }
-                    </tbody>
-                </table>
+                                            {item.status === "0" && <>
+                                                <td className="table_shop_list-inner" style={{color:`#14c014`}}>Đã thanh
+                                                    toán
+                                                </td>
+                                            </>}
+                                            {item.status === "1" && <>
+                                                <td  className="table_shop_list-inner" style={{color:`red`}}>Huỷ thanh
+                                                    toán
+                                                </td>
+                                            </>}
+                                            <td className="table_shop_list-inner">
+                                                <button onClick={()=>handleShow(item)}>Chi tiết</button>
+                                                <BillsDetail bill={billDetail} showBills={showBillDetail} handleClose={handleClose}/>
+                                            </td>
+                                        </tr>
+                                    )
+                                )
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
+
+
+                ) : (
+                    <>
+                        <div className="view_history-NoItem">
+                            <div className="view_history-NoItem-container">
+                                <img src="../static/img/history-empty.png"/>
+                                <p className="view_history-NoItem-container-h"> Không có đơn hàng nào ! </p>
+                            </div>
+                        </div>
+                    </>
+                )}
+
             </div>
         </>
     )

@@ -19,7 +19,7 @@ import './css/merchantBillService.css';
 import './css/views_category.css';
 import './css/pcByMerchant.css';
 import './css/view_admin.css';
-import './css/modal_bill_detail.css';
+import './css/bill_detail_modal.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";

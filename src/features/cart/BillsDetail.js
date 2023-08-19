@@ -1,9 +1,12 @@
+
 import {Button, Modal} from "react-bootstrap";
-import {useEffect, useState} from "react";
-import {rgbToHex} from "@mui/material";
+import {useEffect, useRef, useState} from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 
-export default function BillsDetail({bill, showBills, handleClose}) {
+
+export default function BillsDetail({bill,showBills,handleClose}) {
 
     useEffect(() => {
         console.log(bill)
@@ -24,12 +27,29 @@ export default function BillsDetail({bill, showBills, handleClose}) {
         return timeAll;
     }
     function setVoucher(data) {
-       let voucher = 0;
+        let voucher = 0;
         for (let i = 0; i < data.length; i++) {
             voucher += data[i].products.price*data[i].quantity*(data[i].products.voucher.percent)/100
         }
         return voucher;
     }
+    const contentRef = useRef(null);
+
+    const convertToPdf = () => {
+        const input = contentRef.current;
+
+        html2canvas(input)
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('shops.pdf');
+            });
+    };
+
 
     return (<>
         <Modal
@@ -44,134 +64,137 @@ export default function BillsDetail({bill, showBills, handleClose}) {
             </Modal.Header>
             <Modal.Body>
                 <>
-                    <div className="bill_detail_container">
-                        <div className="bill_detail_inner">
+                    <div ref={contentRef}>
+                        <div className="bill_detail_container">
+                            <div className="bill_detail_inner">
                                  <span className="bill_detail_inner-item-header">
                                      {bill.shops.name}
                                 </span>
-                            <span className="bill_detail_inner-item">
+                                <span className="bill_detail_inner-item">
                                     Địa chỉ:&nbsp; {bill.shops.description}
                                 </span>
-                            <span className="bill_detail_inner-item-p">
+                                <span className="bill_detail_inner-item-p">
                                     HOÁ ĐƠN CHI TIẾT
                                 </span>
-                            <span className="bill_detail_inner-item">
+                                <span className="bill_detail_inner-item">
                                     Số : &nbsp; ###{bill.id}
                                 </span>
-                        </div>
-                        <div className="bill_detail_inner-bill">
+                            </div>
+                            <div className="bill_detail_inner-bill">
                                 <span className="bill_detail_inner-item">
                                     Ngày đặt hàng:
                                     &nbsp; {setDay(bill.localDateTime)}
                                     &nbsp; {setTime(bill.localDateTime)}
                                 </span>
-                            <span className="bill_detail_inner-item">
+                                <span className="bill_detail_inner-item">
                                     Người nhận:&nbsp; {bill.username}
                                 </span>
-                            <span className="bill_detail_inner-item">
+                                <span className="bill_detail_inner-item">
                                     Trạng thái đơn: &nbsp; {bill.status === "1" ?( <span className="table_shop_list-inner" style={{color: `red`}}>Huỷ thanh
                                     toán
                                 </span>):(
-                                <span className="table_shop_list-inner" style={{color: `green`}}>Đã thanh
+                                    <span className="table_shop_list-inner" style={{color: `green`}}>Đã thanh
                                     toán
                                 </span>)
 
-                            }
+                                }
                                 </span>
-                        </div>
-                        <hr/>
-                        <div className="bill_detail_inner-products">
-                            <div className="bill_detail_inner-containerFood">
-                                <span className="bill_detail_inner-item-p">#</span>
-                                <span className="bill_detail_inner-item-p">Tên SP</span>
-                                <span className="bill_detail_inner-item-p">Số lượng</span>
-                                <span className="bill_detail_inner-item-p">Đơn giá</span>
-                                <span className="bill_detail_inner-item-p">Tổng tiền</span>
                             </div>
                             <hr/>
-                            <div className="bill_detail_inner-containerFood-show">
-                                {bill.productsCartsList.length > 0 && bill.productsCartsList.map((item, index) => (<>
-                                    <div className="bill_detail_inner-containerFood-showProducts" >
+                            <div className="bill_detail_inner-products">
+                                <div className="bill_detail_inner-containerFood">
+                                    <span className="bill_detail_inner-item-p">#</span>
+                                    <span className="bill_detail_inner-item-p">Tên SP</span>
+                                    <span className="bill_detail_inner-item-p">Số lượng</span>
+                                    <span className="bill_detail_inner-item-p">Đơn giá</span>
+                                    <span className="bill_detail_inner-item-p">Tổng tiền</span>
+                                </div>
+                                <hr/>
+                                <div className="bill_detail_inner-containerFood-show">
+                                    {bill.productsCartsList.length > 0 && bill.productsCartsList.map((item, index) => (<>
+                                        <div className="bill_detail_inner-containerFood-showProducts" >
                                         <span className="bill_detail_inner-item">
                                         {index +1}
                                     </span>
-                                        <span className="bill_detail_inner-item">
+                                            <span className="bill_detail_inner-item">
                                         {item.products?.name}
                                     </span>
-                                        <span className="bill_detail_inner-item">
+                                            <span className="bill_detail_inner-item">
                                        {item.quantity}
                                     </span>
-                                        <span className="bill_detail_inner-item"
-                                              style={{marginLeft: `5px`}}>
+                                            <span className="bill_detail_inner-item"
+                                                  style={{marginLeft: `5px`}}>
                                                             {new Intl.NumberFormat('vi-VN', {
                                                                 style: 'currency',
                                                                 currency: 'VND'
                                                             }).format(item.products.price)}
                                                          </span>
-                                        <span className="bill_detail_inner-item"
-                                              style={{marginLeft: `5px`}}>
+                                            <span className="bill_detail_inner-item"
+                                                  style={{marginLeft: `5px`}}>
                                                             {new Intl.NumberFormat('vi-VN', {
                                                                 style: 'currency',
                                                                 currency: 'VND'
                                                             }).format(item.quantity * item.products.price)}
                                                          </span>
-                                    </div>
+                                        </div>
 
                                     </>))}
 
-                            </div>
-                            <hr/>
-                            <div className="bill_detail_inner-containerFood-total">
-                                <div className="bill_detail_inner-containerFood-total-inner">
+                                </div>
+                                <hr/>
+                                <div className="bill_detail_inner-containerFood-total">
+                                    <div className="bill_detail_inner-containerFood-total-inner">
                                          <span className="bill_detail_inner-item-p">
                                         Tiền hàng
                                     </span>
-                                    <span className="bill_detail_inner-item-p"
-                                          style={{marginLeft: `5px`}}>
+                                        <span className="bill_detail_inner-item-p"
+                                              style={{marginLeft: `5px`}}>
                                                             {new Intl.NumberFormat('vi-VN', {
                                                                 style: 'currency',
                                                                 currency: 'VND'
                                                             }).format(bill.total)}
                                                          </span>
-                                </div>
+                                    </div>
 
-                                <div className="bill_detail_inner-containerFood-total-inner">
+                                    <div className="bill_detail_inner-containerFood-total-inner">
                                      <span className="bill_detail_inner-item-p">
                                        Khuyến mại:
                                     </span>
-                                    <span className="bill_detail_inner-item-p"
-                                          style={{marginLeft: `5px`}}>
+                                        <span className="bill_detail_inner-item-p"
+                                              style={{marginLeft: `5px`}}>
                                                             {new Intl.NumberFormat('vi-VN', {
                                                                 style: 'currency',
                                                                 currency: 'VND'
                                                             }).format(setVoucher(bill.productsCartsList))}
                                                          </span>
-                                </div>
+                                    </div>
 
-                                <div className="bill_detail_inner-containerFood-total-inner">
+                                    <div className="bill_detail_inner-containerFood-total-inner">
                                        <span className="bill_detail_inner-item-p">
                                         Tổng tiền :
                                     </span>
-                                    <span className="bill_detail_inner-item-p"
-                                          style={{marginLeft: `5px`}}>
+                                        <span className="bill_detail_inner-item-p"
+                                              style={{marginLeft: `5px`}}>
                                                             {new Intl.NumberFormat('vi-VN', {
                                                                 style: 'currency',
                                                                 currency: 'VND'
                                                             }).format(bill.total)}
                                                          </span>
+                                    </div>
+
+
                                 </div>
-
-
-                            </div>
-                            <hr/>
-                            <div className="bill_detail_inner-containerFood-p">
+                                <hr/>
+                                <div className="bill_detail_inner-containerFood-p">
                                     <span className="bill_detail_inner-item-p">
                                         Trân trọng cảm ơn và Hẹn gặp lại quý khách !
                                     </span>
+                                </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
+
                 </>
 
             </Modal.Body>
@@ -179,7 +202,7 @@ export default function BillsDetail({bill, showBills, handleClose}) {
                 <Button variant="secondary" onClick={handleClose}>
                     Trở lại
                 </Button>
-                <Button variant="primary">In hoá đơn</Button>
+                <Button variant="primary" onClick={convertToPdf}>In hoá đơn</Button>
             </Modal.Footer>
         </Modal>
     </>)

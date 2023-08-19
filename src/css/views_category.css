@@ -265,16 +265,16 @@
         opacity:1;
     }
     50% {
-        opacity: 0.6;
+        opacity: 0.5;
     }
     100% {
         opacity: 1;
     }
 }
 
-.view_category-NoItem-container {
-    animation: fade 2.5s infinite;
-}
+/*.view_category-NoItem-container {*/
+/*    animation: fade 2s infinite;*/
+/*}*/
 .view_category-NoItem-container{
     max-height: 393px;
 }
@@ -292,9 +292,52 @@
     color: #fbe74a;
     text-align: center;
     font-family: ui-rounded;
-    top: -62px;
+    top: -11px;
+    animation: fade 1.5s infinite;
 }
 .view_category-NoItem-container-h{
+    position: relative;
+    font-size: 42px;
+    font-weight: 800;
+    color: #fbe74a;
+    text-align: center;
+    font-family: ui-rounded;
+    animation: fade 1.5s infinite;
+}
+
+
+
+/*----------------------Bieu do mua hàng ở đây---------------------------*/
+.view_data-NoItem{
+    display: flex;
+    justify-content: center;
+    margin: 36px;
+}
+@keyframes fade {
+    0% {
+        opacity:1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.view_data-NoItem-container {
+    animation: fade 2s infinite;
+}
+.view_data-NoItem-container{
+    max-height: 550px;
+}
+
+.mrTopData{
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.view_data-NoItem-container-h{
     position: relative;
     font-size: 42px;
     font-weight: 800;
