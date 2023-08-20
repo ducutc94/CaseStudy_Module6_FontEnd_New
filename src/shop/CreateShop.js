@@ -165,8 +165,8 @@ export default function CreateShop(){
                             <input onChange={formik.handleChange}
                                    name={'startTime'} type={'time'}
                                    className={'form-control'}
-                                   id={'startTime'}/>
-                                   onBlur={formik.handleBlur}
+                                   id={'startTime'}
+                                   onBlur={formik.handleBlur}/>
                             {formik.touched.endTime && formik.errors.endTime ? (<span className={"text-danger"}>{formik.errors.endTime}</span>) : null}
                         </div>
 
