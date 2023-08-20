@@ -211,6 +211,8 @@ export default function View() {
                                     </div>
                                     <div className="view_food-right-container">
                                         <div className="view_food-right-item-address">
+                                            <i className="fa-solid fa-location-dot" style={{color: `#3663b0`}}></i>
+                                            &nbsp;
                                             {shopsDescription}
                                         </div>
                                     </div>
