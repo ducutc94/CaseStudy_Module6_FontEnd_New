@@ -4,17 +4,46 @@ import {useFormik} from "formik";
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import storage from "../../config/FirebaseConfig";
+import {useNavigate} from "react-router-dom";
+import * as Yup from "yup";
+import * as yup from "yup";
+
 
 export default function UserProfile() {
     const user = JSON.parse(localStorage.getItem("user"));
     const idUser = user.id;
+    const [userUpdate,setUserUpdate] = useState({});
+    let navigate = useNavigate();
+    const [phone,setPhone] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/users/${idUser}`).then((res) => {
             let data = {...res.data};
             formik.setValues(data);
+            setUserUpdate(res.data);
+            console.log(data)
         });
-    }, [idUser]);
+        axios.get('http://localhost:8080/api/users').then((res=>{
+            if(res.data !==""){
+                setPhone(res.data);
+            }else {
+                setPhone([])
+            }
+        }))
+    }, []);
+    const checkPhoneUser = (phoneUser) => {
+        return phone.some((user) => user.phone === phoneUser);
+    };
+    const validationU = Yup.object().shape({
+
+
+        phone: yup.string().max(10, "Số điện thoại phải là 10 số")
+            .matches(/(|0[3|5|7|8|9])+([0-9]{8})\b/g,"Chưa đúng định dạng")
+            .required("Số điện thoại không được để trống").test('Số điện thoại duy nhất', 'Số điện thoại đã tồn tại', function (value) {
+                return !checkPhoneUser(value);
+            })
+
+    })
 
     const formik = useFormik({
         initialValues: {
@@ -25,10 +54,11 @@ export default function UserProfile() {
             image: "",
             phone: "",
         },
+        validationSchema: validationU,
         onSubmit: async (values) => {
             try {
                 Swal.fire({
-                    title: "Bạn có muốn cập nhật ?",
+                    title: "Bạn muốn cập nhật ?",
                     showDenyButton: true,
                     confirmButtonText: "Lưu",
                     denyButtonText: `Hủy`,
@@ -64,7 +94,7 @@ export default function UserProfile() {
                             localStorage.setItem("user", JSON.stringify(user));
 
                             Swal.fire({
-                                title: 'Đang cập nhật  ...',
+                                title: 'Đang cập nhật ảnh...',
                                 html: 'Vui lòng đợi trong giây lát...',
                                 allowEscapeKey: false,
                                 allowOutsideClick: false,
@@ -90,7 +120,57 @@ export default function UserProfile() {
                 })
         }
     }
+    async function uploadRole() {
+            let data = userUpdate;
+            data.roles[0].id = 3;
+        Swal.fire({
+            title: "Bạn muốn nâng cấp?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Lưu",
+            denyButtonText: `Hủy`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.put(`http://localhost:8080/api/users/upload-role`, data
+                ).then((res) => {
+                    if (res.data.username) {
+                        Swal.fire({
+                            title: 'Đang nâng cấp...',
+                            html: 'Vui lòng đợi trong giây lát...',
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
 
+                                // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                                const timeout = 2500; // 5 giây
+                                setTimeout(() => {
+                                    Swal.close();
+                                }, timeout);
+                            }
+                        }).then((result) => {
+                            Swal.fire('Nâng cấp thành công!Mời bạn đăng nhập lại tài khoản!', '', 'success');
+                            localStorage.clear();
+                            navigate('/')
+
+                        })
+                    } else {
+                        Swal.fire("Nâng cấp ko thành công!", "", "success");
+                    }
+
+                }).catch(err => console.log(err));
+            }else if (result.isDenied) {
+                Swal.fire('Hủy', '', 'info');
+            }
+        }).catch(error => {
+            Swal.fire({
+                title: "Lỗi rồi!",
+                text: "Nâng cấp thất bại",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        })
+    }
     return (
         <>
             <div className="grid">
@@ -154,13 +234,14 @@ export default function UserProfile() {
                                     </div>
                                     <div className="home-user-right-content">
                                         <div className="home-user-right-content-info-upContainer">
-                                            {user.authorities[0].authority === "ROLE_USER " &&
-                                                <>
+                                                {user.authorities[0].authority === "ROLE_USER" &&
+                                                    <>
                                                     <div className="home-user-right-content-info-up">
                                                         <span>Nâng cấp tài khoản</span>
-                                                        <i className="fa-solid fa-cloud-arrow-up"></i>
+                                                        <i onClick={uploadRole} className="fa-solid fa-cloud-arrow-up"></i>
                                                     </div>
-                                                </>}
+                                                </>
+                                        }
                                         </div>
                                         <div className="home-user-right-content-info">
                                             <div className="home-user-title-user">Tải ảnh đại diện</div>
@@ -277,8 +358,11 @@ export default function UserProfile() {
                                                                 <input type="number"
                                                                        name={'phone'}
                                                                        onChange={formik.handleChange}
+                                                                       id={'phone'}
                                                                        value={formik.values.phone}
+                                                                       onBlur={formik.handleBlur}
                                                                 />
+                                                                {formik.touched.phone && formik.errors.phone ? (<span className={"text-danger"}>{formik.errors.phone}</span>) : null}
                                                             </div>
                                                         </div>
                                                         <div className="grid__column-4">
