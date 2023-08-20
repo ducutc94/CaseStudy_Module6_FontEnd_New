@@ -124,7 +124,7 @@ export default function ListShop() {
                                     <td className="table_shop_list-inner">{item.startTime}</td>
                                     <td className="table_shop_list-inner">{item.endTime}</td>
                                     {item.statusShops === "0" && <>
-                                        <td className="table_shop_list-inner">Đã xác thực</td>
+                                        <td className="table_shop_list-inner">Đang hoạt động</td>
                                     </>}
                                     {item.statusShops === "1" && <>
                                         <td className="table_shop_list-inner">Tạm dừng hoạt động</td>

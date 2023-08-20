@@ -8,28 +8,13 @@ import {Link, useNavigate} from "react-router-dom";
 export default function PCByMerchant() {
     const cartMerchant = useSelector(state => state.cartMerchant)
     const dispatch = useDispatch()
-    const [listBill, setListBill] = useState([])
     const user = JSON.parse(localStorage.getItem("user"))
-    const [list, setList] = useState([]);
-    const navigate = useNavigate()
-
-
     useEffect(() => {
         axios.get(`http://localhost:8080/api/bills/bill-dto/${user.id}`).then((res) => {
-            console.log(res.data)
             if (res.data !== null) {
-                setListBill(res.data)
                 dispatch(addCartMerchant(res.data))
             } else {
-                setListBill([])
                 dispatch(addCartMerchant([]))
-            }
-        })
-        axios.get(`http://localhost:8080/api/shops/user/${user.id}`).then((res) => {
-            if (res.data !== null) {
-                setList(res.data)
-            } else {
-                setList([])
             }
         })
         dispatch(setCartMerchant())
@@ -66,11 +51,6 @@ export default function PCByMerchant() {
             }
         })
     }
-    const handleCityChange = (event) => {
-        const shopID = event.target.value;
-        navigate(`/products-carts-shop/${shopID}`);
-    };
-
 
     function deleteSumbit(id, index, item) {
         Swal.fire({

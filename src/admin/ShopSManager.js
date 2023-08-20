@@ -92,7 +92,10 @@ export default function ShopSManager() {
                                     {item.statusShops === "1" && <>
                                         <td className="text-warning">Tạm dừng hoạt động</td>
                                     </>}
-                                    <td colSpan={2} className="table_shop_list-inner iconDeleteShop">
+                                    {item.statusShops === "2" && <>
+                                        <td className="text-warning">Chờ xác thực</td>
+                                    </>}
+                                    {item.statusShops !== "2" ?( <td colSpan={2} className="table_shop_list-inner iconDeleteShop">
                                         <button onClick={() => toggleShop(item.id, item.statusShops)}>
                                             {item.statusShops === "0" ? (
                                                 <>
@@ -106,7 +109,10 @@ export default function ShopSManager() {
                                                 </>
                                             )}
                                         </button>
-                                    </td>
+                                    </td>):(<><td></td></>)
+
+                                  }
+
                                 </tr>
                             )
                         }

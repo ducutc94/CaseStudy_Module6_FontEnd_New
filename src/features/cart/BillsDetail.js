@@ -9,9 +9,6 @@ import jsPDF from "jspdf";
 export default function BillsDetail({bill,showBills,handleClose}) {
 
     useEffect(() => {
-        console.log(bill)
-        console.log(setVoucher(bill.productsCartsList))
-
 
     }, [])
 
