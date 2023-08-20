@@ -17,6 +17,14 @@ export default function BillsDetail({bill,showBills,handleClose}) {
         return date;
 
     }
+    function setAllTotal(total) {
+        let allTotal = 0;
+        for (let i = 0; i < total.length; i++) {
+            allTotal += total[i].quantity * total[i].products.price
+        }
+        return allTotal;
+
+    }
 
     function setTime(localDateTime) {
         const time = localDateTime.split("T")[1];
@@ -114,7 +122,7 @@ export default function BillsDetail({bill,showBills,handleClose}) {
                                         {index +1}
                                     </span>
                                             <span className="bill_detail_inner-item">
-                                        {item.products?.name}
+                                        {item.products?.name}( {item.products.voucher.name}
                                     </span>
                                             <span className="bill_detail_inner-item">
                                        {item.quantity}
@@ -131,7 +139,7 @@ export default function BillsDetail({bill,showBills,handleClose}) {
                                                             {new Intl.NumberFormat('vi-VN', {
                                                                 style: 'currency',
                                                                 currency: 'VND'
-                                                            }).format(item.quantity * item.products.price)}
+                                                            }).format(item.quantity * item.products.price * (100-item.products.voucher.percent)/100)}
                                                          </span>
                                         </div>
 
@@ -149,7 +157,7 @@ export default function BillsDetail({bill,showBills,handleClose}) {
                                                             {new Intl.NumberFormat('vi-VN', {
                                                                 style: 'currency',
                                                                 currency: 'VND'
-                                                            }).format(bill.total)}
+                                                            }).format(setAllTotal(bill.productsCartsList))}
                                                          </span>
                                     </div>
 
