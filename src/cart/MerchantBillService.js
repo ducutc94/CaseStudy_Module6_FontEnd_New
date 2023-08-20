@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {Link, useNavigate} from "react-router-dom";
 import BillsDetail from "../features/cart/BillsDetail";
+import FilterBill from "../filter/FillterBill";
 
 async function getOderByUserId(id) {
     return await axios.get(`http://localhost:8080/api/products-carts/merchant-service-all/${id}`)
@@ -18,11 +19,8 @@ async function getShopByUserId(id) {
 }
 
 export default function MerchantBillService() {
-    const [list, setList] = useState([]);
     const [listBill, setListBill] = useState([]);
-    const [listShop, setListShop] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"))
-    const navigate = useNavigate()
     const [showBillDetail, setShowBillDetail] = useState(false)
     const [billDetail, setBillDetail] = useState({})
     const handleClose = () => setShowBillDetail(false);
@@ -33,32 +31,19 @@ export default function MerchantBillService() {
 
     useEffect(() => {
         Promise.all([getOderByUserId(user.id), getBillsByUserId(user.id), getShopByUserId(user.id)]).then(res => {
-            if (res[0].data != null) {
-                setList(res[0].data)
-
-            } else {
-                setList([])
-            }
             if (res[1].data != null) {
-                console.log(res[1].data)
                 setListBill(res[1].data)
                 setBillDetail(res[1].data[0])
             } else {
                 setListBill([])
             }
-            if (res[2].data != null) {
-                setListShop(res[2].data)
-            } else {
-                setListShop([])
-            }
 
         })
     }, [])
 
-    const handleCityChange = (event) => {
-        const shopID = event.target.value;
-        navigate(`/products-carts-shop/${shopID}`);
-    };
+    const sortByShop = (data) => {
+        setListBill(data)
+    }
 
     return (
         <>
@@ -79,20 +64,9 @@ export default function MerchantBillService() {
                     </span>
 
                     <div className="bill_about--shop">
-                        <div className="bill_about--shop-inner">
-                            <select
-                                name=""
-                                id=""
-                                className="bill_about--shop-inner--btn"
-                                onChange={handleCityChange}
-                            >
-                                <option value="">---Đơn theo cửa hàng---</option>
-                                {listShop.length > 0 && listShop.map((item, index) => (<option key={index} value={item.id}>
-                                    {item.name}
-                                </option>))}
-                            </select>
+                        {/*Filter theo shop */}
+                        <FilterBill filter={sortByShop}/>
 
-                        </div>
                     </div>
 
                 </div>

@@ -29,6 +29,7 @@ export default function Login({showLogin, handleClose}) {
         validationSchema: validation,
         onSubmit: values => {
             axios.post('http://localhost:8080/api/auth/login', values).then((res) => {
+                console.log(res.data)
                 if (res.data.username !== undefined) {
                     localStorage.setItem("user", JSON.stringify(res.data))
                     dispatch(addIdCart(res.data.id))

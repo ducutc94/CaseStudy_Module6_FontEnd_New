@@ -86,6 +86,21 @@ export default function CreateShop(){
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Đang khởi tạo...',
+                            html: 'Vui lòng đợi trong giây lát...',
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+
+                                // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
+                                const timeout = 2500; // 5 giây
+                                setTimeout(() => {
+                                    Swal.close();
+                                }, timeout);
+                            }
+                        })
                     axios.post('http://localhost:8080/api/shops/create',{
                         name:values.name,
                         phone:values.phone,
@@ -101,11 +116,11 @@ export default function CreateShop(){
                         }
 
                     }).then(res => {
-                        Swal.fire('Lưu thành công!, Mời bạn xác thực Email', '', 'success')
+                        Swal.fire('Tạo thành công!, Mời bạn xác thực Email', '', 'success')
                         navigate('/shop')
                     }).catch(err => console.log(err))
                 } else if (result.isDenied) {
-                    Swal.fire('Lưu thất bại', '', 'info')
+                    Swal.fire('Tạo thất bại', '', 'info')
                 }
             })
         }

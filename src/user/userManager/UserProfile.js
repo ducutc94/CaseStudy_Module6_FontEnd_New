@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import storage from "../../config/FirebaseConfig";
 
-
 export default function UserProfile() {
     const user = JSON.parse(localStorage.getItem("user"));
     const idUser = user.id;
@@ -65,7 +64,7 @@ export default function UserProfile() {
                             localStorage.setItem("user", JSON.stringify(user));
 
                             Swal.fire({
-                                title: 'Đang tạo sản phẩm...',
+                                title: 'Đang cập nhật  ...',
                                 html: 'Vui lòng đợi trong giây lát...',
                                 allowEscapeKey: false,
                                 allowOutsideClick: false,
