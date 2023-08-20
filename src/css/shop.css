@@ -102,7 +102,7 @@ position: relative;
 .iconDeleteShop-inner{
     display: none;
     position: absolute;
-    padding: 0 12px;
+    padding: 0 5px;
     background-color: #eaeaedd4;
     border-radius: 6px;
 }
@@ -130,8 +130,30 @@ position: relative;
 }
 
 
-
-
 .iconAddShopFood{
 
+}
+
+
+.shopScroll_container_all{
+    min-height: 400px !important;
+    max-height: 450px !important;
+    overflow: scroll;
+}
+.shopScroll_container_all::-webkit-scrollbar {
+    width: 0; /* Độ rộng của thanh cuộn */
+}
+
+.shopScroll_container_all::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Màu nền của thanh cuộn */
+    border-radius: 4px;
+}
+
+.shopScroll_container_all::-webkit-scrollbar-thumb:hover {
+    background-color: transparent; /* Màu nền của thanh cuộn khi di chuột qua */
+}
+
+.shopScroll_container_all::-webkit-scrollbar-track {
+    background-color: transparent; /* Màu nền của phần dưới thanh cuộn */
+    border-radius: 4px;
 }

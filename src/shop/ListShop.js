@@ -11,9 +11,9 @@ export default function ListShop() {
     useEffect(() => {
         axios.get(`http://localhost:8080/api/shops/user/${idUser}`).then(res => {
 
-            if(res.data !==""){
+            if (res.data !== "") {
                 setShops(res.data);
-            }else {
+            } else {
                 setShops([])
             }
 
@@ -72,94 +72,112 @@ export default function ListShop() {
 
                 </div>
 
-                <table className={"table table_shop_list"}>
-                    <thead>
-                    <tr>
-                        <td className="table_shop_list-header">
-                            <h5 className="table_shop_list-title">
-                                STT
+                <div className="shopScroll_container_all">
+                    <table className={"table table_shop_list"}>
+                        <thead>
+                        <tr>
+                            <td className="table_shop_list-header">
+                                <h5 className="table_shop_list-title">
+                                    STT
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    TÊN
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    SỐ ĐIỆN THOẠI
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    EMAIL
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    GIỜ MỞ CỬA
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    GIỜ ĐÓNG CỬA
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    TRẠNG THÁI
+                                </h5></td>
+                            <td>
+                                <h5 className="table_shop_list-title">
+                                    THÀNH PHỐ
+                                </h5></td>
+                            <td colSpan={3}><h5 className="table_shop_list-title">
+                                TUỲ CHỌN
                             </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TÊN
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                SỐ ĐIỆN THOẠI
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                EMAIL
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                GIỜ MỞ CỬA
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                GIỜ ĐÓNG CỬA
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                TRẠNG THÁI
-                            </h5></td>
-                        <td>
-                            <h5 className="table_shop_list-title">
-                                THÀNH PHỐ
-                            </h5></td>
-                        <td colSpan={3}><h5 className="table_shop_list-title">
-                            TUỲ CHỌN
-                        </h5></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        shops.map((item, index) =>
-                            <tr key={item.id}>
-                                <td className="table_shop_list-inner">{index + 1}</td>
-                                <td  className="table_shop_list-inner">{item.name}</td>
-                                <td  className="table_shop_list-inner">{item.phone}</td>
-                                <td  className="table_shop_list-inner">{item.email}</td>
-                                <td  className="table_shop_list-inner">{item.startTime}</td>
-                                <td  className="table_shop_list-inner">{item.endTime}</td>
-                                {item.statusShops === "0" && <><td  className="table_shop_list-inner">Đã xác thực</td>
-                                </>}
-                                {item.statusShops === "1" && <><td  className="table_shop_list-inner">Tạm dừng hoạt động</td>
-                                </>}
-                                {item.statusShops === "2" && <><td  className="table_shop_list-inner">Chưa xác thực</td>
-                                </>}
-                                <td  className="table_shop_list-inner">{item.city.name}</td>
-                                {item.statusShops === "0"  ? (<>
-                                    <td className="table_shop_list-inner iconEditShop">
-                                        <Link to={`/update-shop/${item.id}`} >
-                                            <i className="fa-regular fa-pen-to-square"></i>
-                                        </Link>
-                                        <span className="iconEditShop-inner">Sửa</span>
-                                    </td>
-                                    <td className="table_shop_list-inner iconDeleteShop">
-                                        <button onClick={() => deleteShop(item.id)}>
-                                           <i className="fa-solid fa-trash"></i>
-                                        </button>
-                                        <span className="iconDeleteShop-inner">Xóa</span>
-                                    </td>
-                                    <td  className="table_shop_list-inner iconAddShopFood">
-                                        <Link to={`/create-food/${item.id}`} className="btn-shop-2" >
-                                            <i className="fa-solid fa-utensils"></i>
-                                        </Link>
-                                     <span className="iconAddShopFood-inner">Thêm</span>
-                                    </td>
-                                </>):(
-                                    <>
-                                    <td className="table_shop_list-inner"></td>
-                                    <td className="table_shop_list-inner"></td>
-                                    <td  className="table_shop_list-inner"></td>
-                                    </>
-                                    ) }
-                            </tr>
-                        )
-                    }
-                    </tbody>
-                </table>
+                        </tr>
+                        </thead>
+                        <tbody >
+                        {
+                            shops.map((item, index) =>
+                                <tr key={item.id} >
+                                    <td className="table_shop_list-inner">{index + 1}</td>
+                                    <td className="table_shop_list-inner">{item.name}</td>
+                                    <td className="table_shop_list-inner">{item.phone}</td>
+                                    <td className="table_shop_list-inner">{item.email}</td>
+                                    <td className="table_shop_list-inner">{item.startTime}</td>
+                                    <td className="table_shop_list-inner">{item.endTime}</td>
+                                    {item.statusShops === "0" && <>
+                                        <td className="table_shop_list-inner">Đã xác thực</td>
+                                    </>}
+                                    {item.statusShops === "1" && <>
+                                        <td className="table_shop_list-inner">Tạm dừng hoạt động</td>
+                                    </>}
+                                    {item.statusShops === "2" && <>
+                                        <td className="table_shop_list-inner">Chưa xác thực</td>
+                                    </>}
+                                    <td className="table_shop_list-inner">{item.city.name}</td>
+                                    {item.statusShops === "0" ? (<>
+                                        <td className="table_shop_list-inner iconEditShop">
+                                            <Link to={`/update-shop/${item.id}`}>
+                                                <i className="fa-regular fa-pen-to-square"
+                                                   title="sửa thông tin cửa hàng"></i>
+                                            </Link>
+                                            <span className="iconEditShop-inner">Sửa</span>
+                                        </td>
+                                        <td className="table_shop_list-inner iconDeleteShop">
+                                            <button onClick={() => deleteShop(item.id)}>
+                                                <i className="fa-solid fa-lock-open" title="Khóa của hàng"></i>
+                                            </button>
+                                            <span className="iconDeleteShop-inner">Khóa </span>
+                                        </td>
+                                        <td className="table_shop_list-inner iconAddShopFood">
+                                            <Link to={`/create-food/${item.id}`} className="btn-shop-2">
+                                                <i className="fa-solid fa-utensils" title="Thêm món ăn mới"></i>
+                                            </Link>
+                                            <span className="iconAddShopFood-inner">Thêm</span>
+                                        </td>
+                                    </>) : (
+                                        <>
+                                            <td className="table_shop_list-inner">
+                                                <td className="table_shop_list-inner iconEditShop">
+                                                    <i className="fa-solid fa-ellipsis" style={{color: `#8080807d`}}></i>
+                                                </td>
+                                            </td>
+                                            <td className="table_shop_list-inner">
+                                                <td className="table_shop_list-inner iconDeleteShop">
+                                                    <i className="fa-solid fa-lock" style={{color: `#8080807d`}}></i>
+                                                </td>
+                                            </td>
+                                            <td className="table_shop_list-inner">
+                                                <td className="table_shop_list-inner iconAddShopFood">
+                                                    <i className="fa-solid fa-ellipsis" style={{color: `#8080807d`}}></i>
+                                                </td>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            )
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </>
     )
