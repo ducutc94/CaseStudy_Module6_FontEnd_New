@@ -78,7 +78,7 @@ export default function Login({showLogin, handleClose}) {
                                     <div className="auth-form__container">
                                         <div className="auth-form__header modal-header ">
                                             <h3 className="auth-form__heading">Đăng nhập</h3>
-                                            <span className="auth-form__switch-btn" onClick={() => setRegister(true)}>Đăng kí
+                                            <span className="auth-form__switch-btn" onClick={() => setRegister(true)}>Đăng ký
                                             </span>
                                         </div>
                                         <div className="auth-form__form">

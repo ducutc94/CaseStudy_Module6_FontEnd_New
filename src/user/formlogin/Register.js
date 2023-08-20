@@ -57,18 +57,13 @@ export default function Register({setRegister,handleCloseRegister}) {
         onSubmit: values => {
             console.log(values.roles)
             console.log(setValueRole(values.roles))
-            axios.post('http://localhost:8080/api/auth/register', {
-                username: values.username,
-                password: values.password,
-                email: values.email,
-                image:"https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2023/02/hinh-avatar-anh-dai-dien-FB-mac-dinh.jpg?ssl\u003d1",
-                roles: [
-                    {
-                        id: +setValueRole(values.roles)
-                    }
-                ]
-            }).then((res) => {
-                if(res.data !== null){
+            Swal.fire({
+                title: 'Bạn có đăng ký?',
+                showDenyButton: true,
+                confirmButtonText: 'Lưu',
+                denyButtonText: `Hủy`,
+            }).then((result) => {
+                if (result.isConfirmed) {
                     Swal.fire({
                         title: 'Đang khởi tạo...',
                         html: 'Vui lòng đợi trong giây lát...',
@@ -78,32 +73,47 @@ export default function Register({setRegister,handleCloseRegister}) {
                             Swal.showLoading();
 
                             // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
-                            const timeout = 2500; // 5 giây
+                            const timeout = 5000; // 5 giây
                             setTimeout(() => {
                                 Swal.close();
                             }, timeout);
                         }
-                    }).then((result) =>{  Swal.fire({
-                        icon: 'success',
-                        title: `Oops...Hello...${values.username}`,
-                        text: 'Đăng kí thành công, Mời bạn đến email xác thực',
-                    }); })
-                    handleCloseRegister()
-                }else {
-                    Swal.fire({
-                        title: "Lỗi rồi!",
-                        text: "aaaaaaaaaaaaaa",
-                        icon: "error",
-                        confirmButtonText: "OK"
-                    });
+                    })
+                    axios.post('http://localhost:8080/api/auth/register', {
+                        username: values.username,
+                        password: values.password,
+                        email: values.email,
+                        image: "https://i0.wp.com/thatnhucuocsong.com.vn/wp-content/uploads/2023/02/hinh-avatar-anh-dai-dien-FB-mac-dinh.jpg?ssl\u003d1",
+                        roles: [
+                            {
+                                id: +setValueRole(values.roles)
+                            }
+                        ]
+                    }).then((res) => {
+                        if (res.data !== null) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: `Oops...Hello...${values.username}`,
+                                text: 'Đăng kí thành công, Mời bạn đến email xác thực',
+                            })
+                            handleCloseRegister()
+                        } else {
+                            Swal.fire({
+                                title: "Lỗi rồi!",
+                                text: "aaaaaaaaaaaaaa",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    }).catch(error => {
+                        Swal.fire({
+                            title: "Lỗi rồi!",
+                            text: "Đăng kí thất bại",
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                    })
                 }
-            }).catch(error => {
-                Swal.fire({
-                    title: "Lỗi rồi!",
-                    text: "Đăng kí thất bại",
-                    icon: "error",
-                    confirmButtonText: "OK"
-                });
             })
         },
     });

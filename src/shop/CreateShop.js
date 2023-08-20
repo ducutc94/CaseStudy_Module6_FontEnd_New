@@ -95,7 +95,7 @@ export default function CreateShop(){
                                 Swal.showLoading();
 
                                 // Đợi 5 giây (hoặc thời gian tùy chọn) và sau đó đóng hộp thông báo
-                                const timeout = 2500; // 5 giây
+                                const timeout = 3000; // 5 giây
                                 setTimeout(() => {
                                     Swal.close();
                                 }, timeout);
