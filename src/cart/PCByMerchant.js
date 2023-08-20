@@ -137,7 +137,10 @@ export default function PCByMerchant() {
                                             <td>
                                                 <img src={items.products.image} style={{ width:`80px` }}/>
                                             </td>
-                                            <td>{items.products.name}</td>
+                                            <td>
+                                                {items.products.name}<br/>
+                                                ( {items.products.voucher.name})
+                                            </td>
                                             <td>
                                                         <span style={{marginLeft: `5px`}}>
                                                             {new Intl.NumberFormat('vi-VN', {

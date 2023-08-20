@@ -122,7 +122,8 @@ export default function BillsDetail({bill,showBills,handleClose}) {
                                         {index +1}
                                     </span>
                                             <span className="bill_detail_inner-item">
-                                        {item.products?.name}( {item.products.voucher.name}
+                                        {item.products?.name}<br/>
+                                                ( {item.products.voucher.name})
                                     </span>
                                             <span className="bill_detail_inner-item">
                                        {item.quantity}
