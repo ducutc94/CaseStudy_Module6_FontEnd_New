@@ -62,7 +62,7 @@ export default function BillsDetail({bill,showBills,handleClose}) {
             onHide={handleClose}
             backdrop="static"
             keyboard={false}
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
         >
             <Modal.Header>
                 <Modal.Title>Chi tiết đơn hàng</Modal.Title>

@@ -207,14 +207,8 @@ export default function Chartjs() {
                             </div>
                             <div className={`col-md-8`}>
                                 <p>THỐNG KÊ</p>
-                                <div className="bill_about--shop">
-                                    {/*Filter theo shop */}
-                                    <FilterBill filter={sortByShop}/>
-
-                                </div>
                             </div>
                             <div className={`col-md-4`}>
-
                                 <div className="d-flex statistical">
                                     <div className="btn-group" role="group" aria-label="Basic example">
                                         <button
@@ -243,11 +237,14 @@ export default function Chartjs() {
                             </div>
                         </div>
 
-                        {displayType === "day" ? (
-                            <Line data={chartData} />
-                        ) : (
-                            <Bar data={chartData} />
-                        )}
+                        <div className="display_chart">
+                            {displayType === "day" ? (
+                                <Line data={chartData} />
+                            ) : (
+                                <Bar data={chartData} />
+                            )}
+                        </div>
+
                     </div>
                 </div>
             ) : (
