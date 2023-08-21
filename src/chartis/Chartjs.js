@@ -12,8 +12,8 @@ import {
     Legend,
     BarElement,
 } from "chart.js";
-import { Box } from "@mui/material";
 import {Link} from "react-router-dom";
+import FilterBill from "../filter/FillterBill";
 
 ChartJS.register(
     CategoryScale,
@@ -44,6 +44,9 @@ export default function Chartjs() {
                 }
             });
     }, [userId]);
+    const sortByShop = (data) => {
+        setBill(data)
+    }
 
     const handleDisplayTypeChange = (type) => {
         setDisplayType(type);
@@ -194,8 +197,14 @@ export default function Chartjs() {
                             </div>
                             <div className={`col-md-8`}>
                                 <p>THỐNG KÊ</p>
+                                <div className="bill_about--shop">
+                                    {/*Filter theo shop */}
+                                    <FilterBill filter={sortByShop}/>
+
+                                </div>
                             </div>
                             <div className={`col-md-4`}>
+
                                 <div className="d-flex statistical">
                                     <div className="btn-group" role="group" aria-label="Basic example">
                                         <button

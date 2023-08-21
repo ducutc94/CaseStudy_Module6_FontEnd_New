@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function FilterBill({filter}){
+export default function FilterBillChart({filter}){
     const user = JSON.parse(localStorage.getItem("user"))
     const [listShop,setListShop] = useState([]);
     useEffect(() => {
@@ -55,4 +55,5 @@ export default function FilterBill({filter}){
             </div>
         </>
     )
+
 }

@@ -1,8 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
 
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import BillsDetail from "../features/cart/BillsDetail";
 import FilterBill from "../filter/FillterBill";
 
@@ -15,7 +14,7 @@ async function getBillsByUserId(id) {
 }
 
 async function getShopByUserId(id) {
-    return await axios.get(`http://localhost:8080/api/shops/user/${id}`) //api/users/1/shops
+    return await axios.get(`http://localhost:8080/api/shops/user-bill/${id}`) //api/users/1/shops
 }
 
 export default function MerchantBillService() {
