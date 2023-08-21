@@ -1,6 +1,6 @@
 
 import {Button, Modal} from "react-bootstrap";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
@@ -151,7 +151,7 @@ export default function BillsDetail({bill,showBills,handleClose}) {
                                 <div className="bill_detail_inner-containerFood-total">
                                     <div className="bill_detail_inner-containerFood-total-inner">
                                          <span className="bill_detail_inner-item-p">
-                                        Tiền hàng
+                                        Tiền hàng:
                                     </span>
                                         <span className="bill_detail_inner-item-p"
                                               style={{marginLeft: `5px`}}>

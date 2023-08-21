@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function ShopSManager() {
@@ -17,9 +16,9 @@ export default function ShopSManager() {
     const toggleShop = (id, statusShops) => {
         Swal.fire({
             position: 'center',
-            title: `Bạn muốn ${statusShops === "0" ? 'khóa' : 'mở'} hoạt động với bên cửa hàng này ?`,
+            title: `Bạn muốn ${statusShops === "0" ? 'Khóa' : 'Mở'} hoạt động với bên cửa hàng này ?`,
             showDenyButton: true,
-            confirmButtonText: statusShops === "0" ? 'khóa' : 'mở',
+            confirmButtonText: statusShops === "0" ? 'Khóa' : 'Mở',
             denyButtonText: 'Hủy',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -34,8 +33,7 @@ export default function ShopSManager() {
                         });
                         setReload(!reload);
                     })
-                    .catch((error) => {
-                        // Handle error
+                    .catch(() => {
                     });
             } else if (result.isDenied) {
                 Swal.fire({
