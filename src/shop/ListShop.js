@@ -23,9 +23,9 @@ export default function ListShop() {
     const deleteShop = (id) => {
         Swal.fire({
             position: 'center',
-            title: 'Bạn muốn xóa cửa hàng ?',
+            title: 'Bạn muốn khóa cửa hàng ?',
             showDenyButton: true,
-            confirmButtonText: 'Xóa',
+            confirmButtonText: 'Khóa',
             denyButtonText: 'Hủy',
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
