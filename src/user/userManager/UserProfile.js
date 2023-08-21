@@ -387,7 +387,7 @@ export default function UserProfile() {
                                                                 <div className="grid__column-4">
                                                                     <div className="cssPhone">
                                                                         <input type="text"
-                                                                               readOnly={true}
+                                                                               // readOnly={true}
                                                                                name={'phone'}
                                                                                onChange={formik.handleChange}
                                                                                id={'phone'}

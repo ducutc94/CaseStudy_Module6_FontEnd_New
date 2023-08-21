@@ -91,12 +91,12 @@ export default function UpdateShop() {
     };
 
     const validationS = yup.object().shape({
-        name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
-            .max(500, "Độ dài tối đa 500 ký tự")
-            .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
-            .required("Tên không được để trống!").test('Tên đã tồn tại', 'Tên đã tồn tại', function (value) {
-                return !checkName(value);
-            }),
+        // name: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
+        //     .max(500, "Độ dài tối đa 500 ký tự")
+        //     .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
+        //     .required("Tên không được để trống!").test('Tên đã tồn tại', 'Tên đã tồn tại', function (value) {
+        //         return !checkName(value);
+        //     }),
         description: yup.string().min(2, "Độ dài tối thiểu 2 ký tự")
             .matches(/[a-zA-Z]+/, "Chưa đúng định dạng")
             .required("Mô tả không được để trống!"),
@@ -163,7 +163,10 @@ export default function UpdateShop() {
                     <div className={'col-md-6'}>
                         <div className="mb-3">
                             <label htmlFor={'name'} className={'form-label'}>Tên</label>
-                            <input onChange={formik.handleChange} name={'name'} type={'text'}
+                            <input onChange={formik.handleChange}
+                                   readOnly={true}
+                                   name={'name'}
+                                   type={'text'}
                                    className={'form-control'} id={'name'}
                                    value={formik.values.name}
                                    onBlur={formik.handleBlur}/>
