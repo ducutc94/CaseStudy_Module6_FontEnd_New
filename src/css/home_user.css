@@ -57,6 +57,10 @@
    margin: auto;
     margin-left: 15px;
 }
+.home-user-left-content-text-link{
+    color: black;
+    text-decoration: none;
+}
 .home-user-left-content-item > i{
     font-size: 14px;
 }
@@ -64,6 +68,10 @@
     margin-left: 3px;
 }
 .home-user-left-content:hover{
+    color: #df410c;
+    cursor: pointer;
+}
+.home-user-left-content-text-link:hover{
     color: #df410c;
     cursor: pointer;
 }
@@ -90,7 +98,7 @@
 .home-user-right-content{
 
 }
-home-user-right-content-info-upContainer{
+.home-user-right-content-info-upContainer{
     position: relative;
     display: contents;
 }
@@ -231,11 +239,40 @@ home-user-right-content-info-upContainer{
     max-width: 105px;
     height: 100%;
     border: none;
-    font-size: 16px;
-    margin-left: 5px;
-    font-weight: 500;
+    font-size: 15px;
+    margin-left: 0;
+    font-weight: 400;
+    color: rgba(163, 160, 160, 0.69);
 }
 .home-user-right-content-info-last{
     padding: 30px;
     position: relative;
+}
+
+.text-danger{
+    display: block;
+    margin: 5px 0 0 5px;
+}
+
+.home-user-right-input > .errorNumberPhone {
+    position: relative;
+    top: -18px;
+    left: -85px;
+}
+
+
+.home_user_paying{
+    float: right;
+    width: 100%;
+    min-height: 610px;
+    position: relative;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 3px 0 rgba(50,50,50,.3);
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+}
+.home_user_paying-img{
+    margin-top: 60px;
 }
