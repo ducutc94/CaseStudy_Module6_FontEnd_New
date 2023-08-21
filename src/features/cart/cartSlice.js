@@ -41,7 +41,7 @@ export const cartSlice = createSlice({
                 const updatedItems = state.items.map((item, index) => {
                     if (index === existingItemIndex) {
                         if((item.quantity + quantity)<= foodBuy.quantity){
-                            updatedTotalMoney = state.totalMoney + (quantity * foodBuy.price)
+                            updatedTotalMoney = state.totalMoney + ((quantity * foodBuy.price)- (quantity * foodBuy.price*(foodBuy.voucher.percent/100)) )
                             return {
                                 ...item,
                                 quantity: item.quantity + quantity,
@@ -85,25 +85,103 @@ export const cartSlice = createSlice({
                 state.totalMoney = 0;
             }
         },
-        deleteItem: (state, action) => {
+        // deleteItem: (state, action) => {
+        //     const indexItem = action.payload.index;
+        //     const food = action.payload.food;
+        //     let cart = localStorage.getItem('cart');
+        //     let data = JSON.parse(cart);
+        //     if (data) {
+        //         const deletedItem = data.items[indexItem];
+        //         const deletedItemPrice = deletedItem.money;
+        //         data.items.splice(indexItem, 1);
+        //         data.totalQuantity--;
+        //         // Trừ tiền của phần tử bị xóa khỏi tổng tiền
+        //         data.totalMoney -= deletedItemPrice;
+        //         state.items = data.items;
+        //         state.totalQuantity = data.totalQuantity;
+        //         state.totalMoney = data.totalMoney;
+        //         localStorage.setItem('cart', JSON.stringify(data));
+        //     }
+        // },
 
+
+        // deleteItem: (state, action) => {
+        //     const indexItem = action.payload.index;
+        //     let cart = localStorage.getItem('cart');
+        //     let data = JSON.parse(cart);
+        //
+        //     if (data && data.items.length > indexItem) {
+        //         // Get the deleted item
+        //         const deletedItem = data.items[indexItem];
+        //
+        //         // Check if the deleted item has a valid price
+        //         if (!isNaN(deletedItem.money) && deletedItem.money >= 0) {
+        //             // Calculate deletedItemPrice based on the deleted item's price
+        //             const deletedItemPrice = deletedItem.money;
+        //
+        //             // Store the current totalMoney in a temporary variable
+        //             const currentTotalMoney = state.totalMoney;
+        //
+        //             // Remove the item from data.items
+        //             data.items.splice(indexItem, 1);
+        //
+        //             // Update totalQuantity and totalMoney
+        //             data.totalQuantity--;
+        //             data.totalMoney -= deletedItemPrice;
+        //
+        //             // Check if the subtraction was successful before updating state
+        //             if (data.totalMoney >= 0) {
+        //                 // Update state with the modified data
+        //                 state.items = data.items;
+        //                 state.totalQuantity = data.totalQuantity;
+        //                 state.totalMoney = data.totalMoney;
+        //
+        //                 // Update localStorage with the modified data
+        //                 localStorage.setItem('cart', JSON.stringify(data));
+        //             } else {
+        //                 // If subtraction would result in a negative totalMoney, revert the change
+        //                 // and keep the original totalMoney
+        //                 data.totalMoney = currentTotalMoney;
+        //                 localStorage.setItem('cart', JSON.stringify(data));
+        //             }
+        //         }
+        //     }
+        // }
+
+
+
+
+        deleteItem: (state, action) => {
             const indexItem = action.payload.index;
-            const food = action.payload.food;
             let cart = localStorage.getItem('cart');
             let data = JSON.parse(cart);
-            if (data) {
+
+            if (data && data.items.length > indexItem) {
                 const deletedItem = data.items[indexItem];
-                const deletedItemPrice = deletedItem.money;
-                data.items.splice(indexItem, 1);
-                data.totalQuantity--;
-                // Trừ tiền của phần tử bị xóa khỏi tổng tiền
-                data.totalMoney -= deletedItemPrice;
-                state.items = data.items;
-                state.totalQuantity = data.totalQuantity;
-                state.totalMoney = data.totalMoney;
-                localStorage.setItem('cart', JSON.stringify(data));
+
+                if (!isNaN(deletedItem.money) && deletedItem.money >= 0) {
+                    const deletedItemPrice = deletedItem.money;
+
+                    data.items.splice(indexItem, 1);
+
+                    data.totalQuantity--;
+                    data.totalMoney -= deletedItemPrice;
+
+                    if (data.totalMoney >= 0) {
+                        state.items = data.items;
+                        state.totalQuantity = data.totalQuantity;
+                        state.totalMoney = data.totalMoney;
+
+                        localStorage.setItem('cart', JSON.stringify(data));
+                    } else {
+                        data.totalMoney += deletedItemPrice; // Revert the change
+                        localStorage.setItem('cart', JSON.stringify(data));
+                    }
+                }
             }
-        },
+        }
+        ,
+
         setStatus: (state, action) => {
             let id = action.payload.food.statusProducts
         },
