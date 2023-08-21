@@ -13,7 +13,7 @@ import {
     BarElement,
 } from "chart.js";
 import { Box } from "@mui/material";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 ChartJS.register(
     CategoryScale,
@@ -30,7 +30,7 @@ export default function Chartjs() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user.id;
     const [bill, setBill] = useState([]);
-    const [displayType, setDisplayType] = useState("day"); // Đặt giá trị mặc định là "day"
+    const [displayType, setDisplayType] = useState("day");
 
     useEffect(() => {
         axios
@@ -44,6 +44,12 @@ export default function Chartjs() {
                 }
             });
     }, [userId]);
+
+    const sortByDate = (a, b) => {
+        const dateA = new Date(a.localDateTime.split("T")[0]);
+        const dateB = new Date(b.localDateTime.split("T")[0]);
+        return dateA - dateB;
+    };
 
     const handleDisplayTypeChange = (type) => {
         setDisplayType(type);
@@ -62,7 +68,9 @@ export default function Chartjs() {
                 return billDate >= startDate && billDate <= endDate;
             });
 
-            updateChart(filteredBills);
+            const sortedBills = filteredBills.sort(sortByDate);
+
+            updateChart(sortedBills);
         } else if (type === "month") {
             const currentYear = new Date().getFullYear();
             const filteredBills = bill.filter((item) => {
@@ -99,6 +107,7 @@ export default function Chartjs() {
 
             setChartData(updatedChartData);
         } else if (type === "year") {
+            const currentYear = new Date().getFullYear();
             const filteredBills = bill.filter((item) => {
                 const billYear = new Date(item.localDateTime.split("T")[0]).getFullYear();
                 return billYear;
@@ -135,13 +144,17 @@ export default function Chartjs() {
     };
 
     const updateChart = (filteredBills) => {
+        const sortedBills = filteredBills.sort(sortByDate);
+
         const updatedDateTotals = {};
-        filteredBills.forEach((item) => {
-            const date = item.localDateTime.split("T")[0];
-            if (!updatedDateTotals[date]) {
-                updatedDateTotals[date] = 0;
+        sortedBills.forEach((item) => {
+            const date = new Date(item.localDateTime.split("T")[0]);
+            const formattedDate = date.toISOString().split("T")[0];
+
+            if (!updatedDateTotals[formattedDate]) {
+                updatedDateTotals[formattedDate] = 0;
             }
-            updatedDateTotals[date] += item.total;
+            updatedDateTotals[formattedDate] += item.total;
         });
 
         const dateLabels = Object.keys(updatedDateTotals);
@@ -184,11 +197,8 @@ export default function Chartjs() {
                         <div className={`row`} style={{ marginTop: "50px", marginBottom: "20px" }}>
                             <div className={`col-md-12`}>
                                 <Link to={'/products-carts-merchant'}
-                                      style={{textDecoration:`none`,position: `relative`,
-                                                                    top: `-20px`,
-                                                                    fontSize: `20px`,
-                                                                    color: `orange`}}>
-                                        <i className="fa-solid fa-backward"></i>
+                                      style={{ textDecoration: `none`, position: `relative`, top: `-20px`, fontSize: `20px`, color: `orange` }}>
+                                    <i className="fa-solid fa-backward"></i>
                                     <span> Trở lại trang quản lý</span>
                                 </Link>
                             </div>
@@ -232,25 +242,29 @@ export default function Chartjs() {
                     </div>
                 </div>
             ) : (
-                    <>
-                        <div className={`col-md-12 mrTopData`}>
-                            <Link to={'/products-carts-merchant'}
-                                  style={{textDecoration:`none`,position: `relative`,
-                                      top: `-20px`,
-                                      fontSize: `20px`,
-                                      color: `orange`}}>
-                                <i className="fa-solid fa-backward"></i>
-                                <span> Trở lại trang quản lý</span>
-                            </Link>
+                <>
+                    <div className={`col-md-12 mrTopData`}>
+                        <Link to={'/products-carts-merchant'}
+                              style={{
+                                  textDecoration: `none`,
+                                  position: `relative`,
+                                  top: `-20px`,
+                                  fontSize: `20px`,
+                                  color: `orange`
+                              }}>
+                            <i className="fa-solid fa-backward"></i>
+                            <span> Trở lại trang quản lý</span>
+                        </Link>
+                    </div>
+                    <div className="view_data-NoItem mrTopData ">
+                        <div className="view_data-NoItem-container">
+                            <img src="../static/img/empty-data.png" />
+                            <p className="view_data-NoItem-container-h"> Dữ liệu trống ... </p>
                         </div>
-                        <div className="view_data-NoItem mrTopData ">
-                            <div className="view_data-NoItem-container">
-                                <img src="../static/img/empty-data.png"/>
-                                <p className="view_data-NoItem-container-h"> Dữ liệu trống ... </p>
-                            </div>
-                        </div>
-                    </>
+                    </div>
+                </>
             )}
         </>
     );
 }
+
