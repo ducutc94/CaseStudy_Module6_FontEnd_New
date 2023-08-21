@@ -4,7 +4,7 @@ import {useFormik} from "formik";
 import Swal from "sweetalert2";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import storage from "../../config/FirebaseConfig";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import * as Yup from "yup";
 import * as yup from "yup";
 
@@ -12,9 +12,14 @@ import * as yup from "yup";
 export default function UserProfile() {
     const user = JSON.parse(localStorage.getItem("user"));
     const idUser = user.id;
-    const [userUpdate,setUserUpdate] = useState({});
+
+    const [phoneUpdate,setPhoneUpdate] = useState({});
+    const [showUserInfo, setShowUserInfo] = useState(true);
+    const [showSecurity, setshowSecurity] = useState(false);
+
+    const [userUpdate, setUserUpdate] = useState({});
     let navigate = useNavigate();
-    const [phone,setPhone] = useState([]);
+    const [phone, setPhone] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/users/${idUser}`).then((res) => {
@@ -23,10 +28,10 @@ export default function UserProfile() {
             setUserUpdate(res.data);
             console.log(data)
         });
-        axios.get('http://localhost:8080/api/users').then((res=>{
-            if(res.data !==""){
+        axios.get('http://localhost:8080/api/users').then((res => {
+            if (res.data !== "") {
                 setPhone(res.data);
-            }else {
+            } else {
                 setPhone([])
             }
         }))
@@ -37,11 +42,11 @@ export default function UserProfile() {
     const validationU = Yup.object().shape({
 
 
-        phone: yup.string().max(10, "Số điện thoại phải là 10 số")
-            .matches(/(|0[3|5|7|8|9])+([0-9]{8})\b/g,"Chưa đúng định dạng")
-            .required("Số điện thoại không được để trống").test('Số điện thoại duy nhất', 'Số điện thoại đã tồn tại', function (value) {
-                return !checkPhoneUser(value);
-            })
+        // phone: yup.string().max(10, "Số điện thoại phải là 10 số")
+        //     .matches(/(|0[3|5|7|8|9])+([0-9]{8})\b/g, "Chưa đúng định dạng")
+        //     .required("Số điện thoại không được để trống").test('Số điện thoại duy nhất', 'Số điện thoại đã tồn tại', function (value) {
+        //         return !checkPhoneUser(value);
+        //     })
 
     })
 
@@ -120,9 +125,10 @@ export default function UserProfile() {
                 })
         }
     }
+
     async function uploadRole() {
-            let data = userUpdate;
-            data.roles[0].id = 3;
+        let data = userUpdate;
+        data.roles[0].id = 3;
         Swal.fire({
             title: "Bạn muốn nâng cấp?",
             showDenyButton: true,
@@ -159,7 +165,7 @@ export default function UserProfile() {
                     }
 
                 }).catch(err => console.log(err));
-            }else if (result.isDenied) {
+            } else if (result.isDenied) {
                 Swal.fire('Hủy', '', 'info');
             }
         }).catch(error => {
@@ -171,6 +177,26 @@ export default function UserProfile() {
             });
         })
     }
+    async function userPhoneUpdate() {
+        let data = phoneUpdate
+        console.log(data)
+        data = user.phone
+        await axios.put(`http://localhost:8080/api/users/upload-role`, data
+        ).then((res) => {
+            Swal.fire("Cập nhật thành công!", "", "success");
+            window.location.reload();
+        }).catch(err => console.log(err));
+    }
+    function displayUserForm() {
+        setShowUserInfo(true)
+        setshowSecurity(false)
+    }
+    function displaySecurityForm() {
+        setshowSecurity(true)
+        setShowUserInfo(false)
+
+    }
+
     return (
         <>
             <div className="grid">
@@ -195,7 +221,7 @@ export default function UserProfile() {
                                         <div className="home-user-left-content-item">
                                             <i className="fa-solid fa-user"></i>
                                         </div>
-                                        <div className="home-user-left-content-text">
+                                        <div className="home-user-left-content-text" onClick={displayUserForm}>
                                             Cập nhật tài khoản
                                         </div>
                                         <div className="home-user-left-content-item">
@@ -204,16 +230,19 @@ export default function UserProfile() {
                                     </div>
                                     <div className="home-user-left-content">
                                         <div className="home-user-left-content-item">
-                                            <i className="fa-solid fa-cart-shopping"></i>
+                                            <i className="fa-solid fa-clock-rotate-left"></i>
                                         </div>
                                         <div className="home-user-left-content-text">
-                                            Thông tin đơn hàng
+                                            <Link to={'/products-carts-oder'}
+                                                  className="home-user-left-content-text-link">
+                                                Lịch sử đơn mua
+                                            </Link>
                                         </div>
                                         <div className="home-user-left-content-item">
                                             <i className="fa-solid fa-angle-right"></i>
                                         </div>
                                     </div>
-                                    <div className="home-user-left-content">
+                                    <div className="home-user-left-content" onClick={displaySecurityForm}>
                                         <div className="home-user-left-content-item">
                                             <i className="fa-regular fa-credit-card"></i>
                                         </div>
@@ -227,160 +256,181 @@ export default function UserProfile() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="grid__column-8">
-                                <div className="home-user-right">
-                                    <div className="home-user-right-title">
-                                        Thông tin người dùng
-                                    </div>
-                                    <div className="home-user-right-content">
-                                        <div className="home-user-right-content-info-upContainer">
-                                                {user.authorities[0].authority === "ROLE_USER" &&
-                                                    <>
-                                                    <div className="home-user-right-content-info-up">
-                                                        <span>Trở thành người bán</span>
-                                                        <i onClick={uploadRole} className="fa-solid fa-cloud-arrow-up"></i>
-                                                    </div>
-                                                </>
-                                        }
-                                        </div>
-                                        <div className="home-user-right-content-info">
-                                            <div className="home-user-title-user">Tải ảnh đại diện</div>
-                                            <div className="home-user">
-                                                <div className="grid__column-3">
-                                                    <div className="home-user-avatar-image">
-                                                        <img src={user.image}/>
-                                                    </div>
-                                                </div>
-                                                <div className="grid__column-9">
-                                                    <div className="home-user-avatar-form">
-                                                        <span>Tải lên từ</span>
-                                                        <div className="home-user-file-image">
-                                                            <input id="uploadAvatar" type="file" hidden required
-                                                                   name={'image'}
-                                                                   accept="image/*"
-                                                            />
-                                                            <label className="label-custom"
-                                                                   htmlFor="uploadAvatar">Chọn</label>
-                                                            <span style={{fontStyle: `italic`}}>Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB </span>
-                                                        </div>
-                                                    </div>
-                                                    <button onClick={uploadImage} className="btn-orange">Cập nhật
-                                                    </button>
-                                                </div>
+
+                            {/*----- đoạn này thông tin cá nhân ban đầu -----*/}
+                            {showUserInfo &&
+                                <>
+                                    <div className="grid__column-8">
+                                        <div className="home-user-right">
+                                            <div className="home-user-right-title">
+                                                Thông tin người dùng
                                             </div>
-                                        </div>
-                                        <div className="home-user-right-content-info">
-                                            <form onSubmit={formik.handleSubmit}>
-                                                <div className="home-user-title-user">Thay đổi thông tin</div>
-                                                <div className="home-user-form">
-                                                    <div className="grid__column-3">
-                                                        <span className="home-user-form-name">Tên</span>
-                                                    </div>
-                                                    <div className="grid__column-4">
-                                                        <div className="home-user-right-input">
-                                                            <input type="text"
-                                                                   readOnly={true}
-                                                                   style={{color: `#a3a0a0b0`}}
-                                                                   onChange={formik.handleChange}
-                                                                   value={formik.values.username}
-                                                                   id={'username'}
-                                                                   name={'username'}
-                                                                   onBlur={formik.handleBlur}
-                                                                   className=""/>
+                                            <div className="home-user-right-content">
+                                                <div className="home-user-right-content-info-upContainer">
+                                                    {user.authorities[0].authority === "ROLE_USER" &&
+                                                        <>
+                                                            <div className="home-user-right-content-info-up">
+                                                                <span>Trở thành người bán</span>
+                                                                <i onClick={uploadRole}
+                                                                   className="fa-solid fa-cloud-arrow-up"></i>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                                <div className="home-user-right-content-info">
+                                                    <div className="home-user-title-user">Tải ảnh đại diện</div>
+                                                    <div className="home-user">
+                                                        <div className="grid__column-3">
+                                                            <div className="home-user-avatar-image">
+                                                                <img src={user.image}/>
+                                                            </div>
+                                                        </div>
+                                                        <div className="grid__column-9">
+                                                            <div className="home-user-avatar-form">
+                                                                <span>Tải lên từ</span>
+                                                                <div className="home-user-file-image">
+                                                                    <input id="uploadAvatar" type="file" hidden required
+                                                                           name={'image'}
+                                                                           accept="image/*"
+                                                                    />
+                                                                    <label className="label-custom"
+                                                                           htmlFor="uploadAvatar">Chọn</label>
+                                                                    <span style={{fontStyle: `italic`}}>Chấp nhận GIF, JPEG, PNG, BMP với kích thước tối đa 5.0 MB </span>
+                                                                </div>
+                                                            </div>
+                                                            <button onClick={uploadImage} className="btn-orange">Cập nhật
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="home-user-form">
-                                                    <div className="grid__column-3">
-                                                        <span className="home-user-form-name">Giới tính</span>
-                                                    </div>
-                                                    <div className="grid__column-4">
-                                                        <div className="home-user-right-input-container">
-                                                            {["Nam", "Nữ", "Khác"].map((option) => (
-                                                                <div className="home-user-right-input-inner"
-                                                                     key={option}>
-                                                                    <input type="radio"
-                                                                           name="gender"
-                                                                           value={option}
+                                                <div className="home-user-right-content-info">
+                                                    <form onSubmit={formik.handleSubmit}>
+                                                        <div className="home-user-title-user">Thay đổi thông tin</div>
+                                                        <div className="home-user-form">
+                                                            <div className="grid__column-3">
+                                                                <span className="home-user-form-name">Tên</span>
+                                                            </div>
+                                                            <div className="grid__column-4">
+                                                                <div className="home-user-right-input">
+                                                                    <input type="text"
+                                                                           readOnly={true}
+                                                                           style={{color: `#a3a0a0b0`}}
                                                                            onChange={formik.handleChange}
-                                                                           checked={formik.values.gender === option}/>
-                                                                    <span className="">{option}</span>
-                                                                </div>))}
+                                                                           value={formik.values.username}
+                                                                           id={'username'}
+                                                                           name={'username'}
+                                                                           onBlur={formik.handleBlur}
+                                                                           className=""/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="home-user-form">
+                                                            <div className="grid__column-3">
+                                                                <span className="home-user-form-name">Giới tính</span>
+                                                            </div>
+                                                            <div className="grid__column-4">
+                                                                <div className="home-user-right-input-container">
+                                                                    {["Nam", "Nữ", "Khác"].map((option) => (
+                                                                        <div className="home-user-right-input-inner"
+                                                                             key={option}>
+                                                                            <input type="radio"
+                                                                                   name="gender"
+                                                                                   value={option}
+                                                                                   onChange={formik.handleChange}
+                                                                                   checked={formik.values.gender === option}/>
+                                                                            <span className="">{option}</span>
+                                                                        </div>))}
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div className="home-user-form">
+                                                            <div className="grid__column-3">
+                                                                <span className="home-user-form-name">Email</span>
+                                                            </div>
+                                                            <div className="grid__column-4">
+                                                                <div className="home-user-right-input">
+                                                                    <input readOnly={true}
+                                                                           type="text"
+                                                                           style={{color: `#a3a0a0b0`}}
+                                                                           name={'email'}
+                                                                           onChange={formik.handleChange}
+                                                                           value={formik.values.email}
+                                                                           id={'email'}
+                                                                           onBlur={formik.handleBlur}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="home-user-form">
+                                                            <div className="grid__column-3">
+                                                                <span className="home-user-form-name">Ngày sinh</span>
+                                                            </div>
+                                                            <div className="grid__column-4">
+                                                                <div className="home-user-right-input">
+                                                                    <input type="date"
+                                                                           className="fixInputBirth"
+                                                                           name={'birthday'}
+                                                                           onChange={formik.handleChange}
+                                                                           value={formik.values.birthday}
+                                                                    />
+                                                                </div>
+                                                            </div>
                                                         </div>
 
-                                                    </div>
-                                                </div>
-                                                <div className="home-user-form">
-                                                    <div className="grid__column-3">
-                                                        <span className="home-user-form-name">Email</span>
-                                                    </div>
-                                                    <div className="grid__column-4">
-                                                        <div className="home-user-right-input">
-                                                            <input readOnly={true}
-                                                                   type="text"
-                                                                   style={{color: `#a3a0a0b0`}}
-                                                                   name={'email'}
-                                                                   onChange={formik.handleChange}
-                                                                   value={formik.values.email}
-                                                                   id={'email'}
-                                                                   onBlur={formik.handleBlur}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="home-user-form">
-                                                    <div className="grid__column-3">
-                                                        <span className="home-user-form-name">Ngày sinh</span>
-                                                    </div>
-                                                    <div className="grid__column-4">
-                                                        <div className="home-user-right-input">
-                                                            <input type="date"
-                                                                   className="fixInputBirth"
-                                                                   name={'birthday'}
-                                                                   onChange={formik.handleChange}
-                                                                   value={formik.values.birthday}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="grid__column-3">
-                                                    <button className="btn-orange">Lưu thay đổi</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <form onSubmit={formik.handleSubmit}>
-                                            <div className="home-user-right-content-info-last">
-                                                <div className="home-user-title-user">Quản lý số điện thoại</div>
-                                                <div className="home-user-title-user-list-phone">
-                                                    <div className="home-user-form">
-                                                        <div className="grid__column-3">
-                                                            <div className="cssPhone">
-                                                                <input type="number"
-                                                                       name={'phone'}
-                                                                       onChange={formik.handleChange}
-                                                                       id={'phone'}
-                                                                       value={formik.values.phone}
-                                                                       onBlur={formik.handleBlur}
-                                                                />
-                                                                {formik.touched.phone && formik.errors.phone ? (<span className={"text-danger"}>{formik.errors.phone}</span>) : null}
+
+                                                        <div className="home-user-title-user-list-phone">
+                                                            <div className="home-user-form">
+                                                                <div className="grid__column-3">
+                                                                    <span className="home-user-form-name">Số điện thoại</span>
+                                                                </div>
+                                                                <div className="grid__column-4">
+                                                                    <div className="cssPhone">
+                                                                        <input type="text"
+                                                                               readOnly={true}
+                                                                               name={'phone'}
+                                                                               onChange={formik.handleChange}
+                                                                               id={'phone'}
+                                                                               value={formik.values.phone}
+                                                                               onBlur={formik.handleBlur}
+                                                                        />
+                                                                        {formik.touched.phone && formik.errors.phone ? (
+                                                                            <span
+                                                                                className={"text-danger"}>{formik.errors.phone}
+                                                                            </span>) : null}
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
-                                                        </div>
-                                                        <div className="grid__column-4">
-                                                            <div className="home-user-right-input">
-                                                                <i className="fa-solid fa-circle-check "
-                                                                   style={{color: `#5bcc0f`}}></i>
-                                                            </div>
-                                                        </div>
-                                                        <div className="grid__column-3">
+                                                            <div className="grid__column-3">
                                                             <button className="btn-orange">Lưu thay đổi</button>
                                                         </div>
-                                                    </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
+
+
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                </>
+
+                            }
+
+                            {
+                                showSecurity &&
+                                <>
+                                    {/*/!* -----đoạn này sẽ thay đổi trng thái componoun----  *!/*/}
+                                    <div className="grid__column-8">
+                                        <div className="home_user_paying">
+                                            <div className="home_user_paying-img">
+                                                <img src="../static/img/service-8.jpg"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
                         </div>
                     </div>
                 </div>
