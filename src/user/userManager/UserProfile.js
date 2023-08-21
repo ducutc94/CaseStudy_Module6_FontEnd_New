@@ -237,7 +237,7 @@ export default function UserProfile() {
                                                 {user.authorities[0].authority === "ROLE_USER" &&
                                                     <>
                                                     <div className="home-user-right-content-info-up">
-                                                        <span>Nâng cấp tài khoản</span>
+                                                        <span>Trở thành người bán</span>
                                                         <i onClick={uploadRole} className="fa-solid fa-cloud-arrow-up"></i>
                                                     </div>
                                                 </>

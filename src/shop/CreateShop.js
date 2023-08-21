@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {ErrorMessage, useFormik} from "formik";
+import { useFormik} from "formik";
 import Swal from "sweetalert2";
 import * as yup from "yup";
 
@@ -155,7 +155,7 @@ export default function CreateShop(){
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor={'description'} className={'form-label'}>Mô tả</label>
+                            <label htmlFor={'description'} className={'form-label'}>Địa chỉ</label>
                             <input onChange={formik.handleChange}
                                    name={'description'}
                                    type={'text'} className={'form-control'}

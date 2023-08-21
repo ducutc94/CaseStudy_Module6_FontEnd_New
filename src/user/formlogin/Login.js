@@ -1,7 +1,7 @@
 import {useFormik} from "formik";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {Button, Modal} from "react-bootstrap";
+import { Modal} from "react-bootstrap";
 import {useState} from "react";
 import Register from "./Register";
 import * as Yup from "yup";
@@ -52,6 +52,7 @@ export default function Login({showLogin, handleClose}) {
                     });
                 }
             }).catch(error => {
+                console.log(error)
                 Swal.fire({
                     title: "Lỗi rồi!",
                     text: "Tên đăng nhập và mật khẩu không đúng",
@@ -86,7 +87,7 @@ export default function Login({showLogin, handleClose}) {
                                                 <input name={'username'} onChange={formik.handleChange}
                                                        type={'text'} className={'auth-form__input'}
                                                        id={'your_name'}
-                                                       placeholder={'Tài Khoản của bạn'}>
+                                                       placeholder={'Tài khoản của bạn'}>
                                                 </input>
                                                 {<span className={"text-danger"}>{formik.errors.username}</span>}
                                             </div>

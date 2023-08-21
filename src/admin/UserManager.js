@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function UserManager() {
@@ -17,9 +16,9 @@ export default function UserManager() {
     const toggleShop = (id, statusUser) => {
         Swal.fire({
             position: 'center',
-            title: `Bạn muốn ${statusUser === "1" ? 'khóa' : 'mở'} tài khoản này ?`,
+            title: `Bạn muốn ${statusUser === "1" ? 'Khóa' : 'Mở'} tài khoản này ?`,
             showDenyButton: true,
-            confirmButtonText: statusUser === "1" ? 'khóa' : 'mở',
+            confirmButtonText: statusUser === "1" ? 'Khóa' : 'Mở',
             denyButtonText: 'Hủy',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -34,8 +33,7 @@ export default function UserManager() {
                         });
                         setReload(!reload);
                     })
-                    .catch((error) => {
-                        // Handle error
+                    .catch(() => {
                     });
             } else if (result.isDenied) {
                 Swal.fire({

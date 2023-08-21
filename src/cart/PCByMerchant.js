@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {useDispatch, useSelector} from "react-redux";
 import {addCartMerchant, confirmOrder, deleteByMerchant, setCartMerchant} from "../features/cart/cartMC";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export default function PCByMerchant() {
     const cartMerchant = useSelector(state => state.cartMerchant)
@@ -23,7 +23,7 @@ export default function PCByMerchant() {
     const handleSumbit = (id, index, item) => {
         Swal.fire({
             position: 'center',
-            title: 'Bạn muốn xác thực đơn hàng ?',
+            title: 'Bạn muốn nhận đơn hàng này ?',
             showDenyButton: true,
             confirmButtonText: 'Xác nhận',
             denyButtonText: 'Hủy',
@@ -35,7 +35,7 @@ export default function PCByMerchant() {
                 axios.put(`http://localhost:8080/api/products-carts/update-confirm/${id}`).then((res) => {
                     if (res.data.status === "0") {
                         Swal.fire({
-                            width: '450px', position: 'center', title: 'Xác thực thành công!', icon: 'success'
+                            width: '450px', position: 'center', title: 'Nhận đơn thành công!', icon: 'success'
                         });
                     } else {
                         Swal.fire({
@@ -55,7 +55,7 @@ export default function PCByMerchant() {
     function deleteSumbit(id, index, item) {
         Swal.fire({
             position: 'center',
-            title: 'Bạn muốn huỷ đơn hàng ?',
+            title: 'Bạn muốn huỷ đơn hàng này ?',
             showDenyButton: true,
             confirmButtonText: 'Xác nhận',
             denyButtonText: 'Hủy',
@@ -133,7 +133,7 @@ export default function PCByMerchant() {
 
                                     <tbody>
                                     {Array.isArray(item.productsCartsList) ? (<>{item.productsCartsList.map((items, index) =>
-                                        <tr>
+                                        <tr key={index +1}>
                                             <td>
                                                 <img src={items.products.image} style={{ width:`80px` }}/>
                                             </td>

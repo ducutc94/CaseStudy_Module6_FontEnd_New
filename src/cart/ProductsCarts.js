@@ -2,8 +2,8 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {useDispatch, useSelector} from "react-redux";
-import {addCart, deleteAll, deleteItem, setCart, setStatus} from "../features/cart/cartSlice";
-import formik, {useFormik} from "formik";
+import { deleteAll, deleteItem, setCart} from "../features/cart/cartSlice";
+import  {useFormik} from "formik";
 import React from 'react';
 
 export default function ProductsCarts() {
@@ -38,7 +38,7 @@ export default function ProductsCarts() {
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
-                            title: 'Đã gửi yêu cầu đến chủ cửa hàng',
+                            title: 'Đơn hàng đã được thêm vào lịch sử mua!!!!',
                             showConfirmButton: false,
                             timer: 1500
                         })
