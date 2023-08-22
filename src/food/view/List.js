@@ -122,7 +122,7 @@ export default function List() {
                             <Filter filter={sortFood}/>
                             <div className="grid__row">
                                 {/*product-item*/}
-                                {currentFoods.map((items, index) =>
+                                {currentFoods.length>0 && currentFoods.map((items, index) =>
                                     <div className="grid__column-2-4" key={index}>
                                         <Link className="home-product-item" to={`/view-food/${items.id}`}>
                                             <div className="home-product-item__image"

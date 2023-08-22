@@ -206,9 +206,13 @@ export default function BillsDetail({bill,showBills,handleClose}) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
+                    <i className="fa-solid fa-rotate-left"></i>  &nbsp;
                     Trở lại
                 </Button>
-                <Button variant="primary" onClick={convertToPdf}>In hoá đơn</Button>
+                <Button variant="primary" onClick={convertToPdf}>
+                    <i className="fa-solid fa-print"></i> &nbsp;
+                    In hoá đơn
+                </Button>
             </Modal.Footer>
         </Modal>
     </>)

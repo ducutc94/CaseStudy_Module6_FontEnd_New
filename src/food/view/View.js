@@ -153,10 +153,6 @@ export default function View() {
                         <div className="view_food-container">
                             <div className="grid__column-5">
                                 <div className="view_food-left">
-                                    {/*<div className="view_food-left-img">*/}
-                                    {/*    <img src={selectedImage} alt="Main Food Image" />*/}
-                                    {/*</div>*/}
-
                                     <div className="view_food-left-img">
                                         <img src={selectedImage} alt="Main Food Image"/>
                                         <div className="arrow-left" onClick={() => handleArrowClick('prev')}>

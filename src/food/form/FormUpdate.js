@@ -120,7 +120,7 @@ export default function FormUpdate(props) {
                                                                 .post('http://localhost:8080/api/products', data)
                                                                 .then(() => {
                                                                     Swal.fire({
-                                                                        title: 'Đang tạo sản phẩm...',
+                                                                        title: 'Đang cập nhật sản phẩm...',
                                                                         html: 'Vui lòng đợi trong giây lát...',
                                                                         allowEscapeKey: false,
                                                                         allowOutsideClick: false,
@@ -134,7 +134,7 @@ export default function FormUpdate(props) {
                                                                             }, timeout);
                                                                         }
                                                                     }).then((result) => {
-                                                                        Swal.fire('Sửa thành công!', '', 'success');
+                                                                        Swal.fire('Cập nhật thành công!', '', 'success');
                                                                         navigate('/');
                                                                     });
                                                                 })
@@ -142,7 +142,7 @@ export default function FormUpdate(props) {
                                                                     console.log(err.message);
                                                                 });
                                                         } else if (result.isDenied) {
-                                                            Swal.fire('Sửa thất bại', '', 'info');
+                                                            Swal.fire('Cập nhật thất bại', '', 'info');
                                                         }
                                                     });
                                                 })

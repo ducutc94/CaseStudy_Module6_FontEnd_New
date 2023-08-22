@@ -6,7 +6,7 @@ export default function Toast1() {
 
     useEffect(() => {
         // Kiểm tra nếu đã hiển thị toast 3 lần, thì không hiển thị nữa
-        if (toastCount >= 3) {
+        if (toastCount >= 2) {
             setIsToastVisible(false);
             return;
         }
@@ -15,7 +15,7 @@ export default function Toast1() {
         const localStorageCount = parseInt(localStorage.getItem('toastCount')) || 0;
 
         // Nếu toast đã hiển thị ít hơn 3 lần trong quá trình truy cập trang này
-        if (localStorageCount < 3) {
+        if (localStorageCount < 2) {
             setIsToastVisible(true);
             setToastCount(localStorageCount);
         }
