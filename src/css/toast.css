@@ -4,9 +4,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: sideInRight ease 4s, fadeOut linear 1s 4s forwards;
+    animation: sideInRight ease 1.5s, fadeOut linear 1s 1.5s forwards;
     position: fixed;
-    top: 0%;
+    top: 0;
     left: 0;
     right: 0;
     z-index: 9;

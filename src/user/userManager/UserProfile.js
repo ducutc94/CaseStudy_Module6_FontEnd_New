@@ -197,6 +197,20 @@ export default function UserProfile() {
 
     }
 
+    // xử lý ảnh avatar nè
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedImage(imageUrl);
+        }
+    };
+
+
+
     return (
         <>
             <div className="grid">
@@ -282,7 +296,8 @@ export default function UserProfile() {
                                                     <div className="home-user">
                                                         <div className="grid__column-3">
                                                             <div className="home-user-avatar-image">
-                                                                <img src={user.image}/>
+                                                                {/*<img src={user.image}/>*/}
+                                                                <img src={selectedImage || user.image} alt="User Avatar" />
                                                             </div>
                                                         </div>
                                                         <div className="grid__column-9">
@@ -292,6 +307,7 @@ export default function UserProfile() {
                                                                     <input id="uploadAvatar" type="file" hidden required
                                                                            name={'image'}
                                                                            accept="image/*"
+                                                                           onChange={handleImageChange}
                                                                     />
                                                                     <label className="label-custom"
                                                                            htmlFor="uploadAvatar">Chọn</label>

@@ -98,9 +98,12 @@ export default function Oder() {
                                                                 <div className="view_category_item-top"></div>
                                                                 <div className="view_category_item">
                                                                     <div className="view_category_item-1">
-                                                                        <i className="fa-solid fa-cookie-bite"></i>
-                                                                        <i className="fa-solid fa-beer-mug-empty"></i>
-                                                                        <i className="fa-solid fa-burger"></i>
+                                                                        {/*<i className="fa-solid fa-cookie-bite"></i>*/}
+                                                                        {/*<i className="fa-solid fa-beer-mug-empty"></i>*/}
+                                                                        {/*<i className="fa-solid fa-burger"></i>*/}
+                                                                        <i className="fa-solid fa-circle"></i>
+                                                                        <i className="fa-solid fa-circle"></i>
+                                                                        <i className="fa-solid fa-circle"></i>
                                                                     </div>
                                                                     <div className="view_category_item-2">
                                                                         <div className="view_category_item-21">
