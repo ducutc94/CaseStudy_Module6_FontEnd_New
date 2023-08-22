@@ -88,34 +88,42 @@ export default function UserManager() {
                         <tbody>
                         {
                             user.map((item, index) =>
-                                <tr key={item.id}>
-                                    <td className="table_shop_list-inner">{index + 1}</td>
-                                    <td className="table_shop_list-inner">{item.username}</td>
-                                    <td className="table_shop_list-inner">{item.phone}</td>
-                                    <td className="table_shop_list-inner">{item.email}</td>
-                                    <td className="table_shop_list-inner">{item.city?.name}</td>
-                                    {item.statusUser === "1" && <>
-                                        <td className="text-success">Đang hoạt động</td>
-                                    </>}
-                                    {item.statusUser === "0" && <>
-                                        <td className="text-warning">Tạm dừng hoạt động</td>
-                                    </>}
-                                    <td colSpan={2} className="table_shop_list-inner iconDeleteShop">
-                                        <button onClick={() => toggleShop(item.id, item.statusUser)}>
-                                            {item.statusUser === "1" ? (
-                                                <>
-                                                    <i className="fa-solid fa-toggle-on"></i>
-                                                    <span className="iconDeleteShop-inner"></span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <i className="fa-solid fa-toggle-off"></i>
-                                                    <span className="iconDeleteShop-inner"></span>
-                                                </>
-                                            )}
-                                        </button>
-                                    </td>
-                                </tr>
+                                {
+                                    if (item.roles[0].name !== 'ROLE_ADMIN') {
+                                        return (
+                                            <tr key={item.id}>
+                                                <td className="table_shop_list-inner">{index + 1}</td>
+                                                <td className="table_shop_list-inner">{item.username}</td>
+                                                <td className="table_shop_list-inner">{item.phone}</td>
+                                                <td className="table_shop_list-inner">{item.email}</td>
+                                                <td className="table_shop_list-inner">{item.city?.name}</td>
+                                                {item.statusUser === "1" && (
+                                                    <td className="text-success">Đang hoạt động</td>
+                                                )}
+                                                {item.statusUser === "0" && (
+                                                    <td className="text-warning">Tạm dừng hoạt động</td>
+                                                )}
+                                                <td colSpan={2} className="table_shop_list-inner iconDeleteShop">
+                                                    <button onClick={() => toggleShop(item.id, item.statusUser)}>
+                                                        {item.statusUser === "1" ? (
+                                                            <>
+                                                                <i className="fa-solid fa-toggle-on"></i>
+                                                                <span className="iconDeleteShop-inner"></span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <i className="fa-solid fa-toggle-off"></i>
+                                                                <span className="iconDeleteShop-inner"></span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    } else {
+                                        return null; // Skip rendering the row if item.roles.id is "1"
+                                    }
+                                }
                             )
                         }
                         </tbody>

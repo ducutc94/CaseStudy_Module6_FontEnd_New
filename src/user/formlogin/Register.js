@@ -162,8 +162,6 @@ export default function Register({setRegister,handleCloseRegister}) {
                                     className="auth-form__input"
                                     placeholder="Mật khẩu của bạn"
                                     onBlur={formikRegister.handleBlur}/>
-                                {formikRegister.touched.password && formikRegister.errors.password ? (<span className={"text-danger"}>{formikRegister.errors.password}</span>) : null}
-
                                 {showPassword ? (
                                         <span
                                             className="auth-form__toggle-password"
@@ -176,6 +174,7 @@ export default function Register({setRegister,handleCloseRegister}) {
                                                       <FontAwesomeIcon icon={faEyeSlash} />
                                                     </span>
                                     )}
+                                {formikRegister.touched.password && formikRegister.errors.password ? (<span className={"text-danger"}>{formikRegister.errors.password}</span>) : null}
                             </div>
                             <div
                                 className="auth-form__group">

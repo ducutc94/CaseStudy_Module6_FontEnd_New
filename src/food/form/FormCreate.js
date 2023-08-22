@@ -142,6 +142,7 @@ export default function FormCreate(props) {
                     showCancelButton: false,
                     confirmButtonText: 'Lưu',
                     denyButtonText: `Hủy`,
+                    width:`450px`,
                 }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) {

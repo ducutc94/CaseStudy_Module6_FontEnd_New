@@ -78,7 +78,7 @@ export default function ShopSManager() {
                         </tr>
                         </thead>
                         <tbody>
-                        {
+                        {shop.length>0 &&
                             shop.map((item, index) =>
                                 <tr key={item.id}>
                                     <td className="table_shop_list-inner">{index + 1}</td>

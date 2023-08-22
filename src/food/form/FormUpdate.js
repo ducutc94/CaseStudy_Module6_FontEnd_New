@@ -180,11 +180,12 @@ export default function FormUpdate(props) {
                         .put(`http://localhost:8080/api/products/${data.id}`, data)
                         .then(() => {
                             Swal.fire({
-                                title: 'Bạn có muốn thêm sản phẩm mới?',
+                                title: 'Bạn có muốn cập nhật sản phẩm ?',
                                 showDenyButton: true,
                                 showCancelButton: false,
                                 confirmButtonText: 'Lưu',
                                 denyButtonText: 'Hủy',
+                                width:`450px`,
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     axios
